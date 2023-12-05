@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="first name" class="">Product Name</label>
+                            <label for="first name" class="">Product Name <span class="text-danger">*</span></label>
                             <input value="<?php if (isset($formData['product_name'])) {
                                                 echo $formData['product_name'];
                                             } ?>" name="product_name" id="product_name" placeholder="Please Enter Product Name" autocomplete='off' type="text" class="form-control">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-md-6 ">
                         <div class="mb-3">
-                            <label for="last name" class="">Units</label>
+                            <label for="last name" class="">Units <span class="text-danger">*</span></label>
                             <select name="units" class="form-control">
                                 <option value="">Select Unit</option>
                                 <?php foreach($units as $unit){ ?>
@@ -48,7 +48,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="is_ferrous" class="">Is Ferrous</label>
+                            <label for="is_ferrous" class="">Is Ferrous <span class="text-danger">*</span></label>
                             <select name="is_ferrous" id="is_ferrous" class="form-control">
                                 <option value="No">No</option>
                                 <option value="Yes">Yes</option>
@@ -57,14 +57,14 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="buyer_price" class="">Buyer Price</label>
-                            <input value="<?php if (isset($formData['buyer_price'])) { echo $formData['buyer_price']; } ?>" name="buyer_price" id="buyer_price" placeholder="Please Enter Buyer Price" autocomplete='off' type="text" class="numberOnly form-control">
+                            <label for="buyer_price" class="">Buyer Price <span class="text-danger">*</span></label>
+                            <input value="<?php if (isset($formData['buyer_price'])) { echo $formData['buyer_price']; } ?>" name="buyer_price" id="buyer_price" placeholder="Please Enter Buyer Price" autocomplete='off' type="text" class="Onlynumbers form-control">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="tier_price" class="">Tier Price</label>
-                            <input value="<?php if (isset($formData['tier_price'])) { echo $formData['tier_price']; } ?>" name="tier_price" id="tier_price" placeholder="Please Enter Tier Price" autocomplete='off' type="text" class="numberOnly form-control">
+                            <label for="tier_price" class="">Tier Price <span class="text-danger">*</span></label>
+                            <input value="<?php if (isset($formData['tier_price'])) { echo $formData['tier_price']; } ?>" name="tier_price" id="tier_price" placeholder="Please Enter Tier Price" autocomplete='off' type="text" class="Onlynumbers form-control">
                         </div>
                     </div>
                 </div>

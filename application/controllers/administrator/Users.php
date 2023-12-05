@@ -28,6 +28,7 @@ class Users extends CI_Controller {
 		$data['breadcrumbs'] = $this->loadBreadCrumbs();
 		$data['data'] = $formContent;
 		$data['form_action'] = $formName;
+		$data['warehouses'] = $this->Common_model->getDataFromTable('tbl_warehouses','*', $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
 		if($formName == 'add'){
 			$this->home_template->load('home_template','admin/users',$data); 
 		}else{
@@ -39,7 +40,10 @@ class Users extends CI_Controller {
 		if(($this->input->post('add'))){		
 			$this->form_validation->set_session_data($this->input->post());
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('first_name','last_name','email_id','user_type','status');    
+			$mandatoryFields=array('first_name','last_name','email_id','user_type');    
+			if($_POST['user_type'] == 'Employee'){
+				$mandatoryFields[] = 'warehouse_id';
+			}
             foreach($mandatoryFields as $row){
 				$fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
 				$this->form_validation->set_rules($row, $fieldname, 'required'); 
@@ -47,7 +51,7 @@ class Users extends CI_Controller {
 
 			$this->form_validation->set_rules('first_name','First name', 'required|callback_alpha_dash_space');
 			$this->form_validation->set_rules('last_name','Last name', 'required|callback_alpha_dash_space');
-			$this->form_validation->set_rules('mobile_no', 'Mobile Number ', 'required|regex_match[/^[0-9]{10}$/]');
+			$this->form_validation->set_rules('phno', 'Mobile Number ', 'required|regex_match[/^[0-9]{10}$/]');
 			$this->form_validation->set_message('is_unique', 'The %s already exists');
         	$this->form_validation->set_rules('email_id', 'email id', 'required|is_unique[tbl_users.email_id]');
 
@@ -90,7 +94,10 @@ class Users extends CI_Controller {
 		
 		if(($this->input->post('edit'))){
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('first_name','last_name','email_id','status');    
+			$mandatoryFields=array('first_name','last_name','email_id','user_type');    
+			if($_POST['user_type'] == 'Employee'){
+				$mandatoryFields[] = 'warehouse_id';
+			}
             foreach($mandatoryFields as $row){
             $fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
             $this->form_validation->set_rules($row, $fieldname, 'required'); 

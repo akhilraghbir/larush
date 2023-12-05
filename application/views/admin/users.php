@@ -28,38 +28,33 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="first name" class="">First Name</label>
-                            <input value="<?php if (isset($formData['first_name'])) {
-                                                echo $formData['first_name'];
-                                            } ?>" name="first_name" id="first_name" placeholder="Please Enter First Name" autocomplete='off' type="text" class="form-control">
+                            <input value="<?php if (isset($formData['first_name'])) { echo $formData['first_name'];} ?>" name="first_name" id="first_name" placeholder="Please Enter First Name" autocomplete='off' type="text" class="form-control">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="last name" class="">Last Name</label><input value="<?php if (isset($formData['last_name'])) {
-                                                                                                echo $formData['last_name'];
-                                                                                            } ?>" name="last_name" id="last_name" placeholder="Please Enter Last Name" type="text" autocomplete='off' class="form-control">
+                            <label for="last name" class="">Last Name</label>
+                            <input value="<?php if (isset($formData['last_name'])) { echo $formData['last_name']; } ?>" name="last_name" id="last_name" placeholder="Please Enter Last Name" type="text" autocomplete='off' class="form-control">
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="mb-3"><label for="exampleEmail11" class="">Email</label><input value="<?php if (isset($formData['email_id'])) {
-                                                                                                                echo $formData['email_id'];
-                                                                                                            } ?>" name="email_id" id="email" placeholder="Please Enter Email Id" autocomplete='off' type="email" class="email form-control"></div>
+                        <div class="mb-3">
+                            <label for="exampleEmail11" class="">Email</label>
+                            <input value="<?php if (isset($formData['email_id'])) { echo $formData['email_id']; } ?>" name="email_id" id="email" placeholder="Please Enter Email Id" autocomplete='off' type="email" class="email form-control"></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="mb-3"><label for="examplePassword11" class="">Mobile</label><input value="<?php if (isset($formData['mobile_no'])) {
-                                                                                                                    echo $formData['mobile_no'];
-                                                                                                                } ?>" name="mobile_no" id="mobile" placeholder="Please Enter Mobile Number" maxlength="10" type="text" class="numberOnly form-control"></div>
+                        <div class="mb-3">
+                            <label for="examplePassword11" class="">Mobile</label>
+                            <input value="<?php if (isset($formData['phno'])) { echo $formData['phno']; } ?>" name="phno" id="mobile" placeholder="Please Enter Mobile Number" maxlength="10" type="text" class="numberOnly form-control"></div>
                     </div>
                 </div>
-
                 <div class="row">
                     <?php if ($this->session->user_type == 'Admin') {  ?>
                         <div class="col-md-6">
                             <div class="mb-3"><label for="examplePassword11" class="">Role</label>
-                                <select class="form-control" name='user_type'>
+                                <select class="form-control" name='user_type' id="user_type">
                                     <option value='Admin' <?php if (isset($formData['user_type'])) {
                                                                 if ($formData['user_type'] == 'Admin') {
                                                                     echo "selected=selected";
@@ -80,19 +75,14 @@
                         </div>
                     <?php } ?>
 
-                    <div class="col-md-6">
-                        <div class="mb-3"><label for="exampleEmail11" class="">Status</label>
-                            <select class="form-control" name='status'>
-                                <option value='Active' <?php if (isset($formData['status'])) {
-                                                            if ($formData['status'] == 'Active') {
-                                                                echo "selected=selected";
-                                                            }
-                                                        } ?>>Active</option>
-                                <option value='Inactive' <?php if (isset($formData['status'])) {
-                                                                if ($formData['status'] == 'Inactive') {
-                                                                    echo "selected=selected";
-                                                                }
-                                                            } ?>>Inactive</option>
+                    <div class="col-md-6 warehouse <?= (isset($formData['user_type']) && $formData['user_type'] == 'Employee') ? '' : 'd-none'?>">
+                        <div class="mb-3"><label for="exampleEmail11" class="">Select Warehouse</label>
+                            <select class="form-control" name='warehouse_id'>
+                               <option value="">Select Warehouse</option>
+                               <?php if(!empty($warehouses)){ 
+                                foreach($warehouses as $warehouse){ ?>
+                                <option value="<?= $warehouse['id']; ?>"><?= $warehouse['warehouse_name']; ?></option>
+                                <?php } } ?>
                             </select>
                         </div>
                     </div>
@@ -111,6 +101,18 @@
                 </form>
             </div>
         </div>
+        <script>
+            $(document).ready(function(){
+                $("#user_type").change(function(){
+                    var user_type = $(this).val();
+                    if(user_type == 'Employee'){
+                        $(".warehouse").removeClass('d-none');
+                    }else{
+                        $(".warehouse").addClass('d-none');
+                    }
+                });
+            });
+        </script>
     <?php } else { ?>
         <div class="row">
             <div class="col-lg-12">

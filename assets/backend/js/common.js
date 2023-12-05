@@ -4,7 +4,7 @@ $(document).ready(function() {
     }
 });
 
-$(".numberOnly").keypress(function (e) {
+$(".numberOnly,.Onlynumbers").keypress(function (e) {
     if (e.which != 8 && e.which != 0 && e.which != 110 && e.which != 46 && (e.which < 48 || e.which > 57)) {
         $(this).attr("placeholder", "Allows Digits Only");
         return false;
