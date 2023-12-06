@@ -317,6 +317,29 @@
             }
         });
     }
+    function getDetails(id) {
+        if (id != '') {
+            $.ajax({
+                url: '<?php echo base_url(); ?>administrator/buyers/getDetails',
+                type: 'POST',
+                data: {"id": id},
+                success: function(data) {
+                    result = JSON.parse(data);
+                    var msg = result.message;
+                    if (result.error == '0') {
+                       $(".modalTitle").text('Buyers Details');
+                       $(".modal-body").html(result.html);
+                       $(".bs-example-modal-lg").modal('show');
+                    } else {
+                       console.log(result);
+                    }
+                },
+                error: function(e) {
+                    console.log(e.message);
+                }
+            });
+        }
+    }
 </script>
 
 <?php } ?>

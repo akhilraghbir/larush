@@ -348,7 +348,7 @@
                        $(".modal-body").html(result.html);
                        $(".bs-example-modal-lg").modal('show');
                     } else {
-                       
+                        console.log(result);
                     }
                 },
                 error: function(e) {

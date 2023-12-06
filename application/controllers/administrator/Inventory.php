@@ -182,15 +182,11 @@ class Inventory extends CI_Controller {
 		}
 	}
 	
-	public function getUsers()
+	public function getProducts()
 	{
-		$vmsNo = $_POST['term'];
-		$accountant = $_POST['accountant'];
-		$wherecondition = " user_type='Client' and status='Active' and (first_name LIKE '%" . $_POST['term'] . "%' or email_id LIKE '%" . $_POST['term'] . "%' or phno LIKE '%" . $_POST['term'] . "%')";
-		if ($accountant != '') {
-			$wherecondition .= " and accountant = " .$accountant;
-		} 
-		$vmsRefdata = $this->Common_model->getSelectedFields('tbl_users', 'id,concat(first_name," ",last_name) as name', $wherecondition, $limit = '100', $orderby = 'id', $sortby = 'DESC');
+		$term = $_POST['term'];
+		$wherecondition = " status='Active' and product_name LIKE '%" . $term . "%'";
+		$vmsRefdata = $this->Common_model->getSelectedFields('tbl_products', 'id,product_name as name' , $wherecondition, $limit = '100', $orderby = 'id', $sortby = 'DESC');
 		echo json_encode($vmsRefdata);
 	}
 }

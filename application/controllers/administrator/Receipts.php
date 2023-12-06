@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Suppliers extends CI_Controller {
+class Receipts extends CI_Controller {
 
 
 	public function __construct(){
@@ -11,31 +11,35 @@ class Suppliers extends CI_Controller {
 
 	public function loadBreadCrumbs(){
 		$data=array();
-		$data['icon_class']="icon-user";
-		$data['title']="Suppliers";
-		$data['helptext']="This Page Is Used To Manage The Suppliers.";
-		$data['actions']['add']=CONFIG_SERVER_ADMIN_ROOT.'suppliers/add';
-		$data['actions']['list']=CONFIG_SERVER_ADMIN_ROOT.'suppliers';
+		$data['icon_class'] = "icon-user";
+		$data['title'] = "Receipts";
+		$data['helptext'] = "This Page Is Used To Manage The Receipts.";
+		$data['actions']['add'] = CONFIG_SERVER_ADMIN_ROOT.'receipts/add';
+		$data['actions']['list'] = CONFIG_SERVER_ADMIN_ROOT.'receipts';
 		return $data;
 	}
 
 	public function index(){
 		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
-		$this->home_template->load('home_template','admin/suppliers',$data);   
+		$this->home_template->load('home_template','admin/receipts',$data);   
 	}
 
 	public function loadUserForm($formContent=array(), $formName=''){
 		$data['breadcrumbs'] = $this->loadBreadCrumbs();
 		$data['data'] = $formContent;
 		$data['form_action'] = $formName;
-		$this->home_template->load('home_template','admin/suppliers',$data); 
+        $data['suppliers'] = $this->Common_model->getDataFromTable('tbl_suppliers','id,supplier_name,company_name',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
+        if($this->session->warehouse_id == 0){
+            $data['warehouses'] = $this->Common_model->getDataFromTable('tbl_warehouses','id,warehouse_name',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
+        }
+		$this->home_template->load('home_template','admin/receipts',$data); 
 	}
 
 	public function add(){
 		if(($this->input->post('add'))){		
 			$this->form_validation->set_session_data($this->input->post());
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('supplier_name','company_name','company_address','country','state','city','phno','alternate_phno','company_email','gstn','bank_account_number','bank_name','ifsc','branch','contact_person_name','contact_person_number','contact_person_email');    
+			$mandatoryFields=array('buyer_name','company_name','company_address','country','state','city','phno','alternate_phno','company_email','gstn','pollution_document','bank_account_number','bank_name','ifsc','branch','contact_person_name','contact_person_number','contact_person_email');    
             foreach($mandatoryFields as $row){
 				$fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
 				$this->form_validation->set_rules($row, $fieldname, 'required'); 
@@ -51,10 +55,10 @@ class Suppliers extends CI_Controller {
 				unset($data['add']);
 				$data['created_on'] = current_datetime();
 				$data['created_by'] == $this->session->id;
-				$this->Common_model->addDataIntoTable('tbl_suppliers',$data);
+				$this->Common_model->addDataIntoTable('tbl_buyers',$data);
 				$this->form_validation->clear_field_data();
-				$this->messages->setMessage('Supplier Created Successfully','success');
-				redirect('administrator/suppliers');
+				$this->messages->setMessage('Buyer Created Successfully','success');
+				redirect('administrator/buyers');
 			}
 		}
 			$this->loadUserForm(array(),'add');
@@ -64,12 +68,12 @@ class Suppliers extends CI_Controller {
 		
 		if(($this->input->post('edit'))){
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('supplier_name','company_name','company_address','country','state','city','phno','alternate_phno','company_email','gstn','bank_account_number','bank_name','ifsc','branch','contact_person_name','contact_person_number','contact_person_email');    
+			$mandatoryFields=array('buyer_name','company_name','company_address','country','state','city','phno','alternate_phno','company_email','gstn','pollution_document','bank_account_number','bank_name','ifsc','branch','contact_person_name','contact_person_number','contact_person_email');    
             foreach($mandatoryFields as $row){
             $fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
             $this->form_validation->set_rules($row, $fieldname, 'required'); 
             }
-			$checkUser = $this->Common_model->check_exists('tbl_suppliers','company_email',$this->input->post('company_email'),'id',$param1);
+			$checkUser = $this->Common_model->check_exists('tbl_buyers','company_email',$this->input->post('company_email'),'id',$param1);
 			if($checkUser > 0){
 				$this->messages->setMessage('User email <i>'.$this->input->post('company_email').'</i> already exist','error');
 			}else{ 
@@ -82,33 +86,18 @@ class Suppliers extends CI_Controller {
 					}
 					unset($data['edit']);
                     $data['updated_on'] = current_datetime();
-    				$this->Common_model->updateDataFromTable('tbl_suppliers',$data,'id',$param1);
-    				$this->messages->setMessage('Supplier Updated Successfully','success');
-    				redirect(base_url('administrator/suppliers'));
+    				$this->Common_model->updateDataFromTable('tbl_buyers',$data,'id',$param1);
+    				$this->messages->setMessage('Buyer Updated Successfully','success');
+    				redirect(base_url('administrator/buyers'));
 				}
 			}
 		}
 		$formData=array();
 		if($param1!=''){
-			$result = $this->Common_model->getDataFromTable('tbl_suppliers','',  $whereField='id', $whereValue=$param1, $orderBy='', $order='', $limit=1, $offset=0, true);
+			$result = $this->Common_model->getDataFromTable('tbl_buyers','',  $whereField='id', $whereValue=$param1, $orderBy='', $order='', $limit=1, $offset=0, true);
 			$formData=$result[0];	
 		}
 		$this->loadUserForm($formData, 'edit');
-	}
-
-	public function updateStatus(){
-		$u_id = $this->input->post('sid');
-		if($this->input->post('status') == 'Active'){
-			$data['status'] = $this->input->post('status');
-			$succ_message = 'Supplier Actived Successfully';
-		}else{
-			$data['status'] = $this->input->post('status');
-			$succ_message = 'Supplier Inactived Successfully';
-		}	
-		$this->Common_model->updateDataFromTable('tbl_suppliers',$data,'id',$u_id);
-		$message = ['error'=>'0','message'=>$succ_message];
-        echo json_encode($message);
-        exit;
 	}
 
 
@@ -116,11 +105,10 @@ class Suppliers extends CI_Controller {
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
 		$status         =  $this->input->post('status');
-		$role         =  $this->input->post('role');
 		$indexColumn = 'id';
-		$selectColumns = ['id','supplier_name','company_name','company_email','phno','status','created_on'];
-		$dataTableSortOrdering = ['supplier_name','company_name','company_email','phno','status','created_on'];
-		$table_name = 'tbl_suppliers';
+		$selectColumns = ['id','buyer_name','company_name','company_email','phno','status','created_on'];
+		$dataTableSortOrdering = ['buyer_name','company_name','company_email','phno','status','created_on'];
+		$table_name = 'tbl_buyers';
 		$joinsArray = [];
 		$wherecondition='id!="0"';
 		if($status=='Active'){
@@ -143,7 +131,7 @@ class Suppliers extends CI_Controller {
 				$action="";
 				$content .='[';
 				$recordListing[$i][0]= $i+1;
-                $recordListing[$i][1]= '<a href="javascript:void()" class="text-info" onclick="getDetails('.$recordData->id.')">'.$recordData->supplier_name.'</a>';
+                $recordListing[$i][1]= '<a href="javascript:void()" class="text-info" onclick="getDetails('.$recordData->id.')">'.$recordData->buyer_name.'</a>';
                 $recordListing[$i][2]= $recordData->company_name;
                 $recordListing[$i][3]= $recordData->company_email;
                 $recordListing[$i][4]= $recordData->phno;
@@ -160,8 +148,7 @@ class Suppliers extends CI_Controller {
 						$action.= '<a class="btn" title="Deactive" onclick="statusUpdate(this,'."'$recordData->id'".','."'Inactive'".')" style="margin-bottom: 2px;color:red;font-size: 16px;cursor:pointer;"><i class="ri-close-line"></i></a>';
 					}
 				}
-				
-				$action.= '<a href="'.CONFIG_SERVER_ADMIN_ROOT.'suppliers/edit/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill" aria-hidden="true"></i></a>';
+				$action.= '<a href="'.CONFIG_SERVER_ADMIN_ROOT.'buyers/edit/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill" aria-hidden="true"></i></a>';
 				$recordListing[$i][7]= $action;
 				$i++;
                 $srNumber++;
@@ -174,32 +161,5 @@ class Suppliers extends CI_Controller {
         }	
         echo '{"draw":'.$draw.',"recordsTotal":'.$recordsFiltered.',"recordsFiltered":'.$recordsFiltered.',"data":'.$final_data.'}';
 	}
-
-	public function getDetails(){
-		$id = $this->input->post('id');
-		$result = $this->Common_model->getDataFromTable('tbl_suppliers','supplier_name,company_name,company_address,country,state,city,phno,alternate_phno,company_email,company_website,gstn,bank_account_number,bank_name,ifsc,branch,contact_person_name,contact_person_number,contact_person_email,status',  $whereField='id', $whereValue=$id, $orderBy='', $order='', $limit=1, $offset=0, true);
-		if(!empty($result[0]) && is_array($result)){
-			$html = "<table class='table table-bordered'>";
-			foreach($result[0] as $key=>$value){
-				$html.="<tr>";
-				$html.="<td>".ucwords(str_replace("_"," ",$key))."</td>";
-				$html.="<td>".$value."</td></tr>";
- 			}
-			$res['html'] = $html;
-			$res['error'] = 0;
-		}else{
-			$res['html'] = '';
-			$res['error'] = 1;
-		}
-		echo json_encode($res);exit;
-	}
-
-	function alpha_dash_space($fullname){
-		if (! preg_match('/^[a-zA-Z\s]+$/', $fullname)) {
-			$this->form_validation->set_message('alpha_dash_space', 'The %s field may only contain alpha characters & White spaces');
-			return FALSE;
-		} else {
-			return TRUE;
-		}
-	}
+	
 }

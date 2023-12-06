@@ -116,7 +116,6 @@ class Buyers extends CI_Controller {
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
 		$status         =  $this->input->post('status');
-		$role         =  $this->input->post('role');
 		$indexColumn = 'id';
 		$selectColumns = ['id','buyer_name','company_name','company_email','phno','status','created_on'];
 		$dataTableSortOrdering = ['buyer_name','company_name','company_email','phno','status','created_on'];
@@ -143,7 +142,7 @@ class Buyers extends CI_Controller {
 				$action="";
 				$content .='[';
 				$recordListing[$i][0]= $i+1;
-                $recordListing[$i][1]= $recordData->buyer_name;
+                $recordListing[$i][1]= '<a href="javascript:void()" class="text-info" onclick="getDetails('.$recordData->id.')">'.$recordData->buyer_name.'</a>';
                 $recordListing[$i][2]= $recordData->company_name;
                 $recordListing[$i][3]= $recordData->company_email;
                 $recordListing[$i][4]= $recordData->phno;
@@ -173,6 +172,31 @@ class Buyers extends CI_Controller {
         }	
         echo '{"draw":'.$draw.',"recordsTotal":'.$recordsFiltered.',"recordsFiltered":'.$recordsFiltered.',"data":'.$final_data.'}';
 	}
+
+	public function getDetails(){
+		$id = $this->input->post('id');
+		$result = $this->Common_model->getDataFromTable('tbl_buyers','buyer_name,company_name,company_address,country,state,city,phno,alternate_phno,company_email,company_website,gstn,pollution_document,bank_account_number,bank_name,ifsc,branch,contact_person_name,contact_person_number,contact_person_email,status
+		',  $whereField='id', $whereValue=$id, $orderBy='', $order='', $limit=1, $offset=0, true);
+		if(!empty($result[0]) && is_array($result)){
+			$html = "<table class='table table-bordered'>";
+			foreach($result[0] as $key=>$value){
+				$html.="<tr>";
+				$html.="<td>".ucwords(str_replace("_"," ",$key))."</td>";
+				if($key=='pollution_document'){
+					$html.="<td><a href='".base_url($value)."' target='_blank'>View Document</a></td></tr>";
+				}else{
+					$html.="<td>".$value."</td></tr>";
+				}
+ 			}
+			$res['html'] = $html;
+			$res['error'] = 0;
+		}else{
+			$res['html'] = '';
+			$res['error'] = 1;
+		}
+		echo json_encode($res);exit;
+	}
+
 	function alpha_dash_space($fullname){
 		if (! preg_match('/^[a-zA-Z\s]+$/', $fullname)) {
 			$this->form_validation->set_message('alpha_dash_space', 'The %s field may only contain alpha characters & White spaces');
