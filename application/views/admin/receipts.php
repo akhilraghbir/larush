@@ -67,8 +67,8 @@
                         <table class="table table-bordered">
                             <thead>
                                 <th>Product Name</th>
-                                <th>Quantity</th>
                                 <th>Price</th>
+                                <th>Quantity</th>
                                 <th>Total</th>
                                 <th>Actions</th>
                             </thead>
@@ -133,6 +133,7 @@
                             var result = JSON.parse(data);
                             if (result.error == '0') {
                                 $(".purchase_body").append(result.html);
+                                $('#product').val('');
                             } else {
                                 console.log(result);
                             }
@@ -141,6 +142,13 @@
                             console.log(e.message);
                         }
                     });
+                }
+            }
+            function calculateTotal(price,elementId){
+                if(price!=''){
+                    var qty = $(".qty_"+elementId).val();
+                    var total = price * qty;
+                    $(".total_"+elementId).val(total.toFixed(2));
                 }
             }
         </script>

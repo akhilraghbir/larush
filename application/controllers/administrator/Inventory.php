@@ -107,6 +107,28 @@ class Inventory extends CI_Controller {
         exit;
 	}
 
+	public function addProduct(){
+		$pid = $this->input->post('id');
+		if($pid!=''){
+			$product = $this->Common_model->getDataFromTable('tbl_products','',  $whereField='id', $whereValue=$pid, $orderBy='', $order='', $limit=1, $offset=0, true);
+			if(is_array($product) && count($product)>0){
+				$elementid = time();
+				$html='<tr class="tr_'.$elementid.'">';
+				$html.='<td>'.$product[0]['product_name'].'</td>';
+				$html.='<td >'.$product[0]['tier_price'].'</td>';
+				$html.='<td><input type="text" maxlength="5" onkeyup="calculateTotal('.$product[0]['tier_price'].','.$elementid.')" class="qty_'.$elementid.' form-control Onlynumbers" placeholder="Enter Quantity"></td>';
+				$html.='<td><input type="text" readonly class="total_'.$elementid.' form-control Onlynumbers" placeholder="Enter Total"></td>';
+				$html.='<td><button type="button" onclick="removeRow('.$elementid.')" class="btn btn-sm btn-danger"><i class="ri-delete-bin-3-fill"></i></button></td>';
+				$html.='</tr>';
+				$res['error'] = 0;
+				$res['html'] = $html;
+			}else{
+				$res['error'] = 1;
+				$res['html'] = '';
+			}
+			echo json_encode($res);exit;
+		}
+	}
 
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
