@@ -17,7 +17,7 @@
             <div class="main-card mb-3 card card-body">
                 <h5 class="card-title"></h5>
                 <?php
-                $url = CONFIG_SERVER_ADMIN_ROOT . "buyers/add";
+                $url = CONFIG_SERVER_ADMIN_ROOT . "receipts/add";
                 echo form_open($url, array('class' => 'userRegistration', 'id' => 'userRegistration')); ?>
                 <div class="row">
                     <div class="col-md-4">
@@ -28,7 +28,7 @@
                                 <?php if (!empty($warehouses)) {
                                     foreach ($warehouses as $warehouse) {
                                 ?>
-                                        <option value="<?= $warehouse['id']; ?>"><?= $warehouse['warehouse_name']; ?></option>
+                                        <option value="<?= $warehouse['id']; ?>" <?php if(isset($formData) && ($formData['warehouse_id']==$warehouse['id'])){ echo "selected"; } ?> ><?= $warehouse['warehouse_name']; ?></option>
                                 <?php }
                                 } ?>
                             </select>
@@ -42,7 +42,7 @@
                                 <?php if (!empty($suppliers)) {
                                     foreach ($suppliers as $supplier) {
                                 ?>
-                                        <option value="<?= $supplier['id']; ?>"><?= $supplier['supplier_name']; ?></option>
+                                        <option value="<?= $supplier['id']; ?>" <?php if(isset($formData) && ($formData['supplier_id']==$supplier['id'])){ echo "selected"; } ?> ><?= $supplier['supplier_name']; ?></option>
                                 <?php }
                                 } ?>
                             </select>
@@ -51,7 +51,7 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="date" class="">Receipt Date <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" name="receipt_date">
+                            <input type="date" class="form-control" value="<?php if (isset($formData['receipt_date'])) { echo $formData['receipt_date']; } ?>" name="receipt_date">
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 table-responsive">
                         <table class="table table-bordered">
                             <thead>
                                 <th>Product Name</th>
@@ -78,8 +78,39 @@
                         </table>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table">
+                            <tr>
+                                <td>Notes</td>
+                                <td><textarea class="form-control" name="notes" placeholder="Enter Notes"></textarea>
+                            </tr>
+                            <tr>
+                                <td>Final Amount</td>
+                                <td><input type="text" class="form-control Onlynumbers" name="final_amount" placeholder="Enter Final Amount"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table">
+                            <tr>
+                                <td colspan="3" class="fw-bold text-end">Sub Total</td>
+                                <td><input type="text" name="sub_total" readonly  class="subtotal_price form-control" placeholder="Sub Total"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="fw-bold text-end">GST (5 %)</td>
+                                <td><input type="text" readonly name="gst" class="gst form-control" placeholder="Total"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="fw-bold text-end">Total</td>
+                                <td><input type="text" readonly  name="grand_total" class="total_price form-control" placeholder="Total"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                </div>
                 <div>
-                    <input type="submit" name="add" class="mt-2 btn btn-primary pull-right" value="Submit">
+                    <input type="submit" name="add" class="mt-2 btn btn-primary pull-right" value="Generate Receipt">
                 </div>
                 </form>
             </div>
@@ -149,6 +180,30 @@
                     var qty = $(".qty_"+elementId).val();
                     var total = price * qty;
                     $(".total_"+elementId).val(total.toFixed(2));
+                    calculateGrandTotal();
+                }
+            }
+
+            function calculateGrandTotal(){
+                var subtotal_price = 0;
+                var qty = 0;
+                var gstpercentage = 5;
+                $(".total").each(function(){
+                    subtotal_price = subtotal_price + parseFloat($(this).val());
+                });
+                var gst = (subtotal_price * gstpercentage) / 100;
+                var grandtotal = gst + subtotal_price;
+                $(".gst").val(gst);
+                $(".subtotal_price").val(subtotal_price.toFixed(2));
+                $(".total_price").val(grandtotal.toFixed(2));
+            }
+            function removeRow(id){
+                if(id!=''){
+                    $(".tr_"+id).hide(500, function(){
+                        this.remove(); 
+                        calculateGrandTotal();   
+                    });
+                    
                 }
             }
         </script>
@@ -176,24 +231,19 @@
                         </div>
                         <hr>
                         <div class="table-responsive tasks dataGridTable">
-                            <table id="buyersList" class="table card-table table-vcenter text-nowrap mb-0 border nowrap" style="width:100%">
+                            <table id="receiptList" class="table card-table table-vcenter text-nowrap mb-0 border nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Buyer Id</th>
-                                        <th>Buyer Name</th>
-                                        <th>Company Name</th>
-                                        <th>Email Id</th>
-                                        <th>Phone Number</th>
-                                        <th>Status</th>
-                                        <th>Created On</th>
+                                        <th>S.No</th>
+                                        <th>Receipt Number</th>
+                                        <th>Supplier Name</th>
+                                        <th>Total</th>
+                                        <th>Receipt Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
-
-                            </table>
-
                             </table>
                         </div>
                     </div>
@@ -205,20 +255,19 @@
 <script type="text/javascript">
     function getdata() {
         var status = $("#status").val();
-        $('#buyersList').DataTable({
+        $('#receiptList').DataTable({
             "destroy": true,
             "responsive": false,
             "processing": true,
             "serverSide": true,
             "order": [
-                [0, "desc"]
+                [4, "desc"]
             ],
             "ajax": {
-                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>buyers/ajaxListing",
+                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>receipts/ajaxListing",
                 "type": 'POST',
                 'data': {
-                    status: status,
-                    role: role
+                    status: status
                 }
             },
             language: {
@@ -233,60 +282,6 @@
         });
     }
     getdata();
-
-    function statusUpdate(e, uId, sTaTus) {
-        $('#page-overlay1').hide();
-        var TtMsg = 'Are you sure you want to ' + sTaTus + ' this status';
-        $.confirm({
-            title: TtMsg,
-            buttons: {
-                formSubmit: {
-                    text: 'Yes',
-                    btnClass: 'btn-blue',
-                    action: function() {
-                        $('#page-overlay').show();
-                        $.ajax({
-                            url: '<?php echo base_url(); ?>administrator/buyers/updateStatus',
-                            type: 'POST',
-                            data: {
-                                "statusresult": "1",
-                                "sid": uId,
-                                "status": sTaTus
-                            },
-                            success: function(data) {
-                                result = JSON.parse(data);
-                                var msg = result.message;
-                                if (result.error == '0') {
-                                    toastr['success'](msg);
-                                    $('#buyersList').DataTable().ajax.reload();
-                                } else {
-                                    toastr['warning'](msg);
-                                    $('#buyersList').DataTable().ajax.reload();
-                                }
-                            },
-                            error: function(e) {
-                                toastr['warning'](e.message);
-                                $('#buyersList').DataTable().ajax.reload();
-                            }
-                        });
-
-                    }
-                },
-                no: function() {
-                    $('#page-overlay').hide();
-                },
-            },
-            onContentReady: function() {
-                // bind to events
-                var jc = this;
-                this.$content.find('form').on('submit', function(e) {
-                    // if the user submits the form by pressing enter in the field.
-                    e.preventDefault();
-                    jc.$$formSubmit.trigger('click'); // reference the button and click it
-                });
-            }
-        });
-    }
 
     function getDetails(id) {
         if (id != '') {

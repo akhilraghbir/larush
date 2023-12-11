@@ -50,7 +50,7 @@ class Suppliers extends CI_Controller {
                 }
 				unset($data['add']);
 				$data['created_on'] = current_datetime();
-				$data['created_by'] == $this->session->id;
+				$data['created_by'] = $this->session->id;
 				$this->Common_model->addDataIntoTable('tbl_suppliers',$data);
 				$this->form_validation->clear_field_data();
 				$this->messages->setMessage('Supplier Created Successfully','success');
