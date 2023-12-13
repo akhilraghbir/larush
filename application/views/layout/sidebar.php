@@ -55,6 +55,12 @@
                         <span>Email Templates</span>
                     </a>
                 </li>
+                <li class="<?= ($modulename == 'Settings') ? 'mm-active' : ''; ?>">
+                    <a href="<?= base_url('administrator/Settings'); ?>" class="waves-effect">
+                        <i class="ri-mail-send-line"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->

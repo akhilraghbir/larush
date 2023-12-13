@@ -116,7 +116,7 @@ class Receipts extends CI_Controller {
                 $recordListing[$i][2]= $recordData->supplier_name;
                 $recordListing[$i][3]= $recordData->grand_total;
                 $recordListing[$i][4]= displayDateInWords($recordData->receipt_date);
-				$action.= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'receipt/print/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-printer-fill" aria-hidden="true"></i></a>';
+				$action.= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'receipts/print/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-printer-fill" aria-hidden="true"></i></a>';
 				$recordListing[$i][5]= $action;
 				$i++;
                 $srNumber++;
@@ -130,4 +130,16 @@ class Receipts extends CI_Controller {
         echo '{"draw":'.$draw.',"recordsTotal":'.$recordsFiltered.',"recordsFiltered":'.$recordsFiltered.',"data":'.$final_data.'}';
 	}
 	
+
+	public function print($id = ''){
+		if($id!=''){
+			$data['settings'] = $this->Common_model->getDataFromTable('tbl_settings','',  $whereField='', $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
+			$data['purchase'] = $this->Common_model->getDataFromTable('tbl_purchases','',  $whereField='id', $whereValue=$id, $orderBy='', $order='', $limit='', $offset=0, true);
+			$data['purchase_items'] = $this->Common_model->getDataFromTable('tbl_purchase_items','',  $whereField='purchase_id', $whereValue=$id, $orderBy='', $order='', $limit='', $offset=0, true);
+			$this->load->view('admin/invoice',$data);
+		}else{
+			redirect(base_url('receipts'));
+		}
+	}
+
 }
