@@ -4,7 +4,7 @@ class bmp {
 
 var $mpdf = null;
 
-public function __construct(&$mpdf){
+function bmp(&$mpdf) {
 	$this->mpdf = $mpdf;
 }
 
