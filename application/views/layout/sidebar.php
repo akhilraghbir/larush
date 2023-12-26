@@ -31,6 +31,12 @@
                         <span>Receipts</span>
                     </a>
                 </li>
+                <li class="<?= ($modulename == 'dispatch') ? 'mm-active' : ''; ?>">
+                    <a href="<?= base_url('administrator/dispatch'); ?>" class="waves-effect">
+                        <i class="ri-account-circle-line"></i>
+                        <span>Dispatch</span>
+                    </a>
+                </li>
                 <li class="<?= ($modulename == 'suppliers') ? 'mm-active' : ''; ?>">
                     <a href="<?= base_url('administrator/suppliers'); ?>" class="waves-effect">
                         <i class="ri-account-circle-line"></i>

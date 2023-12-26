@@ -17,41 +17,27 @@
             <div class="main-card mb-3 card card-body">
                 <h5 class="card-title"></h5>
                 <?php
-                $url = CONFIG_SERVER_ADMIN_ROOT . "receipts/add";
+                $url = CONFIG_SERVER_ADMIN_ROOT . "dispatch/add";
                 echo form_open($url, array('class' => 'userRegistration', 'id' => 'userRegistration')); ?>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="warehouse" class="">Select Warehouse <span class="text-danger">*</span></label>
-                            <select name="warehouse_id" class="form-control">
-                                <option value="">Select Warehouse</option>
-                                <?php if (!empty($warehouses)) {
-                                    foreach ($warehouses as $warehouse) {
+                            <label for="buyer_id" class="">Select Buyer <span class="text-danger">*</span></label>
+                            <select name="buyer_id" id="buyer_id" class="form-control">
+                                <option value="">Select Buyer</option>
+                                <?php if (!empty($buyers)) {
+                                    foreach ($buyers as $buyer) {
                                 ?>
-                                        <option value="<?= $warehouse['id']; ?>" <?php if(isset($formData) && ($formData['warehouse_id']==$warehouse['id'])){ echo "selected"; } ?> ><?= $warehouse['warehouse_name']; ?></option>
+                                        <option value="<?= $buyer['id']; ?>" <?php if(isset($formData) && ($formData['buyer_id']==$buyer['id'])){ echo "selected"; } ?> ><?= $buyer['buyer_name']; ?></option>
                                 <?php }
                                 } ?>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="supplier" class="">Select Supplier <span class="text-danger">*</span></label>
-                            <select name="supplier_id" class="form-control">
-                                <option value="">Select Supplier</option>
-                                <?php if (!empty($suppliers)) {
-                                    foreach ($suppliers as $supplier) {
-                                ?>
-                                        <option value="<?= $supplier['id']; ?>" <?php if(isset($formData) && ($formData['supplier_id']==$supplier['id'])){ echo "selected"; } ?> ><?= $supplier['supplier_name']; ?></option>
-                                <?php }
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="date" class="">Receipt Date <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" value="<?php if (isset($formData['receipt_date'])) { echo $formData['receipt_date']; } ?>" name="receipt_date">
+                            <label for="date" class="">Dispatch Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" value="<?php if (isset($formData['dispatch_date'])) { echo $formData['dispatch_date']; } ?>" name="dispatch_date">
                         </div>
                     </div>
                 </div>
@@ -67,12 +53,12 @@
                         <table class="table table-bordered">
                             <thead>
                                 <th>Product Name</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
+                                <th>Gross</th>
+                                <th>Tare</th>
+                                <th>Net</th>
                                 <th>Actions</th>
                             </thead>
-                            <tbody class="purchase_body">
+                            <tbody class="dispatch_body">
 
                             </tbody>
                         </table>
@@ -85,25 +71,17 @@
                                 <td>Notes</td>
                                 <td><textarea class="form-control" name="notes" placeholder="Enter Notes"></textarea>
                             </tr>
-                            <tr>
-                                <td>Final Amount</td>
-                                <td><input type="text" class="form-control Onlynumbers" name="final_amount" placeholder="Enter Final Amount"></td>
-                            </tr>
                         </table>
                     </div>
                     <div class="col-md-6">
                         <table class="table">
                             <tr>
-                                <td colspan="3" class="fw-bold text-end">Sub Total</td>
-                                <td><input type="text" name="sub_total" readonly  class="subtotal_price form-control" placeholder="Sub Total"></td>
+                                <td colspan="3" class="fw-bold text-end">Total Net</td>
+                                <td><input type="text" name="total_net" readonly  placeholder="Total Net" class="total_net form-control" placeholder="Total Net"></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="fw-bold text-end">GST (5 %)</td>
-                                <td><input type="text" readonly name="gst" class="gst form-control" placeholder="Total"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" class="fw-bold text-end">Total</td>
-                                <td><input type="text" readonly  name="grand_total" class="total_price form-control" placeholder="Total"></td>
+                                <td colspan="3" class="fw-bold text-end">Total Gross</td>
+                                <td><input type="text" readonly  name="total_gross" placeholder="Total Gross" class="total_gross form-control" placeholder="Total Gross"></td>
                             </tr>
                         </table>
                     </div>
@@ -157,13 +135,13 @@
             function addProduct(id = null) {
                 if (id != '') {
                     $.ajax({
-                        url: '<?php echo base_url(); ?>administrator/inventory/addProduct',
+                        url: '<?php echo base_url(); ?>administrator/dispatch/dispatchProduct',
                         type: 'POST',
                         data: {"id": id},
                         success: function(data) {
                             var result = JSON.parse(data);
                             if (result.error == '0') {
-                                $(".purchase_body").append(result.html);
+                                $(".dispatch_body").append(result.html);
                                 $('#product').val('');
                             } else {
                                 console.log(result);
@@ -175,27 +153,27 @@
                     });
                 }
             }
-            function calculateTotal(price,elementId){
-                if(price!=''){
-                    var qty = $(".qty_"+elementId).val();
-                    var total = price * qty;
-                    $(".total_"+elementId).val(total.toFixed(2));
+            function calculateTotal(elementId){
+                if(elementId!=''){
+                    var gross = $(".gross_"+elementId).val();
+                    var tare = $(".tare_"+elementId).val();
+                    var total = parseFloat(gross) - parseFloat(tare);
+                    $(".net_"+elementId).val(total.toFixed(2));
                     calculateGrandTotal();
                 }
             }
 
             function calculateGrandTotal(){
-                var subtotal_price = 0;
-                var qty = 0;
-                var gstpercentage = 5;
-                $(".total").each(function(){
-                    subtotal_price = subtotal_price + parseFloat($(this).val());
+                var tot_gross = 0;
+                var tot_net = 0;
+                $(".gross").each(function(){
+                    tot_gross = tot_gross + parseFloat($(this).val());
                 });
-                var gst = (subtotal_price * gstpercentage) / 100;
-                var grandtotal = gst + subtotal_price;
-                $(".gst").val(gst);
-                $(".subtotal_price").val(subtotal_price.toFixed(2));
-                $(".total_price").val(grandtotal.toFixed(2));
+                $(".net").each(function(){
+                    tot_net = tot_net + parseFloat($(this).val());
+                });
+                $(".total_gross").val(tot_gross.toFixed(2));
+                $(".total_net").val(tot_net.toFixed(2));
             }
             function removeRow(id){
                 if(id!=''){
@@ -204,6 +182,24 @@
                         calculateGrandTotal();   
                     });
                     
+                }
+            }
+            function print(elementId){
+                if(elementId!=''){
+                    var pname = $(".gross_"+elementId).attr('data-pname');
+                    var gross = $(".gross_"+elementId).val();
+                    var net = $(".net_"+elementId).val();
+                    var tare = $(".tare_"+elementId).val();
+                    if(gross == '' || gross ==undefined){
+                        toastr['error']('Please enter gross');return false;
+                    }
+                    if(tare == '' || tare ==undefined || tare == 0){
+                        toastr['error']('Please enter tare');return false;
+                    }
+                    var data = JSON.stringify({pname:pname,gross:gross,net:net,tare:tare});
+                    var token = window.btoa(data);     
+                    //console.log(window.btoa(data));return false;
+                    window.open(base_url+'administrator/dispatch/packing_slip/'+token);
                 }
             }
         </script>
@@ -231,14 +227,13 @@
                         </div>
                         <hr>
                         <div class="table-responsive tasks dataGridTable">
-                            <table id="receiptList" class="table card-table table-vcenter text-nowrap mb-0 border nowrap" style="width:100%">
+                            <table id="dispatchList" class="table card-table table-vcenter text-nowrap mb-0 border nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
-                                        <th>Receipt Number</th>
-                                        <th>Supplier Name</th>
-                                        <th>Total</th>
-                                        <th>Receipt Date</th>
+                                        <th>Dispatch Number</th>
+                                        <th>Company Name</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -254,8 +249,7 @@
 
 <script type="text/javascript">
     function getdata() {
-        var status = $("#status").val();
-        $('#receiptList').DataTable({
+        $('#dispatchList').DataTable({
             "destroy": true,
             "responsive": false,
             "processing": true,
@@ -264,11 +258,9 @@
                 [4, "desc"]
             ],
             "ajax": {
-                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>receipts/ajaxListing",
+                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>dispatch/ajaxListing",
                 "type": 'POST',
-                'data': {
-                    status: status
-                }
+                'data': {}
             },
             language: {
                 paginate: {
