@@ -95,9 +95,9 @@ class Users extends CI_Controller {
 		if(($this->input->post('edit'))){
 			$this->form_validation->checkXssValidation($this->input->post());
 			$mandatoryFields=array('first_name','last_name','email_id','user_type');    
-			if($_POST['user_type'] == 'Employee'){
-				$mandatoryFields[] = 'warehouse_id';
-			}
+			// if($_POST['user_type'] == 'Employee'){
+			// 	$mandatoryFields[] = 'warehouse_id';
+			// }
             foreach($mandatoryFields as $row){
             $fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
             $this->form_validation->set_rules($row, $fieldname, 'required'); 

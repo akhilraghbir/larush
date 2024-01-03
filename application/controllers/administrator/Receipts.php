@@ -100,6 +100,9 @@ class Receipts extends CI_Controller {
 		$table_name = 'tbl_purchases as tr';
 		$joinsArray[] = ['table_name'=>'tbl_suppliers as ts','condition'=>"ts.id = tr.supplier_id",'join_type'=>'left'];;
 		$wherecondition = 'tr.id!="0"';
+		if($this->session->user_type == 'Employee'){
+			$wherecondition = 'tr.created_by='.$this->session->id;
+		}
 		$getRecordListing = $this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords = $getRecordListing['recordsTotal'];
 		$recordsFiltered = $getRecordListing['recordsFiltered'];
@@ -143,7 +146,7 @@ class Receipts extends CI_Controller {
 			$dataTableSortOrdering='';
 			$table_name='tbl_purchase_items as tpi';
 			$joinsArray[] = ['table_name'=>'tbl_products as tp','condition'=>"tp.id = tpi.product_id",'join_type'=>'left'];
-			$whereCondition = "tpi.purchase_id!='$id'";
+			$whereCondition = "tpi.purchase_id='$id'";
 			$listData = $this->Datatables_model->getDataFromDB($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$whereCondition,$indexColumn,'',$orderByColumn,$sortType,true,'POST');
 			$data['purchase_items']  = $listData['data'];
 			$this->load->library('pdf');

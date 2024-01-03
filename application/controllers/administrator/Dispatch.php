@@ -124,21 +124,21 @@ class Dispatch extends CI_Controller {
 	public function print($id = ''){
 		if($id!=''){
 			$data['settings'] = $this->Common_model->getDataFromTable('tbl_settings','',  $whereField='', $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
-			$data['purchase'] = $this->Common_model->getDataFromTable('tbl_purchases','',  $whereField='id', $whereValue=$id, $orderBy='', $order='', $limit='', $offset=0, true);
-			$data['supplier'] = $this->Common_model->getDataFromTable('tbl_suppliers','supplier_name,company_name,company_address',  $whereField='id', $whereValue=$data['purchase'][0]['supplier_id'], $orderBy='', $order='', $limit='', $offset=0, true);
-			$orderByColumn = "tpi.id";
+			$data['dispatch'] = $this->Common_model->getDataFromTable('tbl_dispatch','',  $whereField='id', $whereValue=$id, $orderBy='', $order='', $limit='', $offset=0, true);
+			$data['buyer'] = $this->Common_model->getDataFromTable('tbl_buyers','buyer_name,company_name,company_address',  $whereField='id', $whereValue=$data['dispatch'][0]['buyer_id'], $orderBy='', $order='', $limit='', $offset=0, true);
+			$orderByColumn = "tdi.id";
 			$sortType = 'DESC';
-			$indexColumn='tpi.id';
-			$selectColumns = ['tpi.*','tp.product_name'];
+			$indexColumn='tdi.id';
+			$selectColumns = ['tdi.*','tp.product_name'];
 			$dataTableSortOrdering='';
-			$table_name='tbl_purchase_items as tpi';
-			$joinsArray[] = ['table_name'=>'tbl_products as tp','condition'=>"tp.id = tpi.product_id",'join_type'=>'left'];
-			$whereCondition = "tpi.purchase_id!='$id'";
+			$table_name='tbl_dispatch_items as tdi';
+			$joinsArray[] = ['table_name'=>'tbl_products as tp','condition'=>"tp.id = tdi.product_id",'join_type'=>'left'];
+			$whereCondition = "tdi.dispatch_id='$id'";
 			$listData = $this->Datatables_model->getDataFromDB($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$whereCondition,$indexColumn,'',$orderByColumn,$sortType,true,'POST');
-			$data['purchase_items']  = $listData['data'];
+			$data['dispatch_items']  = $listData['data'];
 			$this->load->library('pdf');
-			$pdfFilePath = 'invoice_'.$data['purchase'][0]['receipt_number'].'.pdf';
-			$html =  $this->load->view('admin/invoice',$data,true);
+			$pdfFilePath = 'dispatch_'.$data['dispatch'][0]['dispatch_number'].'.pdf';
+			$html =  $this->load->view('admin/dispatch_print',$data,true);
 			$this->pdf->loadHtml($html);
 			$this->pdf->setPaper('A4', 'landscape');
 			$this->pdf->render();

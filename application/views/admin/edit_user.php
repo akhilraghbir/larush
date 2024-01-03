@@ -56,6 +56,11 @@ if(isset($data)){
                                                                     echo "selected=selected";
                                                                 }
                                                             } ?>>Accountant</option>
+									<option value='Employee' <?php if (isset($formData['user_type'])) {
+									if ($formData['user_type'] == 'Employee') {
+										echo "selected=selected";
+									}
+								} ?>>Employee</option>
                                 </select>
                             </div>
                         </div>
