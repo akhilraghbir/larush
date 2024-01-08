@@ -50,8 +50,8 @@
                         <div class="mb-3">
                             <label for="is_ferrous" class="">Is Ferrous <span class="text-danger">*</span></label>
                             <select name="is_ferrous" id="is_ferrous" class="form-control">
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
+                                <option value="No" <?php if(isset($formData) && ($formData['is_ferrous']=='No')){ echo "selected"; } ?>>No</option>
+                                <option value="Yes" <?php if(isset($formData) && ($formData['is_ferrous']=='Yes')){ echo "selected"; } ?>>Yes</option>
                             </select>
                         </div>
                     </div>

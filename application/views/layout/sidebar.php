@@ -26,6 +26,18 @@
                             <span>Warehouses</span>
                         </a>
                     </li>
+                    <li class="<?= ($modulename == 'categories') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/categories'); ?>" class="waves-effect">
+                            <i class="ri-account-circle-line"></i>
+                            <span>Expense Categories</span>
+                        </a>
+                    </li>
+                    <li class="<?= ($modulename == 'expenses') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/expenses'); ?>" class="waves-effect">
+                            <i class="ri-account-circle-line"></i>
+                            <span>Expenses</span>
+                        </a>
+                    </li>
                     <li class="<?= ($modulename == 'receipts') ? 'mm-active' : ''; ?>">
                         <a href="<?= base_url('administrator/receipts'); ?>" class="waves-effect">
                             <i class="ri-account-circle-line"></i>

@@ -53,7 +53,7 @@
             <td><?= ++$i; ?></td>
             <td><?= $items['product_name']; ?></td>
             <td><?= $items['quantity']; ?></td>
-            <td>$ <?= $items['price']; ?></td>
+            <td><?= ($items['price']>0) ? '$ '.$items['price'] : '-' ; ?></td>
             <td>$ <?= $items['total']; ?></td>
         </tr>
         <?php } } ?>

@@ -115,7 +115,7 @@ class Receipts extends CI_Controller {
 				$action="";
 				$content .='[';
 				$recordListing[$i][0]= $i+1;
-                $recordListing[$i][1]= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'receipts/print/'.$recordData->id.'" class="text-info" onclick="getDetails('.$recordData->id.')">'.$recordData->receipt_number.'</a>';
+                $recordListing[$i][1]= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'receipts/print/'.$recordData->id.'" class="text-info">'.$recordData->receipt_number.'</a>';
                 $recordListing[$i][2]= $recordData->supplier_name;
                 $recordListing[$i][3]= $recordData->grand_total;
                 $recordListing[$i][4]= displayDateInWords($recordData->receipt_date);

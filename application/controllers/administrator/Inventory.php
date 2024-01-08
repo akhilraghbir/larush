@@ -115,9 +115,16 @@ class Inventory extends CI_Controller {
 				$elementid = time();
 				$html='<tr class="tr_'.$elementid.'">';
 				$html.='<td>'.substr($product[0]['product_name'],0,5).'..</td>';
-				$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]">'.$product[0]['tier_price'].'</td>';
-				$html.='<td><input type="text" maxlength="5" onkeyup="calculateTotal('.$product[0]['tier_price'].','.$elementid.')" name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
-				$html.='<td><input type="hidden" value="'.$product[0]['tier_price'].'" name="price[]"><input type="text" readonly class="total_'.$elementid.' total form-control Onlynumbers" name="total[]" placeholder="Enter Total"></td>';
+				if($product[0]['is_ferrous'] == 'No'){
+					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]"><input type="text" class="form-control price_'.$elementid.'" onkeyup="calculateTotal('.$elementid.')" value="'.$product[0]['tier_price'].'" name="price[]"></td>';
+					$html.='<td><input type="text" maxlength="5" onkeyup="calculateTotal('.$elementid.')" name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
+				}else{
+					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]">
+					<input type="hidden" value="" name="price[]"></td>';
+					$html.='<td><input type="text" maxlength="5"  name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
+				}
+				
+				$html.='<td><input type="text" class="total_'.$elementid.' total form-control Onlynumbers" onkeyup="calculateGrandTotal()" name="total[]" placeholder="Enter Total"></td>';
 				$html.='<td><button type="button" onclick="removeRow('.$elementid.')" class="btn btn-sm btn-danger"><i class="ri-delete-bin-3-fill"></i></button></td>';
 				$html.='</tr>';
 				$res['error'] = 0;

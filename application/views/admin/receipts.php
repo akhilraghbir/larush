@@ -175,13 +175,12 @@
                     });
                 }
             }
-            function calculateTotal(price,elementId){
-                if(price!=''){
-                    var qty = $(".qty_"+elementId).val();
-                    var total = price * qty;
-                    $(".total_"+elementId).val(total.toFixed(2));
-                    calculateGrandTotal();
-                }
+            function calculateTotal(elementId){
+                var price = $(".price_"+elementId).val();
+                var qty = $(".qty_"+elementId).val();
+                var total = price * qty;
+                $(".total_"+elementId).val(total.toFixed(2));
+                calculateGrandTotal();
             }
 
             function calculateGrandTotal(){
@@ -189,7 +188,10 @@
                 var qty = 0;
                 var gstpercentage = 5;
                 $(".total").each(function(){
-                    subtotal_price = subtotal_price + parseFloat($(this).val());
+                    var thisTotal = $(this).val();
+                    if(thisTotal>0 && thisTotal!=undefined){
+                        subtotal_price = subtotal_price + parseFloat(thisTotal);
+                    }
                 });
                 var gst = (subtotal_price * gstpercentage) / 100;
                 var grandtotal = gst + subtotal_price;
