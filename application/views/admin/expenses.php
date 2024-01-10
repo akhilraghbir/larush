@@ -119,6 +119,17 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="last name" class="">Expense Category <span class="text-danger">*</span></label>
+                                    <select name="expense_category" id="expense_category" class="form-control">
+                                        <option value="All">All</option>
+                                        <?php foreach($categories as $category){ ?>
+                                            <option value="<?= $category['id'];?>" <?php if(isset($formData) && ($formData['category']==$category['id'])){ echo "selected"; } ?>><?= $category['category'];?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <input type="button" style="margin-top:28px" onclick="getdata()" name="submit" class="btn btn-primary" value="Search">
@@ -156,6 +167,7 @@
 <script type="text/javascript">
     function getdata() {
         var status = $("#status").val();
+        var expense_category = $("#expense_category").val();
         var clist = $('#expenseList').DataTable({
             "destroy": true,
             "responsive": false,
@@ -168,7 +180,8 @@
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>expenses/ajaxListing",
                 "type": 'POST',
                 'data': {
-                    status:status
+                    status:status,
+                    expense_category:expense_category
                 }
             },
             language: {

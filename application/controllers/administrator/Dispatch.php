@@ -20,7 +20,8 @@ class Dispatch extends CI_Controller {
 	}
 
 	public function index(){
-		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
+		$data['breadcrumbs'] = $this->loadBreadCrumbs();
+		$data['buyers'] = $this->Common_model->getDataFromTable('tbl_buyers','id,buyer_name,company_name',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true); 
 		$this->home_template->load('home_template','admin/dispatch',$data);   
 	}
 
@@ -86,12 +87,20 @@ class Dispatch extends CI_Controller {
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
+		$buyer         =  $this->input->post('buyer');
+		$date         =  $this->input->post('date');
 		$indexColumn = 'td.id';
-		$selectColumns = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date'];
-		$dataTableSortOrdering = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date'];
+		$selectColumns = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date','td.created_on'];
+		$dataTableSortOrdering = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date','td.created_on'];
 		$table_name = 'tbl_dispatch as td';
 		$joinsArray[] = ['table_name'=>'tbl_buyers as tb','condition'=>"tb.id = td.buyer_id",'join_type'=>'left'];;
 		$wherecondition = 'td.id!="0"';
+		if($date!=''){
+			$wherecondition.= ' and date(td.created_on) = "'.$date.'"';
+		}
+		if($buyer!='All'){
+			$wherecondition.= ' and td.buyer_id = '.$buyer;
+		}
 		$getRecordListing = $this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords = $getRecordListing['recordsTotal'];
 		$recordsFiltered = $getRecordListing['recordsFiltered'];
@@ -107,8 +116,9 @@ class Dispatch extends CI_Controller {
                 $recordListing[$i][1]= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'dispatch/print/'.$recordData->id.'" class="text-info" onclick="getDetails('.$recordData->id.')">'.$recordData->dispatch_number.'</a>';
                 $recordListing[$i][2]= $recordData->buyer_name;
                 $recordListing[$i][3]= displayDateInWords($recordData->dispatch_date);
+				$recordListing[$i][4]= displayDateInWords($recordData->created_on);
 				$action.= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'dispatch/print/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="ri-printer-fill" aria-hidden="true"></i></a>';
-				$recordListing[$i][4]= $action;
+				$recordListing[$i][5]= $action;
 				$i++;
                 $srNumber++;
             }

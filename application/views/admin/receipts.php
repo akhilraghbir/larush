@@ -215,17 +215,41 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
+                            <?php if($this->session->user_type == 'Admin'){ ?>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                    <label for="">Select Employee</label>
+                                        <select name="employee" id="employee" class="form-control">
+                                            <option value="All">All</option>
+                                            <?php if(!empty($employees)){ 
+                                            foreach($employees as $employee){    
+                                            ?>
+                                            <option value="<?= $employee['id'];?>"><?= $employee['first_name'];?> (<?= $employee['username']; ?>) </option>
+                                            <?php } } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            <?php } ?>
                             <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Select Status</label>
-                                    <select name="status" id="status" class="form-control">
+                                <div class="mb-3">
+                                <label for="">Select Supplier</label>
+                                    <select name="supplier" id="supplier" class="form-control">
                                         <option value="All">All</option>
-                                        <option value="Active" selected>Active</option>
-                                        <option value="Inactive">In Active</option>
+                                        <?php if(!empty($suppliers)){ 
+                                        foreach($suppliers as $supplier){    
+                                        ?>
+                                        <option value="<?= $supplier['id'];?>"><?= $supplier['company_name'];?></option>
+                                        <?php } } ?>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                <label for="">Select Date</label>
+                                    <input type="date" class="form-control" name="date" id="date">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <input type="button" style="margin-top:28px" onclick="getdata()" name="submit" class="btn btn-primary" value="Search">
                                 </div>
@@ -241,6 +265,7 @@
                                         <th>Supplier Name</th>
                                         <th>Total</th>
                                         <th>Receipt Date</th>
+                                        <th>Created On</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -256,7 +281,9 @@
 
 <script type="text/javascript">
     function getdata() {
-        var status = $("#status").val();
+        var supplier = $("#supplier").val();
+        var employee = $("#employee").val();
+        var date = $("#date").val();
         $('#receiptList').DataTable({
             "destroy": true,
             "responsive": false,
@@ -269,7 +296,9 @@
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>receipts/ajaxListing",
                 "type": 'POST',
                 'data': {
-                    status: status
+                    employee:employee,
+                    supplier:supplier,
+                    date:date
                 }
             },
             language: {

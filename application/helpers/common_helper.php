@@ -100,7 +100,8 @@
 	//-- current date time function
 	if(!function_exists('current_datetime')){
 	    function current_datetime(){
-	        $dt = new DateTime('now', new DateTimezone('Asia/Dubai'));
+
+	        $dt = new DateTime('now', new DateTimezone('America/Los_Angeles'));
 	        $date_time = $dt->format('Y-m-d H:i:s');
 	        return $date_time;
 	    }
@@ -108,7 +109,7 @@
 	
 	if(!function_exists('current_date')){
 	    function current_date(){
-	        $dt = new DateTime('now', new DateTimezone('Asia/Dubai'));
+	        $dt = new DateTime('now', new DateTimezone('America/Los_Angeles'));
 	        $date_time = $dt->format('d-m-Y');
 	        return $date_time;
 	    }
@@ -116,7 +117,7 @@
 	
 	if(!function_exists('current_daydate')){
 	    function current_daydate(){
-	        $dt = new DateTime('now', new DateTimezone('Asia/Dubai'));
+	        $dt = new DateTime('now', new DateTimezone('America/Los_Angeles'));
 	        $date_time = $dt->format('l, jS, F Y');
 	        return $date_time;
 	    }

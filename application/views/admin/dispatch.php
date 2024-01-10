@@ -210,13 +210,22 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Select Status</label>
-                                    <select name="status" id="status" class="form-control">
+                                <div class="mb-3">
+                                <label for="">Select Buyer</label>
+                                    <select name="buyer" id="buyer" class="form-control">
                                         <option value="All">All</option>
-                                        <option value="Active" selected>Active</option>
-                                        <option value="Inactive">In Active</option>
+                                        <?php if(!empty($buyers)){ 
+                                        foreach($buyers as $buyer){    
+                                        ?>
+                                        <option value="<?= $buyer['id'];?>"><?= $buyer['company_name'];?></option>
+                                        <?php } } ?>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                <label for="">Select Date</label>
+                                    <input type="date" class="form-control" name="date" id="date">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -233,7 +242,8 @@
                                         <th>S.No</th>
                                         <th>Dispatch Number</th>
                                         <th>Company Name</th>
-                                        <th>Date</th>
+                                        <th>Dispacth Date</th>
+                                        <th>Created On</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -249,6 +259,8 @@
 
 <script type="text/javascript">
     function getdata() {
+        var date = $("#date").val();
+        var buyer = $("#buyer").val();
         $('#dispatchList').DataTable({
             "destroy": true,
             "responsive": false,
@@ -260,7 +272,10 @@
             "ajax": {
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>dispatch/ajaxListing",
                 "type": 'POST',
-                'data': {}
+                'data': {
+                    date:date,
+                    buyer:buyer
+                }
             },
             language: {
                 paginate: {

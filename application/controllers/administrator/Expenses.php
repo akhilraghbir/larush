@@ -21,6 +21,7 @@ class Expenses extends CI_Controller {
 
 	public function index(){
 		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
+		$data['categories'] = $this->Common_model->getDataFromTable('tbl_categories','',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
 		$this->home_template->load('home_template','admin/expenses',$data);   
 	}
 
@@ -111,6 +112,7 @@ class Expenses extends CI_Controller {
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
 		$status         =  $this->input->post('status');
+		$expense_category = $this->input->post('expense_category');
 		$indexColumn ='te.id';
 		$selectColumns = ['te.id','tec.category','expense_purpose','amount','expense_date','te.created_on','te.status','te.created_by','te.expense_receipt'];
 		$dataTableSortOrdering = ['te.id','tec.category','expense_purpose','amount','expense_date','te.created_on','te.status','te.created_by'];
@@ -121,6 +123,12 @@ class Expenses extends CI_Controller {
 		    $wherecondition.=' and te.status = "Active"';
 		}else if($status=='Inactive'){
 		    $wherecondition.=' and te.status = "Inactive"';
+		}
+		if($this->session->user_type == 'Employee'){
+			$wherecondition.= ' and te.created_by = '.$this->session->id;
+		}
+		if($expense_category!='All'){
+			$wherecondition.= 'and te.expense_category='.$expense_category;
 		}
 		$getRecordListing=$this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords=$getRecordListing['recordsTotal'];

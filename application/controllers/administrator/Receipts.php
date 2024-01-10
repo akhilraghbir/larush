@@ -21,6 +21,8 @@ class Receipts extends CI_Controller {
 
 	public function index(){
 		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
+		$data['suppliers'] = $this->Common_model->getDataFromTable('tbl_suppliers','id,supplier_name,company_name',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
+		$data['employees'] = $this->Common_model->getDataFromTable('tbl_users','id,first_name,username',  $whereField=['status'=>'Active','user_type'=>'Employee'], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
 		$this->home_template->load('home_template','admin/receipts',$data);   
 	}
 
@@ -73,11 +75,16 @@ class Receipts extends CI_Controller {
 					for($i=0;$i<count($products);$i++){
 						$purchaseItems['purchase_id'] = $purchaseId;
 						$purchaseItems['warehouse_id'] = $data['warehouse_id'];
-						$purchaseItems['product_id'] = $products[$i];
-						$purchaseItems['quantity'] = $qty[$i];
+						$stockEntry['product_id'] = $purchaseItems['product_id'] = $products[$i];
+						$stockEntry['quantity'] = $purchaseItems['quantity'] = $qty[$i];
 						$purchaseItems['price'] = $price[$i];
 						$purchaseItems['total'] = $total[$i];
 						$this->Common_model->addDataIntoTable('tbl_purchase_items',$purchaseItems);
+						$stockEntry['warehouse_id'] = $data['warehouse_id'];
+						$stockEntry['type'] = 'purchase';
+						$stockEntry['created_on'] = current_datetime();
+						$this->Common_model->addDataIntoTable('tbl_stock_entries',$stockEntry);
+
 					}
 					$this->form_validation->clear_field_data();
 					$this->messages->setMessage('Receipt Created Successfully','success');
@@ -94,14 +101,26 @@ class Receipts extends CI_Controller {
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
+		$supplier      =  $this->input->post('supplier');
+		$employee      =  $this->input->post('employee');
+		$date      =  $this->input->post('date');
 		$indexColumn = 'tr.id';
-		$selectColumns = ['tr.id','tr.receipt_number','ts.supplier_name','tr.grand_total','tr.receipt_date'];
-		$dataTableSortOrdering = ['tr.receipt_number','ts.supplier_name','tr.grand_total','tr.receipt_date'];
+		$selectColumns = ['tr.id','tr.receipt_number','ts.supplier_name','tr.grand_total','tr.receipt_date','tr.created_on'];
+		$dataTableSortOrdering = ['tr.receipt_number','ts.supplier_name','tr.grand_total','tr.receipt_date','tr.created_on'];
 		$table_name = 'tbl_purchases as tr';
 		$joinsArray[] = ['table_name'=>'tbl_suppliers as ts','condition'=>"ts.id = tr.supplier_id",'join_type'=>'left'];;
 		$wherecondition = 'tr.id!="0"';
 		if($this->session->user_type == 'Employee'){
 			$wherecondition = 'tr.created_by='.$this->session->id;
+		}
+		if($supplier!='All'){
+			$wherecondition.=' and tr.supplier_id = '.$supplier;
+		}
+		if($employee!='All'){
+			$wherecondition.=' and tr.created_by = '.$employee;
+		}
+		if($date!=''){
+			$wherecondition.=' and date(tr.created_on) = "'.$date.'"';
 		}
 		$getRecordListing = $this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords = $getRecordListing['recordsTotal'];
@@ -119,8 +138,9 @@ class Receipts extends CI_Controller {
                 $recordListing[$i][2]= $recordData->supplier_name;
                 $recordListing[$i][3]= $recordData->grand_total;
                 $recordListing[$i][4]= displayDateInWords($recordData->receipt_date);
+				$recordListing[$i][5]= displayDateInWords($recordData->created_on);
 				$action.= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'receipts/print/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="ri-printer-fill" aria-hidden="true"></i></a>';
-				$recordListing[$i][5]= $action;
+				$recordListing[$i][6]= $action;
 				$i++;
                 $srNumber++;
             }

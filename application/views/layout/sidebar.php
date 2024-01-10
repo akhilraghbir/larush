@@ -88,6 +88,12 @@
                             <span>Receipts</span>
                         </a>
                     </li>
+                    <li class="<?= ($modulename == 'expenses') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/expenses'); ?>" class="waves-effect">
+                            <i class="ri-account-circle-line"></i>
+                            <span>Expenses</span>
+                        </a>
+                    </li>
                 <?php } ?>
             </ul>
         </div>
