@@ -116,7 +116,7 @@ class Receipts extends CI_Controller {
 		if($supplier!='All'){
 			$wherecondition.=' and tr.supplier_id = '.$supplier;
 		}
-		if($employee!='All'){
+		if($employee!='All' && $this->session->user_type != 'Employee'){
 			$wherecondition.=' and tr.created_by = '.$employee;
 		}
 		if($date!=''){

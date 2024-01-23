@@ -80,6 +80,12 @@
                             <span>Settings</span>
                         </a>
                     </li>
+                    <li class="<?= ($modulename == 'Tasks') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Tasks'); ?>" class="waves-effect">
+                            <i class="ri-mail-send-line"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
                 <?php } 
                 else if($this->session->user_type == 'Employee'){ ?>
                     <li class="<?= ($modulename == 'receipts') ? 'mm-active' : ''; ?>">

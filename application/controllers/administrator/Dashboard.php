@@ -21,6 +21,9 @@ class Dashboard extends CI_Controller
     public function index()
 	{
 		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
+        if($this->session->user_type == 'Employee'){
+            $data['tasks'] = $this->Common_model->getDataFromTable('tbl_tasks','',  $whereField=['employee_id'=>$this->session->id,'status'=>'Pending'], $whereValue='', $orderBy='priority', $order='desc', $limit='', $offset=0, true);
+        }
 		$this->home_template->load('home_template','admin/dashboard',$data);
     }
     
@@ -142,6 +145,17 @@ class Dashboard extends CI_Controller
             echo json_encode($res);
         }
     }
+
+    public function updateTask(){
+		$u_id = $this->input->post('tid');
+        $data['status'] = 'Completed';
+        $data['completed_on'] = current_datetime();
+        $succ_message = 'Task Updated Successfully';		
+		$this->Common_model->updateDataFromTable('tbl_tasks',$data,'id',$u_id);
+		$message = ['error'=>'0','message'=>$succ_message,'id'=>$u_id];
+        echo json_encode($message);
+        exit;
+	}
     // public function checkSession(){
 	// 	if($_POST){
 	// 		if($this->session->userdata('is_login') != TRUE){

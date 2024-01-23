@@ -46,7 +46,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="is_catalytic" class="">Is Catalytic <span class="text-danger">*</span></label>
+                            <select name="is_catalytic" id="is_catalytic" class="form-control">
+                                <option value="No" <?php if(isset($formData) && ($formData['is_catalytic']=='No')){ echo "selected"; } ?>>No</option>
+                                <option value="Yes" <?php if(isset($formData) && ($formData['is_catalytic']=='Yes')){ echo "selected"; } ?>>Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ferrous_div <?= (isset($formData) && ($formData['is_catalytic']=='Yes')) ? 'd-none' : '' ?>">
                         <div class="mb-3">
                             <label for="is_ferrous" class="">Is Ferrous <span class="text-danger">*</span></label>
                             <select name="is_ferrous" id="is_ferrous" class="form-control">
@@ -55,13 +64,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3 ferrous_div <?= (isset($formData) && ($formData['is_catalytic']=='Yes')) ? 'd-none' : '' ?>">
                         <div class="mb-3">
                             <label for="buyer_price" class="">Buyer Price <span class="text-danger">*</span></label>
                             <input value="<?php if (isset($formData['buyer_price'])) { echo $formData['buyer_price']; } ?>" name="buyer_price" id="buyer_price" placeholder="Please Enter Buyer Price" autocomplete='off' type="text" class="Onlynumbers form-control">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3 ferrous_div <?= (isset($formData) && ($formData['is_catalytic']=='Yes')) ? 'd-none' : '' ?>">
                         <div class="mb-3">
                             <label for="tier_price" class="">Tier Price <span class="text-danger">*</span></label>
                             <input value="<?php if (isset($formData['tier_price'])) { echo $formData['tier_price']; } ?>" name="tier_price" id="tier_price" placeholder="Please Enter Tier Price" autocomplete='off' type="text" class="Onlynumbers form-control">
@@ -159,6 +168,14 @@
             formdata.append("path", path);
             $(".wide_image_element").val('');
             uploadDocs(formdata, 'wide_imageUploadedDoc', 'wide_image');
+        }
+    });
+    $("#is_catalytic").change(function(){
+        var is_catalytic = $(this).val();
+        if(is_catalytic == 'Yes'){
+            $(".ferrous_div").addClass('d-none');
+        }else{
+            $(".ferrous_div").removeClass('d-none');
         }
     });
 </script>

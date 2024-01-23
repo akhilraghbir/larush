@@ -36,7 +36,10 @@ class Inventory extends CI_Controller {
 		if(($this->input->post('add'))){		
 			$this->form_validation->set_session_data($this->input->post());
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('product_name','units','is_ferrous','buyer_price','tier_price');    
+			$mandatoryFields=array('product_name','units','is_catalytic');    
+			if($this->input->post('is_catalytic') == 'No'){
+				array_push($mandatoryFields,'is_ferrous','buyer_price','tier_price');
+			}    
             foreach($mandatoryFields as $row){
 				$fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
 				$this->form_validation->set_rules($row, $fieldname, 'required'); 
@@ -64,7 +67,10 @@ class Inventory extends CI_Controller {
 	public function edit($param1=''){
 		if(($this->input->post('edit'))){
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('product_name','units','is_ferrous','buyer_price','tier_price');    
+			$mandatoryFields=array('product_name','units','is_catalytic');    
+			if($this->input->post('is_catalytic') == 'No'){
+				array_push($mandatoryFields,'is_ferrous','buyer_price','tier_price');
+			}  
             foreach($mandatoryFields as $row){
             $fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
             $this->form_validation->set_rules($row, $fieldname, 'required'); 
@@ -115,7 +121,7 @@ class Inventory extends CI_Controller {
 				$elementid = time();
 				$html='<tr class="tr_'.$elementid.'">';
 				$html.='<td>'.substr($product[0]['product_name'],0,5).'..</td>';
-				if($product[0]['is_ferrous'] == 'No'){
+				if($product[0]['is_catalytic'] == 'No'){
 					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]"><input type="text" class="form-control price_'.$elementid.'" onkeyup="calculateTotal('.$elementid.')" value="'.$product[0]['tier_price'].'" name="price[]"></td>';
 					$html.='<td><input type="text" maxlength="5" onkeyup="calculateTotal('.$elementid.')" name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
 				}else{
@@ -143,7 +149,7 @@ class Inventory extends CI_Controller {
 		$status         =  $this->input->post('status');
 		$indexColumn ='tp.id';
 		$selectColumns = ['tp.id','product_name','tu.unit_name','is_ferrous','buyer_price','tier_price','main_image','wide_image','zoom_image','tp.status','tp.created_on'];
-		$dataTableSortOrdering = ['product_name','tu.unit_name','is_ferrous','buyer_price','tier_price','main_image','wide_image','zoom_image','tp.status','tp.created_on'];
+		$dataTableSortOrdering = ['tp.id','product_name','tu.unit_name','is_ferrous','buyer_price','tier_price','tp.status','tp.created_on'];
 		$table_name ='tbl_products as tp';
 		$joinsArray[] = ['table_name'=>'tbl_units as tu','condition'=>"tu.id = tp.units",'join_type'=>'left'];;
 		$wherecondition='tp.id!="0"';
