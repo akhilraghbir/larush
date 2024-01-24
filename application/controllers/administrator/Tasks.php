@@ -90,7 +90,7 @@ class Tasks extends CI_Controller {
 		$start         =  $this->input->post('start');
 		$indexColumn = 'tt.id';
 		$selectColumns = ['tt.id','tt.task_title','tt.status','tt.created_on','tu.first_name'];
-		$dataTableSortOrdering = ['tt.id','tt.task_name','tt.status','tt.created_on','tu.first_name'];
+		$dataTableSortOrdering = ['tt.id','tt.task_title','tt.status','tt.created_on','tu.first_name'];
 		$table_name='tbl_tasks as tt';
 		$joinsArray[] = ['table_name'=>'tbl_users as tu','condition'=>"tu.id = tt.employee_id",'join_type'=>'left'];
 		$wherecondition = 'tt.id!="0"';

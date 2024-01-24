@@ -43,8 +43,8 @@ class Dashboard extends CI_Controller
     }
     
     public function getNotifCount(){
-        $where['reciever'] = $this->session->id;
-        $where['status'] = 'Active';
+        $where['employee_id'] = $this->session->id;
+        $where['status'] = 'Not Seen';
         try{
             $data = $this->Common_model->getDataFromTable('tbl_notifications','id', $whereField=$where, $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
             if(!empty($data)){
@@ -60,32 +60,36 @@ class Dashboard extends CI_Controller
     }
     
     public function getNotifications(){
-        $where['reciever'] = $this->session->id;
-        $where['status'] = 'Active';
+        $where['employee_id'] = $this->session->id;
+        $where['status'] = 'Not Seen';
         try{
             $html = '';
-            $data = $this->Common_model->getDataFromTable('tbl_notifications','id,notif_message,message,created_on', $whereField=$where, $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
+            $data = $this->Common_model->getDataFromTable('tbl_notifications','id,title,notif_description,created_on', $whereField=$where, $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
             if(!empty($data)){
                 foreach($data as $d){
-                    $html.='<li>
-                            <a href="'.base_url('administrator/notifications/index/'.$d['id']).'"><div class="media">
-                                <div class="media-body">
-                                   <h5 class="notification-user">'.$d['notif_message'].'</h5>
-                                        <p class="notification-msg">'.substr($d['message'],0,30).'..</p>
-                                    <span class="notification-time">'.$d['created_on'].'</span>
+                    $html.='<a href="#" class="text-reset notification-item">
+                            <div class="d-flex">
+                                <div class="avatar-xs me-3">
+                                    <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                        <i class="ri-information-line"></i>
+                                    </span>
                                 </div>
-                            </div></a>
-                        </li>';
-                }
-                $html.='<li><a href="'.base_url('administrator/notifications/index/').'" class="view_all">View All Notifications</a></li>';
-            }else{
-                $html.='<li>
-                            <div class="media">
-                                <div class="media-body">
-                                    <p class="notification-msg">No Notification Found.</p>
+                                <div class="flex-1">
+                                <h6 class="mb-1">'.$d['title'].'</h6>
+                                <p class="mb-1">'.substr($d['notif_description'],0,30).'..</p>
+                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i>'.$d['created_on'].'</p>
                                 </div>
                             </div>
-                        </li>';
+                            </a>';
+                }
+            }else{
+                $html.='<a href="#" class="text-reset notification-item">
+                <div class="d-flex">
+                    <div class="flex-1">
+                        <p class="mb-1">No Notifications...</p>
+                    </div>
+                </div>
+                </a>';
             }
             $response['error'] = 0;
             $response['html'] = $html;
