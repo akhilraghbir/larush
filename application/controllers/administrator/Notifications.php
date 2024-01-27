@@ -125,7 +125,7 @@ class Notifications extends CI_Controller {
             foreach($getRecordListing['data'] as $recordData) {
 				$action='';
 				$content .='[';
-                $recordListing[$i][0]= $j+1;
+                $recordListing[$i][0]= ++$j;
                 $recordListing[$i][1]= $recordData->title;
                 $recordListing[$i][2]= $recordData->first_name;
 				if ($recordData->status == 'Not Seen') {

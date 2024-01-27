@@ -90,7 +90,7 @@ class Dispatch extends CI_Controller {
 		$buyer         =  $this->input->post('buyer');
 		$date         =  $this->input->post('date');
 		$indexColumn = 'td.id';
-		$selectColumns = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date','td.created_on'];
+		$selectColumns = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date','td.created_on','td.is_invoice_generated'];
 		$dataTableSortOrdering = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date','td.created_on'];
 		$table_name = 'tbl_dispatch as td';
 		$joinsArray[] = ['table_name'=>'tbl_buyers as tb','condition'=>"tb.id = td.buyer_id",'join_type'=>'left'];;
@@ -118,6 +118,9 @@ class Dispatch extends CI_Controller {
                 $recordListing[$i][3]= displayDateInWords($recordData->dispatch_date);
 				$recordListing[$i][4]= displayDateInWords($recordData->created_on);
 				$action.= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'dispatch/print/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="ri-printer-fill" aria-hidden="true"></i></a>';
+				if($this->session->user_type == 'Admin' && $recordData->is_invoice_generated == 'No'){
+					$action.= '&nbsp;&nbsp;&nbsp;<a href="'.CONFIG_SERVER_ADMIN_ROOT.'invoices/convertinvoice/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="ri-file-list-3-line" aria-hidden="true"></i></a>';
+				}
 				$recordListing[$i][5]= $action;
 				$i++;
                 $srNumber++;
