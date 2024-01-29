@@ -646,5 +646,13 @@ class Common_model extends CI_Model{
 		   }
 		   return $result;
 	}
+
+	public function getStockQty(){
+		$query = $this->db->query("Select product_id,SUM(CASE When type='purchase' Then quantity Else 0 End ) as purchaseqty, SUM(CASE When type='sale' Then quantity Else 0 End ) as saleqty from tbl_stock_entries GROUP by product_id")->result_array();
+		foreach($query as $res){
+			$stock[$res['product_id']] = ($res['purchaseqty'] - $res['saleqty']);
+		}
+		return $stock;
+	}
 }
 

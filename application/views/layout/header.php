@@ -28,7 +28,12 @@
     <script src="<?= base_url('assets/backend/');?>libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script> 
     <link href="<?= base_url('assets/backend/');?>libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css" integrity="sha512-0V10q+b1Iumz67sVDL8LPFZEEavo6H/nBSyghr7mm9JEQkOAm91HNoZQRvQdjennBb/oEuW+8oZHVpIKq+d25g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <script src="<?= base_url('assets/backend/'); ?>libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="<?= base_url('assets/backend/'); ?>libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+<script src="<?= base_url('assets/backend/'); ?>libs/pdfmake/build/pdfmake.min.js"></script>
+<script src="<?= base_url('assets/backend/'); ?>libs/pdfmake/build/vfs_fonts.js"></script>
+<script src="<?= base_url('assets/backend/'); ?>libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="<?= base_url('assets/backend/'); ?>libs/datatables.net-buttons/js/buttons.print.min.js"></script>
 <script>
     var base_url = "<?= base_url();?>";
     var role = "<?= $this->session->user_type;?>";

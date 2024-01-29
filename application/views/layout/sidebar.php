@@ -7,69 +7,69 @@
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title">Menu</li>
-                <li class="<?= ($modulename == 'dashboard') ? 'mm-active' : ''; ?>">
+                <li class="<?= ($modulename == 'Dashboard') ? 'mm-active' : ''; ?>">
                     <a href="<?= base_url(); ?>" class="waves-effect">
                         <i class="ri-dashboard-line"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <?php if($this->session->user_type == 'Admin'){ ?>
-                    <li class="<?= ($modulename == 'users') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/users'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Users') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Users'); ?>" class="waves-effect">
                             <i class="ri-account-circle-line"></i>
                             <span>Users</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'warehouses') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/warehouses'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Warehouses') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Warehouses'); ?>" class="waves-effect">
                             <i class="ri-building-line"></i>
                             <span>Warehouses</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'categories') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/categories'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Categories') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Categories'); ?>" class="waves-effect">
                             <i class="ri-money-dollar-circle-fill"></i>
                             <span>Expense Categories</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'expenses') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/expenses'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Expenses') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Expenses'); ?>" class="waves-effect">
                             <i class="ri-money-dollar-circle-line"></i>
                             <span>Expenses</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'receipts') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/receipts'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Receipts') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Receipts'); ?>" class="waves-effect">
                             <i class="ri-file-list-3-line"></i>
                             <span>Receipts</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'dispatch') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/dispatch'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Dispatch') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Dispatch'); ?>" class="waves-effect">
                             <i class="ri-red-packet-line"></i>
                             <span>Dispatch</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'invoices') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/invoices'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Invoices') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Invoices'); ?>" class="waves-effect">
                             <i class="ri-red-packet-line"></i>
                             <span>Invoices</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'suppliers') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/suppliers'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Suppliers') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Suppliers'); ?>" class="waves-effect">
                             <i class="ri-user-heart-line"></i>
                             <span>Suppliers</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'buyers') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/buyers'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Buyers') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Buyers'); ?>" class="waves-effect">
                             <i class="ri-user-star-line"></i>
                             <span>Buyers</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'inventory') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/inventory'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Inventory') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Inventory'); ?>" class="waves-effect">
                             <i class="ri-store-2-line"></i>
                             <span>Inventory</span>
                         </a>
@@ -98,18 +98,34 @@
                             <span>Notifications</span>
                         </a>
                     </li>
+                    <li class="<?= (in_array($modulename,['StockReport','AttendanceReport'])) ? 'mm-active' : ''; ?>">
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="ri-table-2"></i>
+                            <span>Reports</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="<?= base_url('administrator/StockReport'); ?>">Stock Report</a></li>
+                            <li><a href="<?= base_url('administrator/AttendanceReport'); ?>">Attendance Report</a></li>
+                        </ul>
+                    </li>
                 <?php } 
                 else if($this->session->user_type == 'Employee'){ ?>
-                    <li class="<?= ($modulename == 'receipts') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/receipts'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Receipts') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Receipts'); ?>" class="waves-effect">
                             <i class="ri-file-list-3-line"></i>
                             <span>Receipts</span>
                         </a>
                     </li>
-                    <li class="<?= ($modulename == 'expenses') ? 'mm-active' : ''; ?>">
-                        <a href="<?= base_url('administrator/expenses'); ?>" class="waves-effect">
+                    <li class="<?= ($modulename == 'Expenses') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Expenses'); ?>" class="waves-effect">
                             <i class="ri-money-dollar-circle-line"></i>
                             <span>Expenses</span>
+                        </a>
+                    </li>
+                    <li class="<?= ($modulename == 'Attendance') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Attendance'); ?>" class="waves-effect">
+                            <i class="ri-money-dollar-circle-line"></i>
+                            <span>Clock In & Clock Out</span>
                         </a>
                     </li>
                 <?php } ?>
