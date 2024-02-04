@@ -68,10 +68,22 @@
                             <span>Buyers</span>
                         </a>
                     </li>
+                    <li class="<?= ($modulename == 'Leads') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Leads'); ?>" class="waves-effect">
+                            <i class="ri-money-dollar-circle-line"></i>
+                            <span>Leads</span>
+                        </a>
+                    </li>
                     <li class="<?= ($modulename == 'Inventory') ? 'mm-active' : ''; ?>">
                         <a href="<?= base_url('administrator/Inventory'); ?>" class="waves-effect">
                             <i class="ri-store-2-line"></i>
                             <span>Inventory</span>
+                        </a>
+                    </li>
+                    <li class="<?= ($modulename == 'StockTransfer') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/StockTransfer'); ?>" class="waves-effect">
+                            <i class="ri-store-2-line"></i>
+                            <span>Stock Transfer</span>
                         </a>
                     </li>
                     <li class="<?= ($modulename == 'EmailTemplates') ? 'mm-active' : ''; ?>">
@@ -108,6 +120,7 @@
                             <li><a href="<?= base_url('administrator/AttendanceReport'); ?>">Attendance Report</a></li>
                         </ul>
                     </li>
+                    
                 <?php } 
                 else if($this->session->user_type == 'Employee'){ ?>
                     <li class="<?= ($modulename == 'Receipts') ? 'mm-active' : ''; ?>">
@@ -126,6 +139,12 @@
                         <a href="<?= base_url('administrator/Attendance'); ?>" class="waves-effect">
                             <i class="ri-money-dollar-circle-line"></i>
                             <span>Clock In & Clock Out</span>
+                        </a>
+                    </li>
+                    <li class="<?= ($modulename == 'Leads') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Leads'); ?>" class="waves-effect">
+                            <i class="ri-money-dollar-circle-line"></i>
+                            <span>Leads</span>
                         </a>
                     </li>
                 <?php } ?>

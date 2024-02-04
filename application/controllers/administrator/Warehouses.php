@@ -176,4 +176,17 @@ class Warehouses extends CI_Controller {
 			return TRUE;
 		}
 	}
+
+	public function getWarehouses(){
+		if($_POST){
+			$warehouses = $this->Common_model->getDataFromTable('tbl_warehouses','',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
+			$html = "<option value=''>Select Warehouse</option>";
+			foreach($warehouses as $warehouse){
+				$html.= "<option value='".$warehouse['id']."'>".$warehouse['warehouse_name']."</option>";
+			}
+			$res['error'] = 0;
+			$res['html'] = $html;
+			echo json_encode($res);
+		}
+	}
 }

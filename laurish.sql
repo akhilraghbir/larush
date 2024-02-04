@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 24, 2024 at 07:05 PM
+-- Generation Time: Jan 29, 2024 at 08:26 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `laurish`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_attendance`
+--
+
+CREATE TABLE `tbl_attendance` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `clock_in` datetime DEFAULT NULL,
+  `clock_out` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_attendance`
+--
+
+INSERT INTO `tbl_attendance` (`id`, `user_id`, `date`, `clock_in`, `clock_out`) VALUES
+(1, 3, '2024-01-29', '2024-01-29 11:08:10', '2024-01-29 11:09:03');
 
 -- --------------------------------------------------------
 
@@ -92,12 +113,14 @@ INSERT INTO `tbl_categories` (`id`, `category`, `status`, `created_by`, `created
 
 CREATE TABLE `tbl_dispatch` (
   `id` int(11) NOT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
   `dispatch_number` varchar(100) NOT NULL,
   `buyer_id` int(11) NOT NULL,
   `notes` text NOT NULL,
   `dispatch_date` date NOT NULL,
   `total_gross` decimal(25,2) DEFAULT NULL,
   `total_net` decimal(25,2) DEFAULT NULL,
+  `is_invoice_generated` enum('No','Yes') NOT NULL DEFAULT 'No',
   `created_by` int(11) NOT NULL,
   `created_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -106,9 +129,9 @@ CREATE TABLE `tbl_dispatch` (
 -- Dumping data for table `tbl_dispatch`
 --
 
-INSERT INTO `tbl_dispatch` (`id`, `dispatch_number`, `buyer_id`, `notes`, `dispatch_date`, `total_gross`, `total_net`, `created_by`, `created_on`) VALUES
-(1, 'D1703615692', 1, 'SKJ SKSK S SS S', '2023-12-27', 2500.00, 2250.00, 1, '2023-12-26 22:34:52'),
-(2, 'D1704299978', 1, 'dnod d dd ', '2024-01-03', 273.00, 251.00, 1, '2024-01-03 20:39:38');
+INSERT INTO `tbl_dispatch` (`id`, `warehouse_id`, `dispatch_number`, `buyer_id`, `notes`, `dispatch_date`, `total_gross`, `total_net`, `is_invoice_generated`, `created_by`, `created_on`) VALUES
+(1, NULL, 'D1703615692', 1, 'SKJ SKSK S SS S', '2023-12-27', 2500.00, 2250.00, 'No', 1, '2023-12-26 22:34:52'),
+(2, 1, 'D1704299978', 1, 'dnod d dd ', '2024-01-03', 273.00, 251.00, 'Yes', 1, '2024-01-03 20:39:38');
 
 -- --------------------------------------------------------
 
@@ -194,6 +217,58 @@ INSERT INTO `tbl_expenses` (`id`, `expense_category`, `expense_purpose`, `amount
 (2, 2, 'Bill', 1800.00, '2024-01-01', 'uploads/expenses/2024-01-08-05-37-121ucndbjg8y.png', 'Active', 1, '2024-01-08 20:37:14', '0000-00-00 00:00:00'),
 (3, 1, 'PO', 560.00, '2024-01-10', 'uploads/expenses/2024-01-10-05-52-482myx4gs6cb.jpg', 'Active', 3, '2024-01-10 20:52:51', '0000-00-00 00:00:00'),
 (4, 1, 'Fuel refill', 100.00, '2024-01-12', 'uploads/expenses/2024-01-12-07-46-58i5mtq7xjp0.jpg', 'Active', 3, '2024-01-12 07:47:02', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_invoices`
+--
+
+CREATE TABLE `tbl_invoices` (
+  `id` int(11) NOT NULL,
+  `dispatch_id` int(11) DEFAULT NULL,
+  `buyer_id` int(11) DEFAULT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `invoice_number` varchar(100) NOT NULL,
+  `invoice_date` date DEFAULT NULL,
+  `sub_total` decimal(25,2) DEFAULT NULL,
+  `gst` decimal(25,2) DEFAULT NULL,
+  `grand_total` decimal(25,2) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_invoices`
+--
+
+INSERT INTO `tbl_invoices` (`id`, `dispatch_id`, `buyer_id`, `warehouse_id`, `invoice_number`, `invoice_date`, `sub_total`, `gst`, `grand_total`, `notes`, `created_by`, `created_on`) VALUES
+(1, 2, 1, 1, 'IN1706356022', '2024-01-27', 4832.00, 241.60, 5073.60, 'sample dispatch to invoice', 1, '2024-01-27 03:47:02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_invoice_items`
+--
+
+CREATE TABLE `tbl_invoice_items` (
+  `id` int(11) NOT NULL,
+  `invoice_id` int(11) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` decimal(25,2) NOT NULL,
+  `price` decimal(25,2) NOT NULL,
+  `total` decimal(25,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_invoice_items`
+--
+
+INSERT INTO `tbl_invoice_items` (`id`, `invoice_id`, `warehouse_id`, `product_id`, `quantity`, `price`, `total`) VALUES
+(1, 1, 1, 3, 140.00, 25.00, 3500.00),
+(2, 1, 1, 4, 111.00, 12.00, 1332.00);
 
 -- --------------------------------------------------------
 
@@ -373,7 +448,9 @@ INSERT INTO `tbl_stock_entries` (`id`, `warehouse_id`, `product_id`, `quantity`,
 (7, 1, 1, 100.00, 'purchase', '2024-01-12 07:38:27'),
 (8, 1, 3, 75.00, 'purchase', '2024-01-12 07:38:27'),
 (9, 1, 6, 100.00, 'purchase', '2024-01-12 07:38:27'),
-(10, 1, 6, 120.00, 'purchase', '2024-01-12 07:38:27');
+(10, 1, 6, 120.00, 'purchase', '2024-01-12 07:38:27'),
+(11, 1, 3, 140.00, 'sale', '2024-01-27 03:47:02'),
+(12, 1, 4, 111.00, 'sale', '2024-01-27 03:47:02');
 
 -- --------------------------------------------------------
 
@@ -498,8 +575,8 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`id`, `first_name`, `last_name`, `username`, `email_id`, `phno`, `password`, `user_type`, `status`, `warehouse_id`, `device_token`, `last_logged_on`, `created_on`, `password_reset_token`, `password_reset_created`) VALUES
-(1, 'Akhil', 'Kumar', 'admin@larush.com', 'admin@larush.com', '9885800328', 'c23fb1a3c1c53a1f7f8633771e4a2cd6', 'Admin', 'Active', NULL, NULL, '2024-01-24 08:54:32', '2023-11-27 23:41:19', NULL, NULL),
-(3, 'Akhil', 'Kumar', 'akhil.srikakolapu@gmail.com', 'akhil.srikakolapu@gmail.com', '9885800328', 'e10adc3949ba59abbe56e057f20f883e ', 'Employee', 'Active', NULL, NULL, '2024-01-24 09:53:56', '2023-11-28 22:10:34', '59sj81mnlh', '2023-12-05 22:23:39');
+(1, 'Akhil', 'Kumar', 'admin@larush.com', 'admin@larush.com', '9885800328', 'c23fb1a3c1c53a1f7f8633771e4a2cd6', 'Admin', 'Active', NULL, NULL, '2024-01-29 11:10:48', '2023-11-27 23:41:19', NULL, NULL),
+(3, 'Akhil', 'Kumar', 'akhil.srikakolapu@gmail.com', 'akhil.srikakolapu@gmail.com', '9885800328', 'e10adc3949ba59abbe56e057f20f883e ', 'Employee', 'Active', NULL, NULL, '2024-01-29 10:12:35', '2023-11-28 22:10:34', '59sj81mnlh', '2023-12-05 22:23:39');
 
 -- --------------------------------------------------------
 
@@ -520,8 +597,8 @@ CREATE TABLE `tbl_user_sessions` (
 --
 
 INSERT INTO `tbl_user_sessions` (`id`, `user_id`, `token`, `created_on`, `updated_on`) VALUES
-(1, 1, 'qz07ycmsd5', '2023-11-27 22:15:06', '2024-01-24 08:54:32'),
-(2, 3, 'dzai7wuhec', '2024-01-03 21:29:06', '2024-01-24 09:53:56');
+(1, 1, '73gtfo2rwi', '2023-11-27 22:15:06', '2024-01-29 11:10:48'),
+(2, 3, 'aehsocil04', '2024-01-03 21:29:06', '2024-01-29 10:12:35');
 
 -- --------------------------------------------------------
 
@@ -554,6 +631,12 @@ INSERT INTO `tbl_warehouses` (`id`, `warehouse_name`, `address`, `contact_name`,
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `tbl_attendance`
+--
+ALTER TABLE `tbl_attendance`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_buyers`
@@ -589,6 +672,18 @@ ALTER TABLE `tbl_emailtemplates`
 -- Indexes for table `tbl_expenses`
 --
 ALTER TABLE `tbl_expenses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_invoices`
+--
+ALTER TABLE `tbl_invoices`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_invoice_items`
+--
+ALTER TABLE `tbl_invoice_items`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -668,6 +763,12 @@ ALTER TABLE `tbl_warehouses`
 --
 
 --
+-- AUTO_INCREMENT for table `tbl_attendance`
+--
+ALTER TABLE `tbl_attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `tbl_buyers`
 --
 ALTER TABLE `tbl_buyers`
@@ -704,6 +805,18 @@ ALTER TABLE `tbl_expenses`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `tbl_invoices`
+--
+ALTER TABLE `tbl_invoices`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `tbl_invoice_items`
+--
+ALTER TABLE `tbl_invoice_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `tbl_notifications`
 --
 ALTER TABLE `tbl_notifications`
@@ -737,7 +850,7 @@ ALTER TABLE `tbl_settings`
 -- AUTO_INCREMENT for table `tbl_stock_entries`
 --
 ALTER TABLE `tbl_stock_entries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tbl_suppliers`
