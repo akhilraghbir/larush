@@ -28,6 +28,7 @@ class StockTransfer extends CI_Controller {
 		$data['breadcrumbs'] = $this->loadBreadCrumbs();
 		$data['data'] = $formContent;
 		$data['form_action'] = $formName;
+		$data['products'] = $this->Common_model->getDataFromTable('tbl_products','',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
 		$this->home_template->load('home_template','admin/stocktransfer',$data); 
 	}
 
@@ -35,7 +36,7 @@ class StockTransfer extends CI_Controller {
 		if(($this->input->post('add'))){		
 			$this->form_validation->set_session_data($this->input->post());
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('business_name','contact_person_name','contact_person_number','address','purpose','visited_date');    
+			$mandatoryFields=array('source_warehouse_id','destination_warehouse_id','product_id','quantity');    
             foreach($mandatoryFields as $row){
 				$fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
 				$this->form_validation->set_rules($row, $fieldname, 'required'); 
@@ -49,12 +50,24 @@ class StockTransfer extends CI_Controller {
                 	$data[$fieldname]= $this->input->post($fieldname);
                 }
                 unset($data['add']);
+				unset($data['available_quantity']);
 				$data['created_by'] = $this->session->id;
-				$data['created_on'] = current_datetime();
-				$user_id = $this->Common_model->addDataIntoTable('tbl_leads',$data);
+				$stockDebit['created_on'] = $stockCredit['created_on'] = $data['created_on'] = current_datetime();
+				$stockDebit['product_id'] = $stockCredit['product_id'] = $data['product_id'];
+				$stockDebit['quantity'] = $stockCredit['quantity'] = $data['quantity'];
+				$stockCredit['type'] = 'Transfer_Credit';
+				$stockCredit['warehouse_id'] = $data['destination_warehouse_id'];
+				$stockDebit['type'] = 'Transfer_Debit';
+				$stockDebit['warehouse_id'] = $data['source_warehouse_id'];
+				$id = $this->Common_model->addDataIntoTable('tbl_stock_transfer',$data);
+				if($id){
+					$stockDebit['reference_id'] = $stockCredit['reference_id'] = $id;
+					$this->Common_model->addDataIntoTable('tbl_stock_entries',$stockDebit);
+					$this->Common_model->addDataIntoTable('tbl_stock_entries',$stockCredit);
+				}
 				$this->form_validation->clear_field_data();
-				$this->messages->setMessage('Lead Created Successfully','success');
-				redirect('administrator/Leads');
+				$this->messages->setMessage('Stock Transfered Successfully','success');
+				redirect('administrator/StockTransfer');
 			}
 		}
 			$this->loadUserForm(array(),'add');

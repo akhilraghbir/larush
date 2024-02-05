@@ -208,6 +208,22 @@ class Inventory extends CI_Controller {
         }	
         echo '{"draw":'.$draw.',"recordsTotal":'.$recordsFiltered.',"recordsFiltered":'.$recordsFiltered.',"data":'.$final_data.'}';
 	}
+
+	public function getAvailableStock(){
+		if($_POST){
+			$productid = $_POST['product_id'];
+			$source_warehouse_id = $_POST['source_warehouse_id'];
+			$stockqty  = $this->Common_model->getStockQty($productid,$source_warehouse_id);
+			if(!empty($stockqty)){
+				$res['error'] = 0;
+				$res['data'] = $stockqty;
+			}else{
+				$res['error'] =1;
+			}
+			echo json_encode($res);exit;
+		}
+	}
+
 	function alpha_dash_space($fullname){
 		if (! preg_match('/^[a-zA-Z\s]+$/', $fullname)) {
 			$this->form_validation->set_message('alpha_dash_space', 'The %s field may only contain alpha characters & White spaces');
