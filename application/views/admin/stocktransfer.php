@@ -146,43 +146,15 @@ $("#product_id").change(function(){
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3 <?= ($this->session->user_type=='Employee') ? 'd-none' : ''; ?>">
-                                <div class="form-group">
-                                    <label>Select Employee</label>
-                                    <select class="form-control" id="user_id" name="user_id">
-                                        <option value="">Select Employee</option>
-                                        <?php if(!empty($employees)){
-                                            foreach($employees as $employee){
-                                        ?>
-                                        <option value="<?= $employee['id']; ?>"><?= $employee['first_name']; ?></option>
-                                        <?php } } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Select Date</label>
-                                    <input type="date" class="form-control" name="date" id="date">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input type="button" style="margin-top:28px" onclick="getdata()" name="submit" class="btn btn-primary" value="Search">
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
                         <div class="table-responsive tasks dataGridTable">
-                            <table id="leadsList" class="table card-table table-vcenter text-nowrap mb-0 border nowrap" style="width:100%">
+                            <table id="transferList" class="table card-table table-vcenter text-nowrap mb-0 border nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
-                                        <th>Employee</th>
-                                        <th>Business Name</th>
-                                        <th>Contact Name</th>
-                                        <th>Contact Number</th>
-                                        <th>Visited On</th>
+                                        <th>Source Warehouse</th>
+                                        <th>Destionation Warehouse</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
                                         <th>Created On</th>
                                     </tr>
                                 </thead>
@@ -201,9 +173,8 @@ $("#product_id").change(function(){
 
 <script type="text/javascript">
     function getdata() {
-        var date = $("#date").val();
         var user_id = $("#user_id").val();
-        var clist = $('#leadsList').DataTable({
+        var clist = $('#transferList').DataTable({
             "destroy": true,
             "responsive": false,
             "dom": 'Bfrtip',
@@ -213,10 +184,9 @@ $("#product_id").change(function(){
                 [0, "desc"]
             ],
             "ajax": {
-                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>leads/ajaxListing",
+                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>stocktransfer/ajaxListing",
                 "type": 'POST',
                 'data': {
-                    date: date,
                     user_id:user_id
                 }
             },
@@ -230,9 +200,6 @@ $("#product_id").change(function(){
                 $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
             }
         });
-        if(role == 'Employee'){
-         clist.column(1).visible(false);
-        }
     }
 
     getdata();

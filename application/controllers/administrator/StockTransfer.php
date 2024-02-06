@@ -102,43 +102,17 @@ class StockTransfer extends CI_Controller {
 		$this->loadUserForm($formData, 'edit');
 	}
 
-	public function updateStatus(){
-		$u_id = $this->input->post('pid');
-		if($this->input->post('status') == 'Active'){
-			$data['status'] = $this->input->post('status');
-			$succ_message = 'Category Actived Successfully';
-		}else{
-			$data['status'] = $this->input->post('status');
-			$succ_message = 'Category Inactived Successfully';
-		}
-		
-		$this->Common_model->updateDataFromTable('tbl_categories',$data,'id',$u_id);
-		$message = ['error'=>'0','message'=>$succ_message];
-        echo json_encode($message);
-        exit;
-	}
-
-
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
-		$date         =  $this->input->post('date');
-        $user_id         =  $this->input->post('user_id');
-		$indexColumn ='tl.id';
-		$selectColumns = ['tl.id','tu.first_name','tl.business_name','tl.contact_person_name','tl.contact_person_number','tl.visited_date','tl.created_on'];
-		$dataTableSortOrdering = ['tl.id','tu.first_name','tl.business_name','tl.contact_person_name','tl.contact_person_number','tl.visited_date','tl.created_on'];
-		$table_name ='tbl_leads as tl';
-		$joinsArray[] = ['table_name'=>'tbl_users as tu','condition'=>"tu.id = tl.created_by",'join_type'=>'left'];;
-		$wherecondition='tl.id!="0"';
-		if($this->session->user_type == 'Employee'){
-            $wherecondition.=' and created_by='.$this->session->id;
-        }else if($user_id!=''){
-            $wherecondition.=' and created_by='.$user_id;
-        }
-        if($date!=''){
-            $wherecondition.=' and visited_date="'.$date.'"';
-        }
-        
+		$indexColumn ='tst.id';
+		$selectColumns = ['tst.*','tsw.warehouse_name as s_warehouse_name','tdw.warehouse_name as d_warehouse_name','tp.product_name'];
+		$dataTableSortOrdering = ['tst.id','tsw.warehouse_name as s_warehouse_name','tdw.warehouse_name as d_warehouse_name','tp.product_name','tst.quantity','tst.created_on'];
+		$table_name ='tbl_stock_transfer as tst';
+		$joinsArray[] = ['table_name'=>'tbl_products as tp','condition'=>"tp.id = tst.product_id",'join_type'=>'left'];;
+		$joinsArray[] = ['table_name'=>'tbl_warehouses as tsw','condition'=>"tsw.id = tst.source_warehouse_id",'join_type'=>'left'];;
+		$joinsArray[] = ['table_name'=>'tbl_warehouses as tdw','condition'=>"tdw.id = tst.destination_warehouse_id",'join_type'=>'left'];;
+		$wherecondition='tst.id!="0"';
 		$getRecordListing=$this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords=$getRecordListing['recordsTotal'];
 		$recordsFiltered=$getRecordListing['recordsFiltered'];
@@ -153,12 +127,11 @@ class StockTransfer extends CI_Controller {
             foreach($getRecordListing['data'] as $recordData) {
 				$content .='[';
 				$recordListing[$i][0]= $i+1;
-                $recordListing[$i][1]= $recordData->first_name;
-                $recordListing[$i][2]= $recordData->business_name;
-				$recordListing[$i][3]= $recordData->contact_person_name;
-                $recordListing[$i][4]= $recordData->contact_person_number;
-                $recordListing[$i][5]= displayDateInWords($recordData->visited_date);
-                $recordListing[$i][6]= displayDateInWords($recordData->created_on);
+                $recordListing[$i][1]= $recordData->s_warehouse_name;
+                $recordListing[$i][2]= $recordData->d_warehouse_name;
+				$recordListing[$i][3]= $recordData->product_name;
+                $recordListing[$i][4]= $recordData->quantity;
+                $recordListing[$i][5]= displayDateInWords($recordData->created_on);
 				$i++;
                 $srNumber++;
             }

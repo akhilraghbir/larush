@@ -118,6 +118,9 @@
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="<?= base_url('administrator/StockReport'); ?>">Stock Report</a></li>
                             <li><a href="<?= base_url('administrator/AttendanceReport'); ?>">Attendance Report</a></li>
+                            <li><a href="<?= base_url('administrator/EmployeeExpenseReport'); ?>">Employee Wise Report</a></li>
+                            <li><a href="<?= base_url('administrator/CompanyExpenseReport'); ?>">Company Wise Report</a></li>
+                            <li><a href="<?= base_url('administrator/ProductProfitReport'); ?>">Product Profit Report</a></li>
                         </ul>
                     </li>
                     

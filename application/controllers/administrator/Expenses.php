@@ -51,6 +51,7 @@ class Expenses extends CI_Controller {
                 	$data[$fieldname]= $this->input->post($fieldname);
                 }
                 unset($data['add']);
+				$data['role'] = $this->session->user_type;
 				$data['created_by'] = $this->session->id;
 				$data['created_on'] = current_datetime();
 				$user_id = $this->Common_model->addDataIntoTable('tbl_expenses',$data);

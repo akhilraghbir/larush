@@ -661,5 +661,25 @@ class Common_model extends CI_Model{
 		}
 		return $stock;
 	}
+
+
+	public function productsSales(){
+		$sql = "select product_id,sum(quantity) as totqty,avg(price) as avgsaleprice from tbl_invoice_items group by product_id";
+		$query = $this->db->query($sql)->result_array();
+		foreach($query as $res){
+			$sales[$res['product_id']]['qty'] = $res['totqty'];
+			$sales[$res['product_id']]['avgprice'] = $res['avgsaleprice'];
+		}
+		return $sales;
+	}
+
+	public function productsPurchase(){
+		$sql = "select product_id,avg(price) as avgpurchaseprice from tbl_purchase_items group by product_id";
+		$query = $this->db->query($sql)->result_array();
+		foreach($query as $res){
+			$purchase[$res['product_id']]['avgprice'] = $res['avgpurchaseprice'];
+		}
+		return $purchase;
+	}
 }
 
