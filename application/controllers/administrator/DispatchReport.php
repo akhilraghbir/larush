@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class EmployeeExpenseReport extends CI_Controller {
+class DispatchReport extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
@@ -11,8 +11,8 @@ class EmployeeExpenseReport extends CI_Controller {
 	public function loadBreadCrumbs(){
 		$data=array();
 		$data['icon_class'] = "icon-bell";
-		$data['title'] = "Employee Expense Report";
-		$data['helptext'] = "This Page Is Used To Manage The Employee Expense Report.";
+		$data['title'] = "Dispatch Report";
+		$data['helptext'] = "This Page Is Used To Manage The Dispatch Report.";
 		$data['actions']['add'] = '';
 		$data['actions']['list'] = '';
 		return $data;
@@ -20,8 +20,7 @@ class EmployeeExpenseReport extends CI_Controller {
 
 	public function index($id = ''){
 		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
-		$data['employees'] = $this->Common_model->getDataFromTable('tbl_users','',  $whereField=['status'=>'Active','user_type'=>'Employee'], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
-		$this->home_template->load('home_template','admin/employee_expense_report',$data);   
+		$this->home_template->load('home_template','admin/dispatch_report',$data);   
 	}
 
 	public function ajaxListing(){
@@ -39,7 +38,7 @@ class EmployeeExpenseReport extends CI_Controller {
             $selectedmonth = explode("-",$selectedmonth);
             $month = $selectedmonth[1];
             $year = $selectedmonth[0];
-            $wherecondition.=" and month(expense_date)='$month' and year(expense_date)='$year'";
+            $wherecondition.=" and month(expense_date)='$month' and year(date)='$year'";
         }
         if($user_id!=''){
             $wherecondition.=" and te.created_by=".$user_id;

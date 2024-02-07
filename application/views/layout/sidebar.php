@@ -121,6 +121,9 @@
                             <li><a href="<?= base_url('administrator/EmployeeExpenseReport'); ?>">Employee Wise Report</a></li>
                             <li><a href="<?= base_url('administrator/CompanyExpenseReport'); ?>">Company Wise Report</a></li>
                             <li><a href="<?= base_url('administrator/ProductProfitReport'); ?>">Product Profit Report</a></li>
+                            <li><a href="<?= base_url('administrator/SalesReport'); ?>">Sales Report</a></li>
+                            <li><a href="<?= base_url('administrator/PurchaseReport'); ?>">Purchase Report</a></li>
+                            <li><a href="<?= base_url('administrator/DispatchReport'); ?>">Dispatch Report Fe / Non Fe</a></li>
                         </ul>
                     </li>
                     
