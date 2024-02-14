@@ -21,13 +21,18 @@ class StockReport extends CI_Controller {
 
 	public function index(){
 		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
+		$data['warehouses'] = $this->Common_model->getDataFromTable('tbl_warehouses','id,warehouse_name',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
 		$this->home_template->load('home_template','admin/stock_report',$data);   
 	}
 
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
-        $stockqty  = $this->Common_model->getStockQty();
+		$warehouse     =  $this->input->post('warehouse');
+		if($warehouse=='All'){
+			$warehouse = '';
+		}
+        $stockqty  = $this->Common_model->getStockQty('',$warehouse);
 		$indexColumn ='tp.id';
 		$selectColumns = ['tp.id','product_name','tu.unit_name'];
 		$dataTableSortOrdering = ['tp.id','product_name','tu.unit_name','tp.id'];

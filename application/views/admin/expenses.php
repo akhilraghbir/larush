@@ -31,7 +31,7 @@
                             <select name="expense_category" class="form-control">
                                 <option value="">Select Category</option>
                                 <?php foreach($categories as $category){ ?>
-                                    <option value="<?= $category['id'];?>" <?php if(isset($formData) && ($formData['category']==$category['id'])){ echo "selected"; } ?>><?= $category['category'];?></option>
+                                    <option value="<?= $category['id'];?>" <?php if(isset($formData) && ($formData['expense_category']==$category['id'])){ echo "selected"; } ?>><?= $category['category'];?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -111,12 +111,8 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Select Status</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="All">All</option>
-                                        <option value="Active" selected>Active</option>
-                                        <option value="Inactive">In Active</option>
-                                    </select>
+                                    <label>Select Date</label>
+                                    <input type="date" class="form-control" id="date" name="date">
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -166,7 +162,7 @@
 
 <script type="text/javascript">
     function getdata() {
-        var status = $("#status").val();
+        var date = $("#date").val();
         var expense_category = $("#expense_category").val();
         var clist = $('#expenseList').DataTable({
             "destroy": true,
@@ -180,7 +176,7 @@
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>expenses/ajaxListing",
                 "type": 'POST',
                 'data': {
-                    status:status,
+                    date:date,
                     expense_category:expense_category
                 }
             },

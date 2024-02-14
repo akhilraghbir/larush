@@ -243,3 +243,4 @@
 		$divClass = ['3'=>'btn-danger','2'=>'btn-warning','1'=>'btn-info'];
 		return $divClass[$priority];
 	}
+	

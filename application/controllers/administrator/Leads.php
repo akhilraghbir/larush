@@ -119,7 +119,7 @@ class Leads extends CI_Controller {
 		$joinsArray[] = ['table_name'=>'tbl_users as tu','condition'=>"tu.id = tl.created_by",'join_type'=>'left'];;
 		$wherecondition='tl.id!="0"';
 		if($this->session->user_type == 'Employee'){
-            $wherecondition.=' and created_by='.$this->session->id;
+            $wherecondition.=' and (created_by='.$this->session->id.' or visible="Everyone")';
         }else if($user_id!=''){
             $wherecondition.=' and created_by='.$user_id;
         }

@@ -239,7 +239,7 @@
             "processing": true,
             "serverSide": true,
             "order": [
-                [7, "desc"]
+                [1, "asc"]
             ],
             "ajax": {
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>inventory/ajaxListing",

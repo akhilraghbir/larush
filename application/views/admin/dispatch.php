@@ -109,6 +109,7 @@
                             dataType: 'json',
                             data: {
                                 term: request.term,
+                                is_catalytic:'no'
                             },
                             success: function(data) {
                                 if (data.length > '0') {

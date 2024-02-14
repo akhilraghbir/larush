@@ -184,7 +184,7 @@ $("#product_id").change(function(){
                 [0, "desc"]
             ],
             "ajax": {
-                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>stocktransfer/ajaxListing",
+                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>StockTransfer/ajaxListing",
                 "type": 'POST',
                 'data': {
                     user_id:user_id

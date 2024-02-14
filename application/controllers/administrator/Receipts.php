@@ -67,6 +67,8 @@ class Receipts extends CI_Controller {
 					unset($data['add']);
 					unset($data['qty']);
 					unset($data['price']);
+					unset($data['gross']);
+					unset($data['tare']);
 					unset($data['total']);
 					$data['receipt_number'] = 'R'.time();
 					$data['created_on'] = current_datetime();
@@ -82,6 +84,7 @@ class Receipts extends CI_Controller {
 						$this->Common_model->addDataIntoTable('tbl_purchase_items',$purchaseItems);
 						$stockEntry['warehouse_id'] = $data['warehouse_id'];
 						$stockEntry['type'] = 'purchase';
+						$stockEntry['reference_id'] = $purchaseId;
 						$stockEntry['created_on'] = current_datetime();
 						$this->Common_model->addDataIntoTable('tbl_stock_entries',$stockEntry);
 
@@ -159,6 +162,7 @@ class Receipts extends CI_Controller {
 			$data['settings'] = $this->Common_model->getDataFromTable('tbl_settings','',  $whereField='', $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
 			$data['purchase'] = $this->Common_model->getDataFromTable('tbl_purchases','',  $whereField='id', $whereValue=$id, $orderBy='', $order='', $limit='', $offset=0, true);
 			$data['supplier'] = $this->Common_model->getDataFromTable('tbl_suppliers','supplier_name,company_name,company_address',  $whereField='id', $whereValue=$data['purchase'][0]['supplier_id'], $orderBy='', $order='', $limit='', $offset=0, true);
+			$data['user'] = $this->Common_model->getDataFromTable('tbl_users','first_name',  $whereField='id', $whereValue=$data['purchase'][0]['created_by'], $orderBy='', $order='', $limit='', $offset=0, true);
 			$orderByColumn = "tpi.id";
 			$sortType = 'DESC';
 			$indexColumn='tpi.id';

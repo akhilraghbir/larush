@@ -199,6 +199,12 @@
                 $(".subtotal_price").val(subtotal_price.toFixed(2));
                 $(".total_price").val(grandtotal.toFixed(2));
             }
+            function calculateNet(elementId){
+                var gross = $(".gross_"+elementId).val();
+                var tare = $(".tare_"+elementId).val();
+                var net = gross - tare;
+                $(".qty_"+elementId).val(net.toFixed(2));
+            }
             function removeRow(id){
                 if(id!=''){
                     $(".tr_"+id).hide(500, function(){

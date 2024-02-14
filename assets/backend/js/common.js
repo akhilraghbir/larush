@@ -10,6 +10,12 @@ $(".numberOnly,.Onlynumbers").keypress(function (e) {
         return false;
     }
 });
+$(document).on('keypress','.Onlynumbers',function(e){
+	if (e.which != 8 && e.which != 0 && e.which != 110 && e.which != 46 && (e.which < 48 || e.which > 57)) {
+        $(this).attr("placeholder", "Allows Digits Only");
+        return false;
+    }
+});
 $(".numberOnly").blur(function(){
     var phoneNumberTest = new RegExp("^[1-9]{1}[0-9]{9}$");
     $('span.error-keyup-7').remove();

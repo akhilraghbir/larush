@@ -157,11 +157,7 @@ class Expenses extends CI_Controller {
 					$recordListing[$i][6]= '<span class="badge rounded-pill bg-success">'.$recordData->status.'</span>';
 				}
 				if($this->session->userdata('user_type') == 'Admin'){	
-					if($recordData->status == 'Inactive'){
-						$action.= '<a class="btn" title="Active" onclick="statusUpdate(this,'."'$recordData->id'".','."'Active'".')" style="margin-bottom: 2px;color:green;font-size: 16px;cursor:pointer;"><i class="ri-check-line"></i></a>';
-					}else{
-						$action.= '<a class="btn" title="Deactive" onclick="statusUpdate(this,'."'$recordData->id'".','."'Inactive'".')" style="margin-bottom: 2px;color:red;font-size: 16px;cursor:pointer;"><i class="ri-close-line"></i></a>';
-					}
+					$action.= '<a href="'.CONFIG_SERVER_ADMIN_ROOT.'expenses/edit/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill" aria-hidden="true"></i></a>';
 				}
 				$recordListing[$i][7]= $action;
 				$i++;

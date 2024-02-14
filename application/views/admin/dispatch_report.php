@@ -15,45 +15,66 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title mb-4">Fe - Non Fe Dispatch Report</h4>
-                                <canvas id="bar" height="300"></canvas>
+                                <div id="chartContainer" style="height:300px"></div>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
 <script type="text/javascript">
     function getdata() {
-        var month = $("#month").val();
+        var date = $("#date").val();
         var user_id = $("#user_id").val();
-        $('#expensesList').DataTable({
-            "destroy": true,
-            "responsive": false,
-            "dom": 'Bfrtip',
-            "processing": true,
-            "serverSide": true,
-            "order": [
-                [1, "desc"]
-            ],
-            buttons: ["copy", "csv", "pdf"],
-            "ajax": {
-                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>EmployeeExpenseReport/ajaxListing",
-                "type": 'POST',
-                'data': {month:month,user_id:user_id}
+        $.ajax({
+            url: '<?php echo base_url(); ?>administrator/DispatchReport/getReport',
+            type: 'POST',
+            data: {
+                "date": date,
             },
-            language: {
-                paginate: {
-                    previous: "<i class='mdi mdi-chevron-left'>",
-                    next: "<i class='mdi mdi-chevron-right'>"
+            success: function(data) {
+                result = JSON.parse(data);
+                var msg = result.message;
+                if (result.error == '0') {
+                    renderGraph(result.data);
+                } else {
+                    toastr['warning'](msg);
                 }
             },
-            drawCallback: function() {
-                $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+            error: function(e) {
+                toastr['warning'](e.message);
             }
         });
     }
-    getdata();
+    function renderGraph(data) {
+        var options = {
+            animationEnabled: true,
+            title: {
+                text: "Fe - Non Fe Dispatch Report"
+            },
+            data: [{
+                type: "doughnut",
+                innerRadius: "40%",
+                showInLegend: true,
+                legendText: "{label}",
+                indexLabel: "{label}: #percent%",
+                // dataPoints: [
+                //     { label: "Department Stores", y: 6492917 },
+                //     { label: "Discount Stores", y: 7380554 },
+                //     { label: "Stores for Men / Women", y: 1610846 },
+                //     { label: "Teenage Specialty Stores", y: 950875 },
+                //     { label: "All other outlets", y: 900000 }
+                // ]
+                dataPoints: data
+            }]
+        };
+        $("#chartContainer").CanvasJSChart(options);
+    }
+    $(document).ready(function(){
+        getdata();
+    });
 </script>

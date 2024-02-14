@@ -139,6 +139,7 @@ class Dispatch extends CI_Controller {
 			$data['settings'] = $this->Common_model->getDataFromTable('tbl_settings','',  $whereField='', $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
 			$data['dispatch'] = $this->Common_model->getDataFromTable('tbl_dispatch','',  $whereField='id', $whereValue=$id, $orderBy='', $order='', $limit='', $offset=0, true);
 			$data['buyer'] = $this->Common_model->getDataFromTable('tbl_buyers','buyer_name,company_name,company_address',  $whereField='id', $whereValue=$data['dispatch'][0]['buyer_id'], $orderBy='', $order='', $limit='', $offset=0, true);
+			$data['user'] = $this->Common_model->getDataFromTable('tbl_users','first_name',  $whereField='id', $whereValue=$data['dispatch'][0]['created_by'], $orderBy='', $order='', $limit='', $offset=0, true);
 			$orderByColumn = "tdi.id";
 			$sortType = 'DESC';
 			$indexColumn='tdi.id';

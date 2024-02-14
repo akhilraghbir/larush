@@ -123,11 +123,13 @@ class Inventory extends CI_Controller {
 				$html.='<td>'.substr($product[0]['product_name'],0,5).'..</td>';
 				if($product[0]['is_catalytic'] == 'No'){
 					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]"><input type="text" class="form-control price_'.$elementid.'" onkeyup="calculateTotal('.$elementid.')" value="'.$product[0]['tier_price'].'" name="price[]"></td>';
-					$html.='<td><input type="text" maxlength="5" onkeyup="calculateTotal('.$elementid.')" name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
+					$html.='<td><input type="text" maxlength="8" onkeyup="calculateTotal('.$elementid.')" name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
 				}else{
 					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]">
 					<input type="hidden" value="" name="price[]"></td>';
-					$html.='<td><input type="text" maxlength="5"  name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
+					$html.='<td><input type="text" maxlength="8" onkeyup="calculateNet('.$elementid.')"  name="gross[]" class="gross_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Gross">
+					<input type="text" maxlength="8"  name="tare[]"  onkeyup="calculateNet('.$elementid.')" class="tare_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Tare">
+					<input type="hidden" name="qty[]" class="qty_'.$elementid.'"></td>';
 				}
 				
 				$html.='<td><input type="text" class="total_'.$elementid.' total form-control Onlynumbers" onkeyup="calculateGrandTotal()" name="total[]" placeholder="Enter Total"></td>';
@@ -236,7 +238,11 @@ class Inventory extends CI_Controller {
 	public function getProducts()
 	{
 		$term = $_POST['term'];
+		$is_catalytic = $_POST['is_catalytic'];
 		$wherecondition = " status='Active' and product_name LIKE '%" . $term . "%'";
+		if(!empty($is_catalytic)){
+			$wherecondition.= " and is_catalytic='$is_catalytic'";
+		}
 		$vmsRefdata = $this->Common_model->getSelectedFields('tbl_products', 'id,product_name as name' , $wherecondition, $limit = '100', $orderby = 'id', $sortby = 'DESC');
 		echo json_encode($vmsRefdata);
 	}

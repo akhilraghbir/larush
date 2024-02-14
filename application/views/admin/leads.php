@@ -63,6 +63,15 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
+                            <label for="first name" class="">Visible<span class="text-danger">*</span></label>
+                            <select name="visible" class="form-control" id="visible">
+                                <option value="Self">Self</option>
+                                <option value="Everyone">Everyone</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
                             <label for="first name" class="">Visited Date<span class="text-danger">*</span></label>
                             <input value="<?php if (isset($formData['visited_date'])) { echo $formData['visited_date']; } ?>" name="visited_date" id="visited_date" autocomplete='off' type="date" class="form-control">
                         </div>
