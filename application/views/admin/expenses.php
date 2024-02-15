@@ -110,10 +110,8 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Select Date</label>
-                                    <input type="date" class="form-control" id="date" name="date">
-                                </div>
+                                <label for="last name" class="">Select Date <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="daterange">
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
@@ -162,7 +160,7 @@
 
 <script type="text/javascript">
     function getdata() {
-        var date = $("#date").val();
+        var date = $("#daterange").val();
         var expense_category = $("#expense_category").val();
         var clist = $('#expenseList').DataTable({
             "destroy": true,

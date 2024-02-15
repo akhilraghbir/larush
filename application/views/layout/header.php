@@ -34,6 +34,9 @@
 <script src="<?= base_url('assets/backend/'); ?>libs/pdfmake/build/vfs_fonts.js"></script>
 <script src="<?= base_url('assets/backend/'); ?>libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
 <script src="<?= base_url('assets/backend/'); ?>libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script>
     var base_url = "<?= base_url();?>";
     var role = "<?= $this->session->user_type;?>";

@@ -119,8 +119,11 @@ class Invoices extends CI_Controller {
 		$joinsArray[] = ['table_name'=>'tbl_buyers as tb','condition'=>"tb.id = tin.buyer_id",'join_type'=>'left'];;
 		$wherecondition = 'tin.id!="0"';
 		if($date!=''){
-			$wherecondition.= ' and date(tin.created_on) = "'.$date.'"';
-		}
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(tin.created_on) between '$fromDate' and '$toDate' ";
+        }
 		if($buyer!='All'){
 			$wherecondition.= ' and tin.buyer_id = '.$buyer;
 		}

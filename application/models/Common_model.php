@@ -647,19 +647,23 @@ class Common_model extends CI_Model{
 		   return $result;
 	}
 
-	public function getStockQty($productid = '',$warehouseid=''){
+	public function getStockQty($productid = '',$warehouseid='',$date=''){
 		if($productid!='' && $warehouseid!=''){
 			$sql = "Select product_id,SUM(CASE When type='Purchase' Then quantity Else 0 End ) as purchaseqty, SUM(CASE When type='Sale' Then quantity Else 0 End ) as saleqty, SUM(CASE When type='Transfer_Debit' Then quantity Else 0 End ) as td, SUM(CASE When type='Transfer_Credit' Then quantity Else 0 End ) as tc from tbl_stock_entries where product_id='".$productid."' and warehouse_id='".$warehouseid."'";
 			$query = $this->db->query($sql)->result_array();
 			$stock = ($query[0]['purchaseqty'] - $query[0]['saleqty'] - $query[0]['td']) + $query[0]['tc'];
-		}else if($productid=='' && $warehouseid!=''){
-			$sql = "Select product_id,SUM(CASE When type='Purchase' Then quantity Else 0 End ) as purchaseqty, SUM(CASE When type='Sale' Then quantity Else 0 End ) as saleqty, SUM(CASE When type='Transfer_Debit' Then quantity Else 0 End ) as td, SUM(CASE When type='Transfer_Credit' Then quantity Else 0 End ) as tc from tbl_stock_entries where warehouse_id='".$warehouseid."' GROUP by product_id";
-			$query = $this->db->query($sql)->result_array();
-			foreach($query as $res){
-				$stock[$res['product_id']] = ($res['purchaseqty'] - $res['saleqty'] - $res['td']) +  $res['tc'];
-			}
 		}else{
-			$sql = "Select product_id,SUM(CASE When type='Purchase' Then quantity Else 0 End ) as purchaseqty, SUM(CASE When type='Sale' Then quantity Else 0 End ) as saleqty , SUM(CASE When type='Transfer_Debit' Then quantity Else 0 End ) as td, SUM(CASE When type='Transfer_Credit' Then quantity Else 0 End ) as tc from tbl_stock_entries GROUP by product_id";
+			$where = "1=1";
+			if($warehouseid!=''){
+				$where.= ' and warehouse_id='.$warehouseid;
+			}
+			if($date!=''){
+				$date = explode("-",$date);
+				$fromDate = date("Y-m-d",strtotime($date[0]));
+				$toDate = date("Y-m-d",strtotime($date[1]));
+				$where.= " and date(created_on) between '$fromDate' and '$toDate'";
+			}
+			$sql = "Select product_id,SUM(CASE When type='Purchase' Then quantity Else 0 End ) as purchaseqty, SUM(CASE When type='Sale' Then quantity Else 0 End ) as saleqty , SUM(CASE When type='Transfer_Debit' Then quantity Else 0 End ) as td, SUM(CASE When type='Transfer_Credit' Then quantity Else 0 End ) as tc from tbl_stock_entries where $where GROUP by product_id";
 			$query = $this->db->query($sql)->result_array();
 			foreach($query as $res){
 				$stock[$res['product_id']] = ($res['purchaseqty'] - $res['saleqty'] - $res['td']) +  $res['tc'];

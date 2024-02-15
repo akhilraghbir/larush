@@ -55,7 +55,6 @@ class Receipts extends CI_Controller {
 				foreach($this->input->post() as $fieldname=>$fieldvalue){
                 	$data[$fieldname]= $this->input->post($fieldname);
                 }
-				
 				if(!isset($data['product_id'])){
 					$this->messages->setMessage('Please select atleast one product','error');
 				}else{
@@ -71,7 +70,7 @@ class Receipts extends CI_Controller {
 					unset($data['tare']);
 					unset($data['total']);
 					$data['receipt_number'] = 'R'.time();
-					$data['created_on'] = current_datetime();
+					$purchaseItems['created_on'] = $stockEntry['created_on'] = $data['created_on'] = current_datetime();
 					$data['created_by'] = $this->session->id;
 					$purchaseId = $this->Common_model->addDataIntoTable('tbl_purchases',$data);
 					for($i=0;$i<count($products);$i++){
@@ -85,9 +84,7 @@ class Receipts extends CI_Controller {
 						$stockEntry['warehouse_id'] = $data['warehouse_id'];
 						$stockEntry['type'] = 'purchase';
 						$stockEntry['reference_id'] = $purchaseId;
-						$stockEntry['created_on'] = current_datetime();
 						$this->Common_model->addDataIntoTable('tbl_stock_entries',$stockEntry);
-
 					}
 					$this->form_validation->clear_field_data();
 					$this->messages->setMessage('Receipt Created Successfully','success');
@@ -123,8 +120,11 @@ class Receipts extends CI_Controller {
 			$wherecondition.=' and tr.created_by = '.$employee;
 		}
 		if($date!=''){
-			$wherecondition.=' and date(tr.created_on) = "'.$date.'"';
-		}
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(tr.created_on) between '$fromDate' and '$toDate' ";
+        }
 		$getRecordListing = $this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords = $getRecordListing['recordsTotal'];
 		$recordsFiltered = $getRecordListing['recordsFiltered'];

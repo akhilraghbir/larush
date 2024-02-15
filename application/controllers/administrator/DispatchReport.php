@@ -76,17 +76,25 @@ class DispatchReport extends CI_Controller {
 	}
 
 	public function getReport(){
+		$date = $this->input->post('date');
 		$ferousproducts = $this->Common_model->getDataFromTable('tbl_products','id',  $whereField=['is_catalytic'=>'No','is_ferrous'=>'Yes'], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
 		$nonferousproducts = $this->Common_model->getDataFromTable('tbl_products','id',  $whereField=['is_catalytic'=>'No','is_ferrous'=>'No'], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
 		$ferrousIds = join("','",array_column($ferousproducts,'id'));
 		$nonferrousIds = join("','",array_column($nonferousproducts,'id'));
-		$ferrousInvoices = $this->db->query("select sum(net) as totqty from tbl_dispatch_items where product_id in ('$ferrousIds')")->result_array();
-		$nonferrousInvoices = $this->db->query("select sum(net) as totqty from tbl_dispatch_items where product_id in ('$nonferrousIds')")->result_array();
+		$wherecondition = '';
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(created_on) between '$fromDate' and '$toDate' ";
+        }
+		$ferrousInvoices = $this->db->query("select sum(net) as totqty from tbl_dispatch_items where product_id in ('$ferrousIds') $wherecondition")->result_array();
+		$nonferrousInvoices = $this->db->query("select sum(net) as totqty from tbl_dispatch_items where product_id in ('$nonferrousIds') $wherecondition")->result_array();
 		$data['error'] = 0;
-		$res[] = ['label' => 'Ferrous Products','y' => $ferrousInvoices[0]['totqty']];
-		$res[] = ['label' => 'Non Ferrous Products','y' => $nonferrousInvoices[0]['totqty']];
+		$res[] = (float)$ferrousInvoices[0]['totqty'];
+		$res[] = (float)$nonferrousInvoices[0]['totqty'];
 		$data['data'] = $res;
-		echo json_encode($data);
+		echo json_encode($data);exit;
 	}
 }
 ?>

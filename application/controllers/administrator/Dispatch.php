@@ -63,7 +63,7 @@ class Dispatch extends CI_Controller {
 					unset($data['net']);
 					unset($data['tare']);
 					$data['dispatch_number'] = 'D'.time();
-					$data['created_on'] = current_datetime();
+					$dispatchItems['created_on'] = $data['created_on'] = current_datetime();
 					$data['created_by'] = $this->session->id;
 					$dispatchId = $this->Common_model->addDataIntoTable('tbl_dispatch',$data);
 					for($i=0;$i<count($products);$i++){
@@ -96,8 +96,11 @@ class Dispatch extends CI_Controller {
 		$joinsArray[] = ['table_name'=>'tbl_buyers as tb','condition'=>"tb.id = td.buyer_id",'join_type'=>'left'];;
 		$wherecondition = 'td.id!="0"';
 		if($date!=''){
-			$wherecondition.= ' and date(td.created_on) = "'.$date.'"';
-		}
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(td.created_on) between '$fromDate' and '$toDate' ";
+        }
 		if($buyer!='All'){
 			$wherecondition.= ' and td.buyer_id = '.$buyer;
 		}

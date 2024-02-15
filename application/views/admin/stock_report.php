@@ -15,7 +15,11 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                            <label for="last name" class="">Select Date <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="daterange">
+                        </div>
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <input type="button" style="margin-top:28px" onclick="getdata()" name="submit" class="btn btn-primary" value="Search">
                             </div>
@@ -44,6 +48,7 @@
 <script type="text/javascript">
     function getdata() {
         var warehouse = $("#warehouse").val();
+        var date = $("#daterange").val();
         var clist = $('#stockReportList').DataTable({
             "destroy": true,
             "dom": 'Bfrtip',
@@ -58,7 +63,7 @@
             "ajax": {
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>StockReport/ajaxListing",
                 "type": 'POST',
-                'data': {warehouse:warehouse}
+                'data': {warehouse:warehouse,date:date}
             },
             language: {
                 paginate: {

@@ -224,10 +224,8 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="mb-3">
-                                <label for="">Select Date</label>
-                                    <input type="date" class="form-control" name="date" id="date">
-                                </div>
+                                <label for="last name" class="">Select Date <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="daterange">
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -260,7 +258,7 @@
 
 <script type="text/javascript">
     function getdata() {
-        var date = $("#date").val();
+        var date = $("#daterange").val();
         var buyer = $("#buyer").val();
         $('#dispatchList').DataTable({
             "destroy": true,

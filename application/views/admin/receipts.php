@@ -250,10 +250,8 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="mb-3">
-                                <label for="">Select Date</label>
-                                    <input type="date" class="form-control" name="date" id="date">
-                                </div>
+                                <label for="last name" class="">Select Date <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="daterange">
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -289,7 +287,7 @@
     function getdata() {
         var supplier = $("#supplier").val();
         var employee = $("#employee").val();
-        var date = $("#date").val();
+        var date = $("#daterange").val();
         $('#receiptList').DataTable({
             "destroy": true,
             "responsive": false,

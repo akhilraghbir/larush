@@ -112,7 +112,8 @@ class Expenses extends CI_Controller {
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
-		$status         =  $this->input->post('status');
+		$status        =  $this->input->post('status');
+		$date          =  $this->input->post('date');
 		$expense_category = $this->input->post('expense_category');
 		$indexColumn ='te.id';
 		$selectColumns = ['te.id','tec.category','expense_purpose','amount','expense_date','te.created_on','te.status','te.created_by','te.expense_receipt'];
@@ -131,6 +132,12 @@ class Expenses extends CI_Controller {
 		if($expense_category!='All'){
 			$wherecondition.= 'and te.expense_category='.$expense_category;
 		}
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(te.expense_date) between '$fromDate' and '$toDate' ";
+        }
 		$getRecordListing=$this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords=$getRecordListing['recordsTotal'];
 		$recordsFiltered=$getRecordListing['recordsFiltered'];

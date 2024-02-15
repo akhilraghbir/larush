@@ -27,7 +27,7 @@ class EmployeeExpenseReport extends CI_Controller {
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
-		$selectedmonth         =  $this->input->post('month');
+		$date         =  $this->input->post('date');
 		$user_id = $this->input->post('user_id');
 		$indexColumn ='te.id';
 		$selectColumns = ['te.id','tec.category','expense_purpose','amount','expense_date','te.created_on','te.status','te.created_by','te.expense_receipt'];
@@ -35,11 +35,11 @@ class EmployeeExpenseReport extends CI_Controller {
 		$table_name ='tbl_expenses as te';
 		$joinsArray[] = ['table_name'=>'tbl_categories as tec','condition'=>"tec.id = te.expense_category",'join_type'=>'left'];;
 		$wherecondition='te.role="Employee"';
-		if($selectedmonth!=''){
-            $selectedmonth = explode("-",$selectedmonth);
-            $month = $selectedmonth[1];
-            $year = $selectedmonth[0];
-            $wherecondition.=" and month(expense_date)='$month' and year(expense_date)='$year'";
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and te.expense_date between '$fromDate' and '$toDate' ";
         }
         if($user_id!=''){
             $wherecondition.=" and te.created_by=".$user_id;

@@ -29,10 +29,11 @@ class StockReport extends CI_Controller {
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
 		$warehouse     =  $this->input->post('warehouse');
+		$date 		   =  $this->input->post('date');
 		if($warehouse=='All'){
 			$warehouse = '';
 		}
-        $stockqty  = $this->Common_model->getStockQty('',$warehouse);
+        $stockqty  = $this->Common_model->getStockQty('',$warehouse,$date);
 		$indexColumn ='tp.id';
 		$selectColumns = ['tp.id','product_name','tu.unit_name'];
 		$dataTableSortOrdering = ['tp.id','product_name','tu.unit_name','tp.id'];

@@ -5,10 +5,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Select Month</label>
-                                <input type="month" class="form-control" id="month" name="month">
-                            </div>
+                            <label for="last name" class="">Select Date <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="daterange">
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
@@ -43,7 +41,7 @@
 </div>
 <script type="text/javascript">
     function getdata() {
-        var month = $("#month").val();
+        var date = $("#daterange").val();
         var user_id = $("#user_id").val();
         $('#expensesList').DataTable({
             "destroy": true,
@@ -58,7 +56,7 @@
             "ajax": {
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>CompanyExpenseReport/ajaxListing",
                 "type": 'POST',
-                'data': {month:month,user_id:user_id}
+                'data': {date:date,user_id:user_id}
             },
             language: {
                 paginate: {

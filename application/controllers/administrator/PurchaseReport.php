@@ -25,17 +25,17 @@ class PurchaseReport extends CI_Controller {
 	}
 
 	public function getReport(){
-		$selectedmonth  =  $this->input->post('month');
+		$date  =  $this->input->post('date');
 		$supplier_id = $this->input->post('supplier_id');
 		$wherecondition = " id!=0";
 		if(!empty($supplier_id)){
 			$wherecondition.= ' and supplier_id='.$supplier_id;
 		}
-		if($selectedmonth!=''){
-            $selectedmonth = explode("-",$selectedmonth);
-            $month = $selectedmonth[1];
-            $year = $selectedmonth[0];
-            $wherecondition.=" and month(created_on)='$month' and year(created_on)='$year'";
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(created_on) between '$fromDate' and '$toDate' ";
         }
 		$sql = "select id from tbl_purchases where ".$wherecondition;
 		$res = $this->db->query($sql)->result_array();

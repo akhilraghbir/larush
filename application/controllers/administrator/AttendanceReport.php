@@ -27,7 +27,7 @@ class AttendanceReport extends CI_Controller {
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
-        $selectedmonth         = $this->input->post('month');
+        $date         = $this->input->post('date');
         $user_id         = $this->input->post('user_id');
 		$indexColumn = 'ta.id';
 		$selectColumns = ['ta.id','ta.date','ta.clock_in','ta.clock_out'];
@@ -35,11 +35,11 @@ class AttendanceReport extends CI_Controller {
 		$table_name='tbl_attendance as ta';
 		$joinsArray = [];
 		$wherecondition = 'ta.id!="0"';
-        if($selectedmonth!=''){
-            $selectedmonth = explode("-",$selectedmonth);
-            $month = $selectedmonth[1];
-            $year = $selectedmonth[0];
-            $wherecondition.=" and month(date)='$month' and year(date)='$year'";
+        if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date between '$fromDate' and '$toDate' ";
         }
         if($user_id!=''){
             $wherecondition.=" and user_id=".$user_id;
