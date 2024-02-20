@@ -123,10 +123,13 @@ class Leads extends CI_Controller {
         }else if($user_id!=''){
             $wherecondition.=' and created_by='.$user_id;
         }
-        if($date!=''){
-            $wherecondition.=' and visited_date="'.$date.'"';
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(visited_date) between '$fromDate' and '$toDate' ";
         }
-        
+
 		$getRecordListing=$this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords=$getRecordListing['recordsTotal'];
 		$recordsFiltered=$getRecordListing['recordsFiltered'];

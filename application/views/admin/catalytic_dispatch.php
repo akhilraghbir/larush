@@ -18,11 +18,10 @@
                 <h5 class="card-title"></h5>
                 <?php
                 if(isset($dispatch[0]['id']) && $dispatch[0]['id']!=''){
-                    $url = CONFIG_SERVER_ADMIN_ROOT . "Dispatch/edit/".$dispatch[0]['id'];
+                    $url = CONFIG_SERVER_ADMIN_ROOT . "CatalyticDispatch/edit/".$dispatch[0]['id'];
                 }else{
-                    $url = CONFIG_SERVER_ADMIN_ROOT . "Dispatch/add";
+                    $url = CONFIG_SERVER_ADMIN_ROOT . "CatalyticDispatch/add";
                 }
-                
                 echo form_open($url, array('class' => 'userRegistration', 'id' => 'userRegistration')); ?>
                 <div class="row">
                     <div class="col-md-4">
@@ -72,9 +71,8 @@
                         <table class="table table-bordered">
                             <thead>
                                 <th>Product Name</th>
-                                <th>Gross</th>
-                                <th>Tare</th>
-                                <th>Net</th>
+                                <th>Units</th>
+                                <th>Weight</th>
                                 <th>Actions</th>
                             </thead>
                             <tbody class="dispatch_body">
@@ -84,11 +82,10 @@
                             ?>
                             <tr class="tr_<?= $elementid; ?>"> 
                                 <td><?= substr($products[$items['product_id']],0,20); ?></td>
-                                <td><input type="text" maxlength="12"  name="gross_up[]"  onkeyup="calculateTotal(<?= $elementid; ?>)" value="<?= $items['gross'];?>"  class="gross_<?= $elementid; ?> gross form-control Onlynumbers" placeholder="Enter Gross"></td>
-                                <td><input type="text" maxlength="12"  name="tare_up[]"  onkeyup="calculateTotal(<?= $elementid; ?>)" value="<?= $items['tare'];?>"  class="tare_<?= $elementid; ?> tare form-control Onlynumbers" placeholder="Enter Tare"></td>
+                                <td><input type="text" maxlength="12"  name="net_up[]"  onkeyup="calculateGrandTotal()" value="<?= $items['net'];?>"  class="net_<?= $elementid; ?> net form-control Onlynumbers" placeholder="Enter Units"></td>
                                 <td><input type="hidden" value="<?= $items['product_id']; ?>" name="product_up_id[]">
                                     <input type="hidden" value="<?= $items['id']; ?>" name="up_ids[]">
-                                    <input type="text" data-pname="<?= $products[$items['product_id']] ?>" maxlength="12" value="<?= $items['net'];?>" onkeyup="calculateGrandTotal()" class="net_<?= $elementid; ?> net form-control Onlynumbers" name="net_up[]" placeholder="Enter Net"></td>
+                                    <input type="text" data-pname="<?= $products[$items['product_id']] ?>" maxlength="12" value="<?= $items['gross'];?>" onkeyup="calculateGrandTotal()" class="gross_<?= $elementid; ?> gross form-control Onlynumbers" name="gross_up[]" placeholder="Enter Weight"></td>
                                 <td><button type="button" onclick="removeRow(<?= $elementid; ?>,<?= $items['id']; ?>)" class="btn btn-sm btn-danger"><i class="ri-delete-bin-3-fill"></i></button>
                                     <button type="button" onclick="print(<?= $elementid; ?>)" class="btn btn-sm btn-info"><i class="ri-printer-fill"></i></button></td>
                             </tr>
@@ -109,12 +106,12 @@
                     <div class="col-md-6">
                         <table class="table">
                             <tr>
-                                <td colspan="3" class="fw-bold text-end">Total Net</td>
-                                <td><input type="text" name="total_net" readonly  placeholder="Total Net" class="total_net form-control" placeholder="Total Net"></td>
+                                <td colspan="3" class="fw-bold text-end">Total Units</td>
+                                <td><input type="text" name="total_net" readonly  placeholder="Total Units" class="total_net form-control"></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="fw-bold text-end">Total Gross</td>
-                                <td><input type="text" readonly  name="total_gross" placeholder="Total Gross" class="total_gross form-control" placeholder="Total Gross"></td>
+                                <td colspan="3" class="fw-bold text-end">Total Weight</td>
+                                <td><input type="text" readonly  name="total_gross" placeholder="Total Weight" class="total_gross form-control"></td>
                             </tr>
                         </table>
                     </div>
@@ -142,7 +139,7 @@
                             dataType: 'json',
                             data: {
                                 term: request.term,
-                                is_catalytic:'no'
+                                is_catalytic:'yes'
                             },
                             success: function(data) {
                                 if (data.length > '0') {
@@ -169,7 +166,7 @@
             function addProduct(id = null) {
                 if (id != '') {
                     $.ajax({
-                        url: '<?php echo base_url(); ?>administrator/dispatch/dispatchProduct',
+                        url: '<?php echo base_url(); ?>administrator/CatalyticDispatch/dispatchProduct',
                         type: 'POST',
                         data: {"id": id},
                         success: function(data) {
@@ -187,27 +184,27 @@
                     });
                 }
             }
-            function calculateTotal(elementId){
-                if(elementId!=''){
-                    var gross = $(".gross_"+elementId).val();
-                    var tare = $(".tare_"+elementId).val();
-                    var total = parseFloat(gross) - parseFloat(tare);
-                    $(".net_"+elementId).val(total.toFixed(2));
-                    calculateGrandTotal();
-                }
-            }
+            // function calculateTotal(elementId){
+            //     if(elementId!=''){
+            //         var gross = $(".gross_"+elementId).val();
+            //         var tare = $(".tare_"+elementId).val();
+            //         var total = parseFloat(gross) - parseFloat(tare);
+            //         $(".net_"+elementId).val(total.toFixed(2));
+            //         calculateGrandTotal();
+            //     }
+            // }
 
             function calculateGrandTotal(){
                 var tot_gross = 0;
                 var tot_net = 0;
-                $(".gross").each(function(){
-                    if($(this).val()!='' && $(this).val()!=undefined){
-                        tot_gross = tot_gross + parseFloat($(this).val());
-                    }
-                });
                 $(".net").each(function(){
                     if($(this).val()!='' && $(this).val()!=undefined){
                         tot_net = tot_net + parseFloat($(this).val());
+                    }
+                });
+                $(".gross").each(function(){
+                    if($(this).val()!='' && $(this).val()!=undefined){
+                        tot_gross = tot_gross + parseFloat($(this).val());
                     }
                 });
                 $(".total_gross").val(tot_gross.toFixed(2));
@@ -243,17 +240,16 @@
                     var pname = $(".gross_"+elementId).attr('data-pname');
                     var gross = $(".gross_"+elementId).val();
                     var net = $(".net_"+elementId).val();
-                    var tare = $(".tare_"+elementId).val();
+                    if(net == '' || net ==undefined || net == 0){
+                        toastr['error']('Please enter units');return false;
+                    }
                     if(gross == '' || gross ==undefined){
-                        toastr['error']('Please enter gross');return false;
+                        toastr['error']('Please enter weight');return false;
                     }
-                    if(tare == '' || tare ==undefined || tare == 0){
-                        toastr['error']('Please enter tare');return false;
-                    }
-                    var data = JSON.stringify({pname:pname,gross:gross,net:net,tare:tare});
+                    var data = JSON.stringify({pname:pname,gross:gross,net:net});
                     var token = window.btoa(data);     
                     //console.log(window.btoa(data));return false;
-                    window.open(base_url+'administrator/dispatch/packing_slip/'+token);
+                    window.open(base_url+'administrator/CatalyticDispatch/packing_slip/'+token);
                 }
             }
         </script>
@@ -322,7 +318,7 @@
                 [4, "desc"]
             ],
             "ajax": {
-                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>dispatch/ajaxListing",
+                "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>CatalyticDispatch/ajaxListing",
                 "type": 'POST',
                 'data': {
                     date:date,

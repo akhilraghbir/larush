@@ -50,6 +50,12 @@
                             <span>Dispatch</span>
                         </a>
                     </li>
+                    <li class="<?= ($modulename == 'CatalyticDispatch') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/CatalyticDispatch'); ?>" class="waves-effect">
+                            <i class="ri-red-packet-line"></i>
+                            <span>Catalytic Dispatch</span>
+                        </a>
+                    </li>
                     <li class="<?= ($modulename == 'Invoices') ? 'mm-active' : ''; ?>">
                         <a href="<?= base_url('administrator/Invoices'); ?>" class="waves-effect">
                             <i class="ri-red-packet-line"></i>

@@ -23,6 +23,10 @@ class Dashboard extends CI_Controller
 		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
         if($this->session->user_type == 'Employee'){
             $data['tasks'] = $this->Common_model->getDataFromTable('tbl_tasks','',  $whereField=['employee_id'=>$this->session->id,'status'=>'Pending'], $whereValue='', $orderBy='priority', $order='desc', $limit='', $offset=0, true);
+        }else{
+            $data['employees'] = $this->Common_model->check_exists('tbl_users',['user_type'=>'Employee'],'','','');
+            $data['buyers'] = $this->Common_model->check_exists('tbl_suppliers',['status'=>'Active'],'','','');
+            $data['suppliers'] = $this->Common_model->check_exists('tbl_buyers',['status'=>'Active'],'','','');
         }
 		$this->home_template->load('home_template','admin/dashboard',$data);
     }

@@ -244,3 +244,38 @@
 		return $divClass[$priority];
 	}
 	
+
+if (!function_exists('timeDifference')) {
+    function timeDifference($startDate,$endDate='')
+    {
+		if($endDate==''){
+        	$seconds = strtotime(current_datetime()) - strtotime($startDate);
+		}else{
+			$seconds = strtotime($endDate) - strtotime($startDate);
+		}
+
+        $days    = floor($seconds / 86400);
+        $hours   = floor(($seconds - ($days * 86400)) / 3600);
+        $minutes = floor(($seconds - ($days * 86400) - ($hours * 3600))/60);
+        $seconds = floor(($seconds - ($days * 86400) - ($hours * 3600) - ($minutes*60)));
+
+        if($days>0)
+        {
+            return $days." days ago";
+        }
+        if($hours > 0)
+        {
+            return $hours." hours ago";
+        }
+
+        if($minutes > 0)
+        {
+            return $minutes." minutes ago";
+        }
+
+        if($seconds > 0)
+        {
+            return $seconds." seconds ago";
+        }
+    }
+}

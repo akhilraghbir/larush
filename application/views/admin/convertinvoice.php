@@ -44,7 +44,7 @@
                             <tr>
                                 <td><input type="hidden" value="<?= $items['product_id'];?>" name="product_id[]"><?= $items['product_name'];?></td>
                                 <td><input type="hidden" class="qty_<?= $items['product_id']; ?>" value="<?= $items['net'];?>" name="qty[]"><?= $items['net'];?></td>
-                                <td><input type="text" name="price[]" onkeyup="calculateTotal(<?= $items['product_id']; ?>)" value="<?= $items['buyer_price'];?>" class="price_<?= $items['product_id'];?> form-control"></td>
+                                <td><input type="text" name="price[]" onkeyup="calculateTotal(<?= $items['product_id']; ?>)" value="<?= $items['buyer_price'];?>" maxlength="10" class="price_<?= $items['product_id'];?> Onlynumbers form-control"></td>
                                 <td><input type="text" name="total[]" readonly value="<?= $total;?>" class="total_<?= $items['product_id']; ?> total form-control"></td>
                             </tr>
                           <?php } } ?>

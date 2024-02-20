@@ -54,13 +54,12 @@ class AttendanceReport extends CI_Controller {
         if(!empty($getRecordListing)) {
             $actionContent = '';
             foreach($getRecordListing['data'] as $recordData) {
-				$action='';
 				$content .='[';
                 $recordListing[$i][0]= ++$j;
                 $recordListing[$i][1]= $recordData->date;
                 $recordListing[$i][2]= $recordData->clock_in;
 				$recordListing[$i][3]= $recordData->clock_out;
-				$recordListing[$i][4]= $action;
+				$recordListing[$i][4]= timeDifference($recordData->clock_in,$recordData->clock_out);
 				$i++;
                 $srNumber++;
             }
