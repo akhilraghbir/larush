@@ -31,7 +31,6 @@
 <script type="text/javascript">
     function getdata() {
         var date = $("#daterange").val();
-        var user_id = $("#user_id").val();
         $.ajax({
             url: '<?php echo base_url(); ?>administrator/DispatchReport/getReport',
             type: 'POST',

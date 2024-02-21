@@ -104,54 +104,48 @@ class Dashboard extends CI_Controller
         }
     }
     
-    public function getDonut(){
-        $financialYear = $this->Common_model->getFinancialYear('id')['id'];
-        if($_POST['get'] == 'expense-donut'){
-            $data = $this->db->query("SELECT sum(bill_amount) as value,category_name as label FROM `tbl_bills` LEFT JOIN tbl_categories on tbl_categories.id = tbl_bills.category_id where financial_year = '$financialYear' and bill_type = 'Expense' GROUP by category_id")->result();
-            if(count($data)>0){
-                $res['error'] = 0;
-                $res['data'] = $data;
-                $res['colors'] = RAND_COLORS;
-            }else{
-                $res['error'] = 1;
-            }
-            echo json_encode($res);
-        }else if($_POST['get'] == 'income-donut'){
-            $data = $this->db->query("SELECT sum(bill_amount) as value,category_name as label FROM `tbl_bills` LEFT JOIN tbl_categories on tbl_categories.id = tbl_bills.category_id where financial_year = '$financialYear' and bill_type = 'Income' GROUP by category_id")->result();
-            if(count($data)>0){
-                $res['error'] = 0;
-                $res['data'] = $data;
-                $res['colors'] = RAND_COLORS;
-            }else{
-                $res['error'] = 1;
-            }
-            echo json_encode($res);
+    public function getSalesReport(){
+        $date = $this->input->post('date');
+		$ferousproducts = $this->Common_model->getDataFromTable('tbl_products','id',  $whereField=['is_catalytic'=>'No','is_ferrous'=>'Yes'], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
+		$nonferousproducts = $this->Common_model->getDataFromTable('tbl_products','id',  $whereField=['is_catalytic'=>'No','is_ferrous'=>'No'], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
+		$ferrousIds = join("','",array_column($ferousproducts,'id'));
+		$nonferrousIds = join("','",array_column($nonferousproducts,'id'));
+		$wherecondition = '';
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(created_on) between '$fromDate' and '$toDate' ";
         }
+		$ferrousInvoices = $this->db->query("select sum(quantity) as totqty from tbl_invoice_items where product_id in ('$ferrousIds') $wherecondition")->result_array();
+		$nonferrousInvoices = $this->db->query("select sum(quantity) as totqty from tbl_invoice_items where product_id in ('$nonferrousIds') $wherecondition")->result_array();
+		$data['error'] = 0;
+		$res[] = (float)$ferrousInvoices[0]['totqty'];
+		$res[] = (float)$nonferrousInvoices[0]['totqty'];
+		$data['data'] = $res;
+		echo json_encode($data);exit;
     }
-    
-    public function areaGraph(){
-        $financialYear = $this->Common_model->getFinancialYear('id')['id'];
-        if($_POST['get'] == 'areaGraph'){
-            $data = $this->db->query("SELECT month(created_on) as period,sum(case when bill_type = 'Expense' then bill_amount else 0 end) as Expenses,sum(case when bill_type = 'Income' then bill_amount else 0 end) as Income  from tbl_bills where financial_year = '$financialYear' GROUP by month(created_on)")->result_array();
-            if(count($data)>0){
-                $res['error'] = 0;
-                $res['data'] = $data;
-            }else{
-                $res['error'] = 0;
-                $res['data'] = [];
-            }
-            echo json_encode($res);
-        }else{
-            $data = $this->db->query("SELECT month(created_on) as Month,count(case when bill_type = 'Expense' then bill_amount else 0 end) as Expense,count(case when bill_type = 'Income' then bill_amount else 0 end) as Income  from tbl_bills where financial_year = '$financialYear' GROUP by month(created_on)")->result_array();
-            if(count($data)>0){
-                $res['error'] = 0;
-                $res['data'] = $data;
-            }else{
-                $res['error'] = 0;
-                $res['data'] = [];
-            }
-            echo json_encode($res);
+
+    public function getPurchaseReport(){
+        $date = $this->input->post('date');
+		$ferousproducts = $this->Common_model->getDataFromTable('tbl_products','id',  $whereField=['is_catalytic'=>'No','is_ferrous'=>'Yes'], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
+		$nonferousproducts = $this->Common_model->getDataFromTable('tbl_products','id',  $whereField=['is_catalytic'=>'No','is_ferrous'=>'No'], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
+		$ferrousIds = join("','",array_column($ferousproducts,'id'));
+		$nonferrousIds = join("','",array_column($nonferousproducts,'id'));
+		$wherecondition = '';
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(created_on) between '$fromDate' and '$toDate' ";
         }
+		$ferrousInvoices = $this->db->query("select sum(quantity) as totqty from tbl_purchase_items where product_id in ('$ferrousIds') $wherecondition")->result_array();
+		$nonferrousInvoices = $this->db->query("select sum(quantity) as totqty from tbl_purchase_items where product_id in ('$nonferrousIds') $wherecondition")->result_array();
+		$data['error'] = 0;
+		$res[] = (float)$ferrousInvoices[0]['totqty'];
+		$res[] = (float)$nonferrousInvoices[0]['totqty'];
+		$data['data'] = $res;
+		echo json_encode($data);exit;
     }
 
     public function updateTask(){
