@@ -19,7 +19,7 @@
                         </div>
                         <div class="col-md-3">
                             <label for="last name" class="">Select Date <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="daterange">
+                            <input type="text" class="form-control daterange" id="daterange">
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">

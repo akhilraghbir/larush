@@ -61,7 +61,6 @@ class Attendance extends CI_Controller {
             $final_data = '[]';
         }	
          echo '{"draw":'.$draw.',"recordsTotal":'.$recordsFiltered.',"recordsFiltered":'.$recordsFiltered.',"data":'.$final_data.'}';
-       	
 	}	
 
     

@@ -83,10 +83,10 @@ $(function() {
 var start = moment().subtract(29, 'days');
 var end = moment();
 function cb(start, end) {
-    //$('#daterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    $('#daterange').val('');
+    $('.daterange').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    //$('.daterange').val('');
 }
-$('#daterange').daterangepicker({
+$('.daterange').daterangepicker({
     startDate: start,
     endDate: end,
     ranges: {

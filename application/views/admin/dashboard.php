@@ -15,179 +15,89 @@
     <?php } } ?>
 </div>
 <?php }else{ ?>
-<div class="row">
-	<div class="col-xl-12">
-		<div class="row">
-			<div class="col-md-3">
-				<div class="card">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-1 overflow-hidden">
-								<p class="text-truncate font-size-14 mb-2">Employees</p>
-								<h4 class="mb-0"><?= $employees; ?></h4>
-							</div>
-							<div class="text-primary ms-auto">
-								<i class=" ri-user-fill font-size-24"></i>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="card">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-1 overflow-hidden">
-								<p class="text-truncate font-size-14 mb-2">Suppliers</p>
-								<h4 class="mb-0"><?= $suppliers; ?></h4>
-							</div>
-							<div class="text-primary ms-auto">
-								<i class="ri-store-2-line font-size-24"></i>
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex">
+								<div class="flex-1 overflow-hidden">
+									<p class="text-truncate font-size-14 mb-2">Employees</p>
+									<h4 class="mb-0"><?= $employees; ?></h4>
+								</div>
+								<div class="text-primary ms-auto">
+									<i class=" ri-user-fill font-size-24"></i>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="card">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-1 overflow-hidden">
-								<p class="text-truncate font-size-14 mb-2">Buyers</p>
-								<h4 class="mb-0"><?= $buyers; ?></h4>
-							</div>
-							<div class="text-primary ms-auto">
-								<i class="ri-briefcase-4-line font-size-24"></i>
+				<div class="col-md-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex">
+								<div class="flex-1 overflow-hidden">
+									<p class="text-truncate font-size-14 mb-2">Suppliers</p>
+									<h4 class="mb-0"><?= $suppliers; ?></h4>
+								</div>
+								<div class="text-primary ms-auto">
+									<i class="ri-store-2-line font-size-24"></i>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="card">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-1 overflow-hidden">
-								<p class="text-truncate font-size-14 mb-2">Buyers</p>
-								<h4 class="mb-0"><?= $buyers; ?></h4>
+				<div class="col-md-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex">
+								<div class="flex-1 overflow-hidden">
+									<p class="text-truncate font-size-14 mb-2">Buyers</p>
+									<h4 class="mb-0"><?= $buyers; ?></h4>
+								</div>
+								<div class="text-primary ms-auto">
+									<i class="ri-briefcase-4-line font-size-24"></i>
+								</div>
 							</div>
-							<div class="text-primary ms-auto">
-								<i class="ri-briefcase-4-line font-size-24"></i>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex">
+								<div class="flex-1 overflow-hidden">
+									<p class="text-truncate font-size-14 mb-2">Products</p>
+									<h4 class="mb-0"><?= $products; ?></h4>
+								</div>
+								<div class="text-primary ms-auto">
+									<i class="ri-briefcase-4-line font-size-24"></i>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- end row -->
-
-		<!-- <div class="card">
-			<div class="card-body">
-				<div class="float-end d-none d-md-inline-block">
-					<div class="btn-group mb-2">
-						<button type="button" class="btn btn-sm btn-light">Today</button>
-						<button type="button" class="btn btn-sm btn-light active">Weekly</button>
-						<button type="button" class="btn btn-sm btn-light">Monthly</button>
-					</div>
-				</div>
-				<h4 class="card-title mb-4">Revenue Analytics</h4>
-				<div>
-					<div id="line-column-chart" class="apex-charts" dir="ltr"></div>
-				</div>
-			</div>
-
-			<div class="card-body border-top text-center">
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="d-inline-flex">
-							<h5 class="me-2">$12,253</h5>
-							<div class="text-success">
-								<i class="mdi mdi-menu-up font-size-14"> </i>2.2 %
-							</div>
-						</div>
-						<p class="text-muted text-truncate mb-0">This month</p>
-					</div>
-
-					<div class="col-sm-4">
-						<div class="mt-4 mt-sm-0">
-							<p class="mb-2 text-muted text-truncate"><i class="mdi mdi-circle text-primary font-size-10 me-1"></i> This Year :</p>
-							<div class="d-inline-flex">
-								<h5 class="mb-0 me-2">$ 34,254</h5>
-								<div class="text-success">
-									<i class="mdi mdi-menu-up font-size-14"> </i>2.1 %
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="mt-4 mt-sm-0">
-							<p class="mb-2 text-muted text-truncate"><i class="mdi mdi-circle text-success font-size-10 me-1"></i> Previous Year :</p>
-							<div class="d-inline-flex">
-								<h5 class="mb-0">$ 32,695</h5>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div> -->
 	</div>
 	<div class="row">
-		<div class="col-xl-4">
+		<div class="col-lg-4">
 			<div class="card">
 				<div class="card-body">
-					<div class="dropdown float-end">
-						<a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-							<i class="mdi mdi-dots-vertical"></i>
-						</a>
-						<div class="dropdown-menu dropdown-menu-end">
-							<!-- item-->
-							<a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-							<!-- item-->
-							<a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-							<!-- item-->
-							<a href="javascript:void(0);" class="dropdown-item">Profit</a>
-							<!-- item-->
-							<a href="javascript:void(0);" class="dropdown-item">Action</a>
-						</div>
+					<!-- <h4 class="card-title mb-4">Sales Vs Purchases</h4> -->
+					<div class="float-end">
+						<input type="text" class="form-control daterange" autocomplete="off" onchange="getSalesVsPurchases()"  id="daterange-sales-purchases">
 					</div>
-
-					<h4 class="card-title mb-4">Earning Reports</h4>
-					<div class="text-center">
-						<div class="row">
-							<div class="col-sm-6">
-								<div>
-									<div class="mb-3">
-										<div id="radialchart-1" class="apex-charts"></div>
-									</div>
-
-									<p class="text-muted text-truncate mb-2">Weekly Earnings</p>
-									<h5 class="mb-0">$2,523</h5>
-								</div>
-							</div>
-
-							<div class="col-sm-6">
-								<div class="mt-5 mt-sm-0">
-									<div class="mb-3">
-										<div id="radialchart-2" class="apex-charts"></div>
-									</div>
-
-									<p class="text-muted text-truncate mb-2">Monthly Earnings</p>
-									<h5 class="mb-0">$11,235</h5>
-								</div>
-							</div>
-							
-						</div>
-						
-					</div>
+					<div id="column_chart_datalabel" class="apex-charts" dir="ltr"></div>
 				</div>
-			</div>
+			</div><!--end card-->
 		</div>
 		<div class="col-xl-4">
 			<div class="card">
 				<div class="card-body">
 					<div class="float-end">
-						<input type="text" class="form-control" autocomplete="off" onchange="getSalesChart()"  id="daterange">
+						<input type="text" class="form-control daterange" autocomplete="off" onchange="getSalesChart()"  id="daterange">
 					</div>
 					<h4 class="card-title mb-4">Sales (Fe & Non Fe)</h4>
 					<div id="donut-chart" class="apex-charts"></div>
@@ -198,7 +108,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="float-end">
-						<input type="text" class="form-control" autocomplete="off" onchange="getPurchaseChart()"  id="daterange">
+						<input type="text" class="form-control daterange" autocomplete="off" onchange="getPurchaseChart()"  id="daterange">
 					</div>
 					<h4 class="card-title mb-4">Purchase (Fe & Non Fe)</h4>
 					<div id="purchase-donut-chart" class="apex-charts"></div>
@@ -206,8 +116,42 @@
 			</div>
 		</div>
 	</div>
-	
-</div>
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title mb-4">Employee login time records</h4>
+					<div class="table-responsive">
+						<div class="table-responsive tasks dataGridTable">
+                            <table id="todayAttendance" class="table card-table table-vcenter text-nowrap mb-0 border nowrap" style="width:100%">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Employee Name</th>
+										<th>Login Time</th>
+									</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="card">
+				<div class="card-body">
+					<div class="float-end">
+						<input type="text" class="form-control daterange" autocomplete="off" onchange="getExpensesChart()"  id="daterange-expenses">
+					</div>
+					<h4 class="card-title mb-4">Company Expenses</h4>
+					<div id="bar_chart" class="apex-charts" dir="ltr"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 <?php } ?>
 <script src="<?= base_url(); ?>assets/backend/libs/apexcharts/apexcharts.min.js"></script>
 <script>
@@ -269,12 +213,36 @@ function getPurchaseChart(){
 			"date": date,
 		},
 		beforeSend:function(){
-			//renderGraph([0,0]);
 		},
 		success: function(data) {
 			result = JSON.parse(data);
 			if (result.error == 0) {
 				purchaseChart(result.data);
+			} else {
+				toastr['warning']('Something went wrong');
+			}
+		},
+		error: function(e) {
+			toastr['warning'](e.message);
+		}
+	});
+}
+
+function getSalesVsPurchases(){
+	var date = $("#daterange-sales-purchases").val();
+	$.ajax({
+		url: '<?php echo base_url(); ?>administrator/Dashboard/getSalesVsPurchases',
+		type: 'POST',
+		data: {
+			"date": date,
+		},
+		beforeSend:function(){
+			//renderGraph([0,0]);
+		},
+		success: function(data) {
+			result = JSON.parse(data);
+			if (result.error == 0) {
+				SalesVsPurchases(result.data);
 			} else {
 				toastr['warning']('Something went wrong');
 			}
@@ -354,5 +322,205 @@ function purchaseChart(data){
 	chart = new ApexCharts(document.querySelector("#purchase-donut-chart"), options);
 	chart.render();
 }
-getPurchaseChart();
+
+function SalesVsPurchases(data){
+	var options = 
+			{	
+				chart: {
+					height: 350,
+					type: "bar",
+					toolbar: {
+						show: !1
+					}
+				},
+				plotOptions: {
+					bar: {
+						dataLabels: {
+							position: "top"
+						}
+					}
+				},
+				dataLabels: {
+					enabled: !0,
+					formatter: function(e) {
+						return e + "$"
+					},
+					offsetY: -20,
+					style: {
+						fontSize: "12px",
+						colors: ["#000"]
+					}
+				},
+				series: [{
+					name: "Value",
+					data: data
+				}],
+				colors: ["#0586ad"],
+				grid: {
+					borderColor: "#f1f1f1",
+					padding: {
+						bottom: 10
+					}
+				},
+				xaxis: {
+					categories: ["Sales", "Purchases"],
+					position: "top",
+					labels: {
+						offsetY: -18
+					},
+					axisBorder: {
+						show: !1
+					},
+					axisTicks: {
+						show: !1
+					},
+					crosshairs: {
+						fill: {
+							type: "gradient",
+							gradient: {
+								colorFrom: "#D8E3F0",
+								colorTo: "#BED1E6",
+								stops: [0, 100],
+								opacityFrom: .4,
+								opacityTo: .5
+							}
+						}
+					},
+					tooltip: {
+						enabled: !0,
+						offsetY: -35
+					}
+				},
+				fill: {
+					gradient: {
+						shade: "light",
+						type: "horizontal",
+						shadeIntensity: .25,
+						gradientToColors: void 0,
+						inverseColors: !0,
+						opacityFrom: 1,
+						opacityTo: 1,
+						stops: [50, 0, 100, 100]
+					}
+				},
+				yaxis: {
+					axisBorder: {
+						show: !1
+					},
+					axisTicks: {
+						show: !1
+					},
+					labels: {
+						show: !1,
+						formatter: function(e) {
+							return e + "$"
+						}
+					}
+				},
+				title: {
+					text: "Sales Vs Purchase",
+					floating: !0,
+					offsetY: 320,
+					align: "center",
+					style: {
+						color: "#000"
+					}
+				},
+				legend: {
+					offsetY: 7
+				}
+			};
+    options = (chart = new ApexCharts(document.querySelector("#column_chart_datalabel"), options)).render()
+}
+
+function getdata() {
+	$('#todayAttendance').DataTable({
+		"destroy": true,
+		"responsive": false,
+		"processing": true,
+		"serverSide": true,
+		"order": [
+			[2, "desc"]
+		],
+		"ajax": {
+			"url": "<?php echo base_url(); ?>administrator/Dashboard/ajaxListingAttendance",
+			"type": 'POST',
+			'data': {}
+		},
+		language: {
+			paginate: {
+				previous: "<i class='mdi mdi-chevron-left'>",
+				next: "<i class='mdi mdi-chevron-right'>"
+			}
+		},
+		drawCallback: function() {
+			$(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+		}
+	});
+}
+getdata();
+
+function getExpensesChart(){
+	var date = $("#daterange-expenses").val();
+	$.ajax({
+		url: '<?php echo base_url(); ?>administrator/Dashboard/getExpenses',
+		type: 'POST',
+		data: {
+			"date": date,
+		},
+		beforeSend:function(){
+			//renderGraph([0,0]);
+		},
+		success: function(data) {
+			result = JSON.parse(data);
+			if (result.error == 0) {
+				expensesChart(result.amount,result.category);
+			} else {
+				toastr['warning']('Something went wrong');
+			}
+		},
+		error: function(e) {
+			toastr['warning'](e.message);
+		}
+	});
+}
+
+function expensesChart(data,labels){
+	
+    var options =
+		{    
+		chart: {
+            height: 350,
+            type: "bar",
+            toolbar: {
+                show: !1
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: !0
+            }
+        },
+        dataLabels: {
+            enabled: !1
+        },
+        series: [{
+            data: data
+        }],
+        colors: ["#1cbb8c"],
+        grid: {
+            borderColor: "#f1f1f1",
+            padding: {
+                bottom: 5
+            }
+        },
+        xaxis: {
+            categories: labels
+        },
+        legend: {
+            offsetY: 5
+        }
+    };
+    options = (chart = new ApexCharts(document.querySelector("#bar_chart"), options)).render();
+}
 </script>

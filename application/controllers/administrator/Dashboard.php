@@ -27,6 +27,7 @@ class Dashboard extends CI_Controller
             $data['employees'] = $this->Common_model->check_exists('tbl_users',['user_type'=>'Employee'],'','','');
             $data['buyers'] = $this->Common_model->check_exists('tbl_suppliers',['status'=>'Active'],'','','');
             $data['suppliers'] = $this->Common_model->check_exists('tbl_buyers',['status'=>'Active'],'','','');
+            $data['products'] = $this->Common_model->check_exists('tbl_products',['status'=>'Active'],'','','');
         }
 		$this->home_template->load('home_template','admin/dashboard',$data);
     }
@@ -148,6 +149,46 @@ class Dashboard extends CI_Controller
 		echo json_encode($data);exit;
     }
 
+    public function getSalesVsPurchases(){
+        $date = $this->input->post('date');
+        $wherecondition = '';
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" date(created_on) between '$fromDate' and '$toDate' ";
+        }
+        $sales = $this->db->query("select sum(grand_total) as sale_total from tbl_invoices where $wherecondition")->result_array();
+		$purchases = $this->db->query("select sum(grand_total) as purchase_total from tbl_purchases where $wherecondition")->result_array();
+        $data['error'] = 0;
+		$res[] = (float)$sales[0]['sale_total'];
+		$res[] = (float)$purchases[0]['purchase_total'];
+		$data['data'] = $res;
+		echo json_encode($data);exit;
+    }
+
+    public function getExpenses(){
+        $date = $this->input->post('date');
+        $wherecondition = '';
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" date(expense_date) between '$fromDate' and '$toDate' ";
+        }
+        $expenseCategories = $this->Common_model->getDataFromTable('tbl_categories','id,category',  $whereField='', $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
+        $expenseCategories = array_column($expenseCategories,'category','id');
+        $expenses = $this->db->query("select sum(amount) as total,expense_category from tbl_expenses where role='Admin' and $wherecondition group by expense_category")->result_array();
+        $i=0;
+        foreach($expenses as $expense){
+            $data['amount'][$i] = (float)$expense['total'];
+            $data['category'][$i] = $expenseCategories[$expense['expense_category']];
+            $i++;
+        }
+        $data['error'] = 0;
+        echo json_encode($data);exit;
+    }
+
     public function updateTask(){
 		$u_id = $this->input->post('tid');
         $data['status'] = 'Completed';
@@ -158,6 +199,43 @@ class Dashboard extends CI_Controller
         echo json_encode($message);
         exit;
 	}
+
+    public function ajaxListingAttendance(){
+        $draw          =  $this->input->post('draw');
+		$start         =  $this->input->post('start');
+        $today = date("Y-m-d");
+		$indexColumn = 'ta.id';
+		$selectColumns = ['ta.id','tu.first_name','ta.clock_in'];
+		$dataTableSortOrdering = ['ta.id','tu.first_name','ta.clock_in'];
+		$table_name='tbl_attendance as ta';
+		$joinsArray[] = ['table_name'=>'tbl_users as tu','condition'=>"tu.id = ta.user_id",'join_type'=>'left'];
+		$wherecondition = 'ta.id!="0" and date(created_on)="'.$today.'"';
+		$getRecordListing = $this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
+		$totalRecords = $getRecordListing['recordsTotal'];
+		$recordsFiltered = $getRecordListing['recordsFiltered'];
+		$recordListing = array();
+        $content = '[';
+		$i = $j =0;	
+        $srNumber=$start;	
+        if(!empty($getRecordListing)) {
+            $actionContent = '';
+            foreach($getRecordListing['data'] as $recordData) {
+				$action='';
+				$content .='[';
+                $recordListing[$i][0]= ++$j;
+                $recordListing[$i][1]= $recordData->first_name;
+                $recordListing[$i][2]= $recordData->clock_in;
+				$i++;
+                $srNumber++;
+            }
+            $content .= ']';
+            $final_data = json_encode($recordListing);
+        } else {
+            $final_data = '[]';
+        }	
+        echo '{"draw":'.$draw.',"recordsTotal":'.$recordsFiltered.',"recordsFiltered":'.$recordsFiltered.',"data":'.$final_data.'}';
+    }
+
     // public function checkSession(){
 	// 	if($_POST){
 	// 		if($this->session->userdata('is_login') != TRUE){
