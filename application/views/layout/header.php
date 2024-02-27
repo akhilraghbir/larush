@@ -7,7 +7,7 @@
     <meta content="<?= SITENAME; ?>" name="description" />
     <meta content="Webartise" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="<?= base_url('assets/backend/');?>images/favicon.ico">
+    <link rel="shortcut icon" href="<?= base_url('assets/backend/');?>images/larush_logo.jpg">
     <!-- jquery.vectormap css -->
     <link href="<?= base_url('assets/backend/');?>libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
     <!-- DataTables -->

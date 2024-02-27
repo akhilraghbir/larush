@@ -36,7 +36,7 @@ class Inventory extends CI_Controller {
 		if(($this->input->post('add'))){		
 			$this->form_validation->set_session_data($this->input->post());
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('product_name','units','is_catalytic');    
+			$mandatoryFields=array('product_name','units','is_catalytic','is_purchase_sale_different');    
 			if($this->input->post('is_catalytic') == 'No'){
 				array_push($mandatoryFields,'is_ferrous','buyer_price','tier_price');
 			}    
@@ -67,7 +67,7 @@ class Inventory extends CI_Controller {
 	public function edit($param1=''){
 		if(($this->input->post('edit'))){
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('product_name','units','is_catalytic');    
+			$mandatoryFields=array('product_name','units','is_catalytic','is_purchase_sale_different');    
 			if($this->input->post('is_catalytic') == 'No'){
 				array_push($mandatoryFields,'is_ferrous','buyer_price','tier_price');
 			}  
@@ -120,12 +120,14 @@ class Inventory extends CI_Controller {
 			if(is_array($product) && count($product)>0){
 				$elementid = time();
 				$html='<tr class="tr_'.$elementid.'">';
-				$html.='<td>'.substr($product[0]['product_name'],0,5).'..</td>';
+				$html.='<td>'.substr($product[0]['product_name'],0,5).'..
+				<input type="hidden" value="'.$product[0]['is_purchase_sale_different'].'" name="is_purchase_sale_different[]"></td>';
 				if($product[0]['is_catalytic'] == 'No'){
 					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]"><input type="text" class="form-control price_'.$elementid.'" onkeyup="calculateTotal('.$elementid.')" value="'.$product[0]['tier_price'].'" name="price[]"></td>';
 					$html.='<td><input type="text" maxlength="8" onkeyup="calculateTotal('.$elementid.')" name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
 				}else{
 					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]">
+					<td>
 					<input type="hidden" value="" name="price[]"></td>';
 					$html.='<td><input type="text" maxlength="8" onkeyup="calculateNet('.$elementid.')"  name="gross[]" class="gross_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Gross">
 					<input type="text" maxlength="8"  name="tare[]"  onkeyup="calculateNet('.$elementid.')" class="tare_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Tare">

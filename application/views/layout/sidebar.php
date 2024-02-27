@@ -116,6 +116,12 @@
                             <span>Notifications</span>
                         </a>
                     </li>
+                    <li class="<?= ($modulename == 'MoneyBook') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/MoneyBook'); ?>" class="waves-effect">
+                            <i class="ri-money-dollar-circle-line"></i>
+                            <span>Money Book</span>
+                        </a>
+                    </li>
                     <li class="<?= (in_array($modulename,['StockReport','AttendanceReport'])) ? 'mm-active' : ''; ?>">
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="ri-table-2"></i>
@@ -157,6 +163,12 @@
                         <a href="<?= base_url('administrator/Leads'); ?>" class="waves-effect">
                             <i class="ri-money-dollar-circle-line"></i>
                             <span>Leads</span>
+                        </a>
+                    </li>
+                    <li class="<?= ($modulename == 'MoneyBook') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/MoneyBook'); ?>" class="waves-effect">
+                            <i class="ri-money-dollar-circle-line"></i>
+                            <span>Money Book</span>
                         </a>
                     </li>
                 <?php } ?>

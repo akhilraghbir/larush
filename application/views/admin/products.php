@@ -78,7 +78,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="is_ferrous" class="">Is Purchase-Sale Different <span class="text-danger">*</span></label>
+                            <select name="is_purchase_sale_different" id="is_purchase_sale_different" class="form-control">
+                                <option value="No" <?php if(isset($formData) && ($formData['is_purchase_sale_different']=='No')){ echo "selected"; } ?>>No</option>
+                                <option value="Yes" <?php if(isset($formData) && ($formData['is_purchase_sale_different']=='Yes')){ echo "selected"; } ?>>Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label for="exampleEmail11" class="">Main Image</label>
                             <input type="file" class="main_image_element form-control border" >
@@ -93,7 +102,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label for="exampleEmail11" class="">Zoom Image</label>
                             <input type="file" class="zoom_image_element form-control border" >
@@ -108,7 +117,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label for="exampleEmail11" class="">Wide Image</label>
                             <input type="file" class="wide_image_element form-control border" >

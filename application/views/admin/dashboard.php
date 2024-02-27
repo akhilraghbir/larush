@@ -1,4 +1,6 @@
-<?php if($recordData->user_type=='Employee'){ ?>
+<?php 
+	if($this->session->userdata('user_type') == 'Employee'){	
+?>
 <div class="row">
     <?php if(!empty($tasks)){ 
         foreach($tasks as $task){
@@ -14,6 +16,32 @@
     </div>
     <?php } } ?>
 </div>
+<script>
+function markcompleted(id){
+	if(id!=''){
+		$.ajax({
+			url: '<?php echo base_url(); ?>administrator/dashboard/updateTask',
+			type: 'POST',
+			data: {
+				"tid": id,
+			},
+			success: function(data) {
+				result = JSON.parse(data);
+				var msg = result.message;
+				if (result.error == '0') {
+					toastr['success'](msg);
+					$(".task_div_"+result.id).remove();
+				} else {
+					toastr['warning'](msg);
+				}
+			},
+			error: function(e) {
+				toastr['warning'](e.message);
+			}
+		});
+	}
+}
+</script>
 <?php }else{ ?>
 	<div class="row">
 		<div class="col-xl-12">
@@ -85,9 +113,11 @@
 		<div class="col-lg-4">
 			<div class="card">
 				<div class="card-body">
-					<!-- <h4 class="card-title mb-4">Sales Vs Purchases</h4> -->
-					<div class="float-end">
-						<input type="text" class="form-control daterange" autocomplete="off" onchange="getSalesVsPurchases()"  id="daterange-sales-purchases">
+					<div class="d-flex align-items-center">
+						<h4 class="card-title me-2 mb-0">Sales Vs Purchases</h4>
+						<div>
+							<input type="text" class="form-control daterange" autocomplete="off" onchange="getSalesVsPurchases()"  id="daterange-sales-purchases">
+						</div>
 					</div>
 					<div id="column_chart_datalabel" class="apex-charts" dir="ltr"></div>
 				</div>
@@ -96,10 +126,12 @@
 		<div class="col-xl-4">
 			<div class="card">
 				<div class="card-body">
-					<div class="float-end">
-						<input type="text" class="form-control daterange" autocomplete="off" onchange="getSalesChart()"  id="daterange">
+					<div  class="d-flex align-items-center">
+						<h4 class="card-title mb-0 me-2">Sales (Fe & Non Fe)</h4>
+						<div>
+							<input type="text" class="form-control daterange" autocomplete="off" onchange="getSalesChart()"  id="daterange">
+						</div>
 					</div>
-					<h4 class="card-title mb-4">Sales (Fe & Non Fe)</h4>
 					<div id="donut-chart" class="apex-charts"></div>
 				</div>
 			</div>
@@ -107,10 +139,12 @@
 		<div class="col-xl-4">
 			<div class="card">
 				<div class="card-body">
-					<div class="float-end">
-						<input type="text" class="form-control daterange" autocomplete="off" onchange="getPurchaseChart()"  id="daterange">
+					<div  class="d-flex align-items-center">
+						<h4 class="card-title mb-0 me-2">Purchase (Fe & Non Fe)</h4>
+						<div>
+							<input type="text" class="form-control daterange" autocomplete="off" onchange="getPurchaseChart()"  id="daterange">
+						</div>
 					</div>
-					<h4 class="card-title mb-4">Purchase (Fe & Non Fe)</h4>
 					<div id="purchase-donut-chart" class="apex-charts"></div>
 				</div>
 			</div>
@@ -152,33 +186,9 @@
 			</div>
 		</div>
 	</div>
-<?php } ?>
+
 <script src="<?= base_url(); ?>assets/backend/libs/apexcharts/apexcharts.min.js"></script>
 <script>
-function markcompleted(id){
-	if(id!=''){
-		$.ajax({
-			url: '<?php echo base_url(); ?>administrator/dashboard/updateTask',
-			type: 'POST',
-			data: {
-				"tid": id,
-			},
-			success: function(data) {
-				result = JSON.parse(data);
-				var msg = result.message;
-				if (result.error == '0') {
-					toastr['success'](msg);
-					$(".task_div_"+result.id).remove();
-				} else {
-					toastr['warning'](msg);
-				}
-			},
-			error: function(e) {
-				toastr['warning'](e.message);
-			}
-		});
-	}
-}
 function getSalesChart(){
 	var date = $("#daterange").val();
 	$.ajax({
@@ -327,7 +337,7 @@ function SalesVsPurchases(data){
 	var options = 
 			{	
 				chart: {
-					height: 350,
+					height: 286,
 					type: "bar",
 					toolbar: {
 						show: !1
@@ -336,7 +346,7 @@ function SalesVsPurchases(data){
 				plotOptions: {
 					bar: {
 						dataLabels: {
-							position: "top"
+							position: "top",
 						}
 					}
 				},
@@ -524,3 +534,4 @@ function expensesChart(data,labels){
     options = (chart = new ApexCharts(document.querySelector("#bar_chart"), options)).render();
 }
 </script>
+<?php } ?>

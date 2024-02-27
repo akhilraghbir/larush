@@ -46,7 +46,6 @@ class Receipts extends CI_Controller {
 				$fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
 				$this->form_validation->set_rules($row, $fieldname, 'required'); 
             }
-			
             if($this->form_validation->run() == FALSE){
 				$this->form_validation->set_session_data($this->input->post());
 				$errorMessage=validation_errors();
@@ -62,6 +61,7 @@ class Receipts extends CI_Controller {
 					$qty = $data['qty'];
 					$price = $data['price'];
 					$total = $data['total'];
+					$is_purchase_sale_different = $data['is_purchase_sale_different'];
 					unset($data['product_id']);
 					unset($data['add']);
 					unset($data['qty']);
@@ -69,15 +69,20 @@ class Receipts extends CI_Controller {
 					unset($data['gross']);
 					unset($data['tare']);
 					unset($data['total']);
+					unset($data['is_purchase_sale_different']);
 					$data['receipt_number'] = 'R'.time();
 					$purchaseItems['created_on'] = $stockEntry['created_on'] = $data['created_on'] = current_datetime();
 					$data['created_by'] = $this->session->id;
 					$purchaseId = $this->Common_model->addDataIntoTable('tbl_purchases',$data);
 					for($i=0;$i<count($products);$i++){
+						if($is_purchase_sale_different[$i] == 'Yes'){
+							$conversion[] =  $products[$i];
+						}
 						$purchaseItems['purchase_id'] = $purchaseId;
 						$purchaseItems['warehouse_id'] = $data['warehouse_id'];
 						$stockEntry['product_id'] = $purchaseItems['product_id'] = $products[$i];
-						$stockEntry['quantity'] = $purchaseItems['quantity'] = $qty[$i];
+						$purchaseItems['units'] = $stockEntry['quantity'] = $purchaseItems['quantity'] = $qty[$i];
+						$purchaseItems['is_purchase_sale_different'] = $is_purchase_sale_different[$i];
 						$purchaseItems['price'] = $price[$i];
 						$purchaseItems['total'] = $total[$i];
 						$this->Common_model->addDataIntoTable('tbl_purchase_items',$purchaseItems);
@@ -86,6 +91,10 @@ class Receipts extends CI_Controller {
 						$stockEntry['reference_id'] = $purchaseId;
 						$this->Common_model->addDataIntoTable('tbl_stock_entries',$stockEntry);
 					}
+					if(count($conversion) == 0){
+						$updatepurc['is_qty_converted'] = 'Yes';
+						$this->Common_model->updateDataFromTable('tbl_purchases',$updatepurc,'id',$purchaseId);
+					}
 					$this->form_validation->clear_field_data();
 					$this->messages->setMessage('Receipt Created Successfully','success');
 					redirect('administrator/Receipts');
@@ -93,10 +102,52 @@ class Receipts extends CI_Controller {
 				
 			}
 		}
-			$this->loadUserForm(array(),'add');
+		$this->loadUserForm(array(),'add');
 	}
 
+	public function convert($param=''){
+		if($param!=''){
+			$data['purchase'] = $this->Common_model->getDataFromTable('tbl_purchases','',  $whereField='id', $whereValue=$param, $orderBy='', $order='', $limit='', $offset=0, true); 
+			$orderByColumn = "tdi.id";
+			$sortType = 'DESC';
+			$indexColumn='tdi.id';
+			$selectColumns = ['tdi.*','tp.product_name','tp.buyer_price'];
+			$dataTableSortOrdering='';
+			$table_name='tbl_purchase_items as tdi';
+			$joinsArray[] = ['table_name'=>'tbl_products as tp','condition'=>"tp.id = tdi.product_id",'join_type'=>'left'];
+			$whereCondition = "tdi.purchase_id='$param' and tdi.is_purchase_sale_different = 'Yes'";
+			$listData = $this->Datatables_model->getDataFromDB($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$whereCondition,$indexColumn,'',$orderByColumn,$sortType,true,'POST');
+			$data['dispatch_items']  = $listData['data'];
+            $data['breadcrumbs'] = $this->loadBreadCrumbs();
+            // echo "<pre>";
+            // print_r($data);exit;
+            $this->home_template->load('home_template','admin/convertpurchase',$data);   
+		}else{
+			redirect('administrator/Receipts');
+		}
+	}
 
+	public function updateReceipt(){
+		if(($this->input->post('add'))){	
+			$purchaseId = $this->input->post('purchase_id');
+			$productsId = $this->input->post('product_id');
+			
+			$weight = $this->input->post('qty');
+			for($i=0;$i<count($productsId);$i++){
+				$stockupdate['quantity'] = $update['quantity'] = $weight[$i];
+
+				$stockwhere['product_id'] = $purchaseWhere['product_id'] = $productsId[$i];
+				$stockwhere['reference_id'] = $purchaseWhere['purchase_id'] = $purchaseId;
+				$stockwhere['type'] = 'Purchase';
+
+				$this->Common_model->updateDataFromTable('tbl_purchase_items',$update,$purchaseWhere,'');
+				$this->Common_model->updateDataFromTable('tbl_stock_entries',$stockupdate,$stockwhere,'');
+			}
+			$this->Common_model->updateDataFromTable('tbl_purchases',['is_qty_converted'=>'Yes'],'id',$purchaseId);
+			$this->messages->setMessage('Receipt Updated Successfully','success');
+			redirect('administrator/Receipts');
+		}
+	}
 
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
@@ -105,7 +156,7 @@ class Receipts extends CI_Controller {
 		$employee      =  $this->input->post('employee');
 		$date      =  $this->input->post('date');
 		$indexColumn = 'tr.id';
-		$selectColumns = ['tr.id','tr.receipt_number','ts.supplier_name','tr.grand_total','tr.receipt_date','tr.created_on'];
+		$selectColumns = ['tr.id','tr.receipt_number','ts.supplier_name','tr.grand_total','tr.receipt_date','tr.created_on','tr.is_qty_converted'];
 		$dataTableSortOrdering = ['tr.receipt_number','ts.supplier_name','tr.grand_total','tr.receipt_date','tr.created_on'];
 		$table_name = 'tbl_purchases as tr';
 		$joinsArray[] = ['table_name'=>'tbl_suppliers as ts','condition'=>"ts.id = tr.supplier_id",'join_type'=>'left'];;
@@ -143,6 +194,9 @@ class Receipts extends CI_Controller {
                 $recordListing[$i][4]= displayDateInWords($recordData->receipt_date);
 				$recordListing[$i][5]= displayDateInWords($recordData->created_on);
 				$action.= '<a target="_blank" href="'.CONFIG_SERVER_ADMIN_ROOT.'receipts/print/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="ri-printer-fill" aria-hidden="true"></i></a>';
+				if($recordData->is_qty_converted == 'No'){
+					$action.= '&nbsp;&nbsp;&nbsp;<a href="'.CONFIG_SERVER_ADMIN_ROOT.'receipts/convert/'.$recordData->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice"><i class="ri-pencil-fill" aria-hidden="true"></i></a>';
+				}
 				$recordListing[$i][6]= $action;
 				$i++;
                 $srNumber++;
