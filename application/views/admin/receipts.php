@@ -23,12 +23,12 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="warehouse" class="">Select Warehouse <span class="text-danger">*</span></label>
-                            <select name="warehouse_id" class="form-control">
+                            <select name="warehouse_id" id="warehouse_id" class="form-control">
                                 <option value="">Select Warehouse</option>
                                 <?php if (!empty($warehouses)) {
                                     foreach ($warehouses as $warehouse) {
                                 ?>
-                                        <option value="<?= $warehouse['id']; ?>" <?php if(isset($formData) && ($formData['warehouse_id']==$warehouse['id'])){ echo "selected"; } ?> ><?= $warehouse['warehouse_name']; ?></option>
+                                        <option value="<?= $warehouse['id']; ?>" data-gst="<?= $warehouse['gst']; ?>" data-pst="<?= $warehouse['pst']; ?>" <?php if(isset($formData) && ($formData['warehouse_id']==$warehouse['id'])){ echo "selected"; } ?> ><?= $warehouse['warehouse_name']; ?></option>
                                 <?php }
                                 } ?>
                             </select>
@@ -98,8 +98,16 @@
                                 <td><input type="text" name="sub_total" readonly  class="subtotal_price form-control" placeholder="Sub Total"></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="fw-bold text-end">GST (5 %)</td>
-                                <td><input type="text" readonly name="gst" class="gst form-control" placeholder="Total"></td>
+                                <td colspan="3" class="fw-bold text-end">GST (<span class="gst_span">0</span> %)</td>
+                                <td><input type="text" readonly name="gst" class="gst form-control" placeholder="Total">
+                                    <input type="hidden" name="gst_per" class="gst_per">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="fw-bold text-end">PST (<span class="pst_span">0</span> %)</td>
+                                <td><input type="text" readonly name="pst" class="pst form-control" placeholder="Total">
+                                    <input type="hidden" name="pst_per" class="pst_per">
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="fw-bold text-end">Total</td>
@@ -119,6 +127,15 @@
         <script>
             $('#product').keyup(function() {
                 product_search();
+            });
+
+            $("#warehouse_id").change(function(){
+                var gst = $("#warehouse_id option:selected").attr('data-gst');
+                var pst = $("#warehouse_id option:selected").attr('data-pst');
+                $(".pst_per").val(pst);
+                $(".gst_per").val(gst);
+                $(".gst_span").text(gst);
+                $(".pst_span").text(pst);
             });
 
             function product_search() {
@@ -186,7 +203,8 @@
             function calculateGrandTotal(){
                 var subtotal_price = 0;
                 var qty = 0;
-                var gstpercentage = 5;
+                var gstpercentage = $('.gst_per').val();
+                var pstpercentage = $('.pst_per').val();
                 $(".total").each(function(){
                     var thisTotal = $(this).val();
                     if(thisTotal>0 && thisTotal!=undefined){
@@ -194,8 +212,10 @@
                     }
                 });
                 var gst = (subtotal_price * gstpercentage) / 100;
-                var grandtotal = gst + subtotal_price;
+                var pst = (subtotal_price * pstpercentage) / 100;
+                var grandtotal = gst + subtotal_price + pst;
                 $(".gst").val(gst);
+                $(".pst").val(pst);
                 $(".subtotal_price").val(subtotal_price.toFixed(2));
                 $(".total_price").val(grandtotal.toFixed(2));
             }
@@ -204,6 +224,7 @@
                 var tare = $(".tare_"+elementId).val();
                 var net = gross - tare;
                 $(".qty_"+elementId).val(net.toFixed(2));
+                calculateTotal(elementId);
             }
             function removeRow(id){
                 if(id!=''){

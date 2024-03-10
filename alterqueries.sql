@@ -7,3 +7,4 @@ ALTER TABLE `tbl_invoice_items` ADD `created_on` DATETIME NULL DEFAULT NULL AFTE
 ALTER TABLE `tbl_products` ADD `is_purchase_sale_different` ENUM('No','Yes') NULL DEFAULT 'No' AFTER `zoom_image`;
 ALTER TABLE `tbl_purchase_items` ADD `is_purchase_sale_different` ENUM('No','Yes') NOT NULL AFTER `quantity`, ADD `units` DECIMAL(25,2) NULL DEFAULT NULL AFTER `is_purchase_sale_different`;
 ALTER TABLE `tbl_purchases` ADD `is_qty_converted` ENUM('No','Yes') NOT NULL DEFAULT 'No' AFTER `notes`;
+ALTER TABLE `tbl_invoices` ADD `pst` DECIMAL(25,2) NULL DEFAULT NULL AFTER `gst`;

@@ -87,6 +87,7 @@ class Invoices extends CI_Controller {
     public function convertinvoice($id = ''){
         if($id!=''){
             $data['dispatch'] = $this->Common_model->getDataFromTable('tbl_dispatch','',  $whereField='id', $whereValue=$id, $orderBy='', $order='', $limit='', $offset=0, true); 
+			$data['warehouse'] = $this->Common_model->getDataFromTable('tbl_warehouses','',  $whereField='id', $whereValue=$data['dispatch'][0]['warehouse_id'], $orderBy='', $order='', $limit='', $offset=0, true); 
             $data['buyer'] = $this->Common_model->getDataFromTable('tbl_buyers','buyer_name,company_name,company_address',  $whereField='id', $whereValue=$data['dispatch'][0]['buyer_id'], $orderBy='', $order='', $limit='', $offset=0, true);
 			$orderByColumn = "tdi.id";
 			$sortType = 'DESC';

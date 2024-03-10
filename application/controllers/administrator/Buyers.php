@@ -35,7 +35,7 @@ class Buyers extends CI_Controller {
 		if(($this->input->post('add'))){		
 			$this->form_validation->set_session_data($this->input->post());
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('buyer_name','company_name','company_address','country','state','city','phno','alternate_phno','company_email','gstn','pollution_document','bank_account_number','bank_name','ifsc','branch','contact_person_name','contact_person_number','contact_person_email');    
+			$mandatoryFields=array('company_name','company_address');    
             foreach($mandatoryFields as $row){
 				$fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
 				$this->form_validation->set_rules($row, $fieldname, 'required'); 
@@ -64,7 +64,7 @@ class Buyers extends CI_Controller {
 		
 		if(($this->input->post('edit'))){
 			$this->form_validation->checkXssValidation($this->input->post());
-			$mandatoryFields=array('buyer_name','company_name','company_address','country','state','city','phno','alternate_phno','company_email','gstn','pollution_document','bank_account_number','bank_name','ifsc','branch','contact_person_name','contact_person_number','contact_person_email');    
+			$mandatoryFields=array('company_name','company_address');    
             foreach($mandatoryFields as $row){
             $fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
             $this->form_validation->set_rules($row, $fieldname, 'required'); 
@@ -143,7 +143,7 @@ class Buyers extends CI_Controller {
 				$content .='[';
 				$recordListing[$i][0]= $i+1;
                 $recordListing[$i][1]= '<a href="javascript:void()" class="text-info" onclick="getDetails('.$recordData->id.')">'.$recordData->buyer_name.'</a>';
-                $recordListing[$i][2]= $recordData->company_name;
+                $recordListing[$i][2]= '<a href="javascript:void()" class="text-info" onclick="getDetails('.$recordData->id.')">'.$recordData->company_name.'</a>';
                 $recordListing[$i][3]= $recordData->company_email;
                 $recordListing[$i][4]= $recordData->phno;
 				if($recordData->status == 'Inactive'){

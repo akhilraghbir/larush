@@ -105,6 +105,7 @@ class StockTransfer extends CI_Controller {
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
+		$date 		   =  $this->input->post('date');
 		$indexColumn ='tst.id';
 		$selectColumns = ['tst.*','tsw.warehouse_name as s_warehouse_name','tdw.warehouse_name as d_warehouse_name','tp.product_name'];
 		$dataTableSortOrdering = ['tst.id','tsw.warehouse_name as s_warehouse_name','tdw.warehouse_name as d_warehouse_name','tp.product_name','tst.quantity','tst.created_on'];
@@ -113,6 +114,12 @@ class StockTransfer extends CI_Controller {
 		$joinsArray[] = ['table_name'=>'tbl_warehouses as tsw','condition'=>"tsw.id = tst.source_warehouse_id",'join_type'=>'left'];;
 		$joinsArray[] = ['table_name'=>'tbl_warehouses as tdw','condition'=>"tdw.id = tst.destination_warehouse_id",'join_type'=>'left'];;
 		$wherecondition='tst.id!="0"';
+		if($date!=''){
+            $date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+            $wherecondition.=" and date(tst.created_on) between '$fromDate' and '$toDate' ";
+        }
 		$getRecordListing=$this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords=$getRecordListing['recordsTotal'];
 		$recordsFiltered=$getRecordListing['recordsFiltered'];

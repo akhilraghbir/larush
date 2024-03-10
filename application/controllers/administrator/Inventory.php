@@ -122,13 +122,11 @@ class Inventory extends CI_Controller {
 				$html='<tr class="tr_'.$elementid.'">';
 				$html.='<td>'.substr($product[0]['product_name'],0,5).'..
 				<input type="hidden" value="'.$product[0]['is_purchase_sale_different'].'" name="is_purchase_sale_different[]"></td>';
-				if($product[0]['is_catalytic'] == 'No'){
+				if($product[0]['is_catalytic'] == 'Yes'){
 					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]"><input type="text" class="form-control price_'.$elementid.'" onkeyup="calculateTotal('.$elementid.')" value="'.$product[0]['tier_price'].'" name="price[]"></td>';
 					$html.='<td><input type="text" maxlength="8" onkeyup="calculateTotal('.$elementid.')" name="qty[]" class="qty_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Quantity"></td>';
 				}else{
-					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]">
-					<td>
-					<input type="hidden" value="" name="price[]"></td>';
+					$html.='<td><input type="hidden" value="'.$product[0]['id'].'" name="product_id[]"><input type="text" class="form-control price_'.$elementid.'" onkeyup="calculateTotal('.$elementid.')" value="'.$product[0]['tier_price'].'" name="price[]"></td>';
 					$html.='<td><input type="text" maxlength="8" onkeyup="calculateNet('.$elementid.')"  name="gross[]" class="gross_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Gross">
 					<input type="text" maxlength="8"  name="tare[]"  onkeyup="calculateNet('.$elementid.')" class="tare_'.$elementid.' qty form-control Onlynumbers" placeholder="Enter Tare">
 					<input type="hidden" name="qty[]" class="qty_'.$elementid.'"></td>';

@@ -72,6 +72,10 @@
                             <td><input type="text" name="gst" readonly placeholder="Total GST" value="" class="gst form-control"></td>
                         </tr>
                         <tr>
+                            <td colspan="3" class="fw-bold text-end">PST</td>
+                            <td><input type="text" name="pst" readonly placeholder="Total PST" value="" class="pst form-control"></td>
+                        </tr>
+                        <tr>
                             <td colspan="3" class="fw-bold text-end">Total Gross</td>
                             <td><input type="text" readonly name="grand_total" placeholder="Total" value="" class="grand_total form-control"></td>
                         </tr>
@@ -96,7 +100,8 @@
 
     function calculateGrandTotal(){
         var subtotal_price = 0;
-        var gstpercentage = 5;
+        var gstpercentage = "<?= $warehouse[0]['gst'];?>";
+        var pstpercentage = "<?= $warehouse[0]['pst'];?>";
         $(".total").each(function(){
             var thisTotal = $(this).val();
             if(thisTotal>0 && thisTotal!=undefined){
@@ -104,8 +109,10 @@
             }
         });
         var gst = (subtotal_price * gstpercentage) / 100;
-        var grandtotal = gst + subtotal_price;
+        var pst = (subtotal_price * pstpercentage) / 100;
+        var grandtotal = gst + subtotal_price + pst;
         $(".gst").val(gst);
+        $(".pst").val(pst);
         $(".sub_total").val(subtotal_price.toFixed(2));
         $(".grand_total").val(grandtotal.toFixed(2));
     }

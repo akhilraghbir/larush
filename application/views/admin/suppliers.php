@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="supplier_name" class="">Supplier Name <span class="text-danger">*</span></label>
+                            <label for="supplier_name" class="">Supplier Name</label>
                             <input value="<?php if (isset($formData['supplier_name'])) {
                                                 echo $formData['supplier_name'];
                                             } ?>" name="supplier_name" id="supplier_name" placeholder="Please Enter Supplier Name" autocomplete='off' type="text" class="form-control">
@@ -52,38 +52,10 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="country" class="">Country <span class="text-danger">*</span></label>
-                            <input value="<?php if (isset($formData['country'])) {
-                                                echo $formData['country'];
-                                            } ?>" name="country" id="country" placeholder="Please Enter Country" autocomplete='off' type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="state" class="">State <span class="text-danger">*</span></label>
-                            <input value="<?php if (isset($formData['state'])) {
-                                                echo $formData['state'];
-                                            } ?>" name="state" id="state" placeholder="Please Enter State" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="city" class="">City <span class="text-danger">*</span></label>
-                            <input value="<?php if (isset($formData['city'])) {
-                                                echo $formData['city'];
-                                            } ?>" name="city" id="city" placeholder="Please Enter City" type="text" class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="phno" class="">Phone Number <span class="text-danger">*</span></label>
+                            <label for="phno" class="">Phone Number </label>
                             <input value="<?php if (isset($formData['phno'])) {
                                                 echo $formData['phno'];
                                             } ?>" name="phno" id="phno" placeholder="Please Enter Phone Number" maxlength="10" autocomplete='off' type="text" class="numberOnly form-control">
@@ -91,7 +63,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="alternate_phno" class="">Alternate Phone Number <span class="text-danger">*</span></label>
+                            <label for="alternate_phno" class="">Alternate Phone Number </label>
                             <input value="<?php if (isset($formData['alternate_phno'])) {
                                                 echo $formData['alternate_phno'];
                                             } ?>" name="alternate_phno" id="alternate_phno" placeholder="Please Enter Alternate Phone Number" maxlength="10" autocomplete='off' type="text" class="numberOnly form-control">
@@ -99,7 +71,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="company_email" class="">Email Address <span class="text-danger">*</span></label>
+                            <label for="company_email" class="">Email Address </label>
                             <input value="<?php if (isset($formData['company_email'])) {
                                                 echo $formData['company_email'];
                                             } ?>" name="company_email" id="company_email" placeholder="Please Enter Company Email Address" type="text" class="email form-control">
@@ -118,7 +90,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="gstn" class="">GST Number <span class="text-danger">*</span></label>
+                            <label for="gstn" class="">GST Number </label>
                             <input value="<?php if (isset($formData['gstn'])) {
                                                 echo $formData['gstn'];
                                             } ?>" name="gstn" id="gstn" placeholder="Please Enter GSTN" maxlength="14" autocomplete='off' type="text" class="form-control">
@@ -126,7 +98,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="bank_account_number" class="">Bank Account Number <span class="text-danger">*</span></label>
+                            <label for="bank_account_number" class="">Bank Account Number </label>
                             <input value="<?php if (isset($formData['bank_account_number'])) {
                                                 echo $formData['bank_account_number'];
                                             } ?>" name="bank_account_number" id="bank_account_number" placeholder="Please Enter Bank Account Number" type="text" class="form-control">
@@ -137,7 +109,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="bank_name" class="">Bank Name <span class="text-danger">*</span></label>
+                            <label for="bank_name" class="">Bank Name </label>
                             <input value="<?php if (isset($formData['bank_name'])) {
                                                 echo $formData['bank_name'];
                                             } ?>" name="bank_name" id="bank_name" placeholder="Please Enter Bank Name" autocomplete='off' type="text" class="form-control">
@@ -145,7 +117,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="ifsc" class="">IFSC <span class="text-danger">*</span></label>
+                            <label for="ifsc" class="">IFSC </label>
                             <input value="<?php if (isset($formData['ifsc'])) {
                                                 echo $formData['ifsc'];
                                             } ?>" name="ifsc" id="ifsc" placeholder="Please Enter IFSC" autocomplete='off' type="text" class="form-control">
@@ -153,7 +125,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="branch" class="">Branch <span class="text-danger">*</span></label>
+                            <label for="branch" class="">Branch </label>
                             <input value="<?php if (isset($formData['branch'])) {
                                                 echo $formData['branch'];
                                             } ?>" name="branch" id="branch" placeholder="Please Enter Branch" type="text" class="form-control">
@@ -164,7 +136,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="contact_person_name" class="">Contact Person Name <span class="text-danger">*</span></label>
+                            <label for="contact_person_name" class="">Contact Person Name </label>
                             <input value="<?php if (isset($formData['contact_person_name'])) {
                                                 echo $formData['contact_person_name'];
                                             } ?>" name="contact_person_name" id="contact_person_name" placeholder="Please Enter Contact Person Name" autocomplete='off' type="text" class="form-control">
@@ -172,7 +144,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="contact_person_number" class="">Contact Person Number <span class="text-danger">*</span></label>
+                            <label for="contact_person_number" class="">Contact Person Number </label>
                             <input value="<?php if (isset($formData['contact_person_number'])) {
                                                 echo $formData['contact_person_number'];
                                             } ?>" name="contact_person_number" id="contact_person_number" placeholder="Please Enter Contact Person Number" autocomplete='off' maxlength="10" type="text" class="numberOnly form-control">
@@ -180,7 +152,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="contact_person_email" class="">Contact Person Email <span class="text-danger">*</span></label>
+                            <label for="contact_person_email" class="">Contact Person Email </label>
                             <input value="<?php if (isset($formData['contact_person_email'])) {
                                                 echo $formData['contact_person_email'];
                                             } ?>" name="contact_person_email" id="contact_person_email" placeholder="Please Enter Contact person Email" type="text" class="form-control">

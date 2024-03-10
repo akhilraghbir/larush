@@ -67,6 +67,10 @@
             <td>$ <?= $purchase[0]['gst'];?></td>
         </tr>
         <tr>
+            <td class="bold text-right" colspan="4">PST :</td>
+            <td>$ <?= $purchase[0]['pst'];?></td>
+        </tr>
+        <tr>
             <td class="bold text-right" colspan="4">Total :</td>
             <td>$ <?= $purchase[0]['grand_total'];?></td>
         </tr>

@@ -146,6 +146,18 @@ $("#product_id").change(function(){
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="last name" class="">Select Date <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control daterange" id="daterange">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="button" style="margin-top:28px" onclick="getdata()" name="submit" class="btn btn-primary" value="Submit">
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
                         <div class="table-responsive tasks dataGridTable">
                             <table id="transferList" class="table card-table table-vcenter text-nowrap mb-0 border nowrap" style="width:100%">
                                 <thead>
@@ -174,6 +186,7 @@ $("#product_id").change(function(){
 <script type="text/javascript">
     function getdata() {
         var user_id = $("#user_id").val();
+        var date = $("#daterange").val();
         var clist = $('#transferList').DataTable({
             "destroy": true,
             "responsive": false,
@@ -187,7 +200,8 @@ $("#product_id").change(function(){
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>StockTransfer/ajaxListing",
                 "type": 'POST',
                 'data': {
-                    user_id:user_id
+                    user_id:user_id,
+                    date:date
                 }
             },
             language: {

@@ -21,8 +21,12 @@ class ProductProfitReport extends CI_Controller {
 	public function index($id = ''){
 		$data['breadcrumbs'] = $this->loadBreadCrumbs(); 
         $data['products'] = $this->Common_model->getDataFromTable('tbl_products','',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
-        $data['productsales'] = $this->Common_model->productsSales();
-        $data['productpurchase'] = $this->Common_model->productsPurchase();
+		$date = '';
+		if($_POST){
+			$date = $_POST['date'];
+		}
+        $data['productsales'] = $this->Common_model->productsSales($date);
+        $data['productpurchase'] = $this->Common_model->productsPurchase($date);
 		$this->home_template->load('home_template','admin/product_profit_report',$data);   
 	}
 

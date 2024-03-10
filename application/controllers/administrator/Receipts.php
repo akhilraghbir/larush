@@ -32,7 +32,7 @@ class Receipts extends CI_Controller {
 		$data['form_action'] = $formName;
         $data['suppliers'] = $this->Common_model->getDataFromTable('tbl_suppliers','id,supplier_name,company_name',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
         if($this->session->warehouse_id == 0){
-            $data['warehouses'] = $this->Common_model->getDataFromTable('tbl_warehouses','id,warehouse_name',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
+            $data['warehouses'] = $this->Common_model->getDataFromTable('tbl_warehouses','id,warehouse_name,gst,pst',  $whereField='status', $whereValue='Active', $orderBy='', $order='', $limit='', $offset=0, true);
         }
 		$this->home_template->load('home_template','admin/receipts',$data); 
 	}
@@ -69,6 +69,8 @@ class Receipts extends CI_Controller {
 					unset($data['gross']);
 					unset($data['tare']);
 					unset($data['total']);
+					unset($data['gst_per']);
+					unset($data['pst_per']);
 					unset($data['is_purchase_sale_different']);
 					$data['receipt_number'] = 'R'.time();
 					$purchaseItems['created_on'] = $stockEntry['created_on'] = $data['created_on'] = current_datetime();
@@ -91,7 +93,7 @@ class Receipts extends CI_Controller {
 						$stockEntry['reference_id'] = $purchaseId;
 						$this->Common_model->addDataIntoTable('tbl_stock_entries',$stockEntry);
 					}
-					if(count($conversion) == 0){
+					if(is_array($conversion) && count($conversion) == 0){
 						$updatepurc['is_qty_converted'] = 'Yes';
 						$this->Common_model->updateDataFromTable('tbl_purchases',$updatepurc,'id',$purchaseId);
 					}

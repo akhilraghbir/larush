@@ -673,8 +673,16 @@ class Common_model extends CI_Model{
 	}
 
 
-	public function productsSales(){
-		$sql = "select product_id,sum(quantity) as totqty,avg(price) as avgsaleprice from tbl_invoice_items group by product_id";
+	public function productsSales($date = ''){
+		if(!empty($date)){
+			$date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+			$where = " where date(created_on) between '$fromDate' and '$toDate'";
+		}else{
+			$where = '';
+		}
+		$sql = "select product_id,sum(quantity) as totqty,avg(price) as avgsaleprice from tbl_invoice_items $where group by product_id";
 		$query = $this->db->query($sql)->result_array();
 		foreach($query as $res){
 			$sales[$res['product_id']]['qty'] = $res['totqty'];
@@ -683,8 +691,16 @@ class Common_model extends CI_Model{
 		return $sales;
 	}
 
-	public function productsPurchase(){
-		$sql = "select product_id,avg(price) as avgpurchaseprice from tbl_purchase_items group by product_id";
+	public function productsPurchase($date = ''){
+		if(!empty($date)){
+			$date = explode("-",$date);
+            $fromDate = date("Y-m-d",strtotime($date[0]));
+            $toDate = date("Y-m-d",strtotime($date[1]));
+			$where = " where date(created_on) between '$fromDate' and '$toDate'";
+		}else{
+			$where = '';
+		}
+		$sql = "select product_id,avg(price) as avgpurchaseprice from tbl_purchase_items $where group by product_id";
 		$query = $this->db->query($sql)->result_array();
 		foreach($query as $res){
 			$purchase[$res['product_id']]['avgprice'] = $res['avgpurchaseprice'];

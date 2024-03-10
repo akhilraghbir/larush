@@ -59,12 +59,16 @@
         </tr>
         <?php } } ?>
         <tr>
-            <td class="bold text-right" colspan="4">Total Net :</td>
+            <td class="bold text-right" colspan="4">Sub Total :</td>
             <td><?= $invoice[0]['sub_total'];?></td>
         </tr>
         <tr>
             <td class="bold text-right" colspan="4">Total GST :</td>
             <td><?= $invoice[0]['gst'];?></td>
+        </tr>
+        <tr>
+            <td class="bold text-right" colspan="4">Total PST :</td>
+            <td><?= $invoice[0]['pst'];?></td>
         </tr>
         <tr>
             <td class="bold text-right" colspan="4">Total :</td>

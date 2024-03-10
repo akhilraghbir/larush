@@ -34,6 +34,7 @@ class Attendance extends CI_Controller {
 		$dataTableSortOrdering = ['ta.id','ta.date','ta.clock_in','ta.clock_out'];
 		$table_name='tbl_attendance as ta';
 		$joinsArray = [];
+		
 		$wherecondition = 'ta.id!="0" and ta.user_id='.$this->session->id;
 		$getRecordListing = $this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords=$getRecordListing['recordsTotal'];
@@ -51,7 +52,7 @@ class Attendance extends CI_Controller {
                 $recordListing[$i][1]= $recordData->date;
                 $recordListing[$i][2]= $recordData->clock_in;
 				$recordListing[$i][3]= $recordData->clock_out;
-				$recordListing[$i][4]= $action;
+				$recordListing[$i][4]= $recordListing[$i][4]= timeDifference($recordData->clock_in,$recordData->clock_out);
 				$i++;
                 $srNumber++;
             }

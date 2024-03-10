@@ -261,21 +261,21 @@ if (!function_exists('timeDifference')) {
 
         if($days>0)
         {
-            return $days." days ago";
+            return $days." days";
         }
         if($hours > 0)
         {
-            return $hours." hours ago";
+            return $hours." hours";
         }
 
         if($minutes > 0)
         {
-            return $minutes." minutes ago";
+            return $minutes." minutes";
         }
 
         if($seconds > 0)
         {
-            return $seconds." seconds ago";
+            return $seconds." seconds";
         }
     }
 }
