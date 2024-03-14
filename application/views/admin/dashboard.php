@@ -1,6 +1,64 @@
 <?php 
 	if($this->session->userdata('user_type') == 'Employee'){	
 ?>
+<div class="card">
+    <div class="card-body">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label>Date</label>
+					<input type="date" class="form-control" value="<?= date('Y-m-d'); ?>" disabled name="date">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label>Type</label>
+					<select class="form-control" id="type" name="type">
+						<option value="Clock In">Clock In</option>
+						<option value="Clock Out">Clock Out</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<input type="button" style="margin-top:28px" onclick="submit()" name="submit" class="btn btn-primary" value="Submit">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<div class="row">
+			<ul class="nav nav-pills nav-justified" role="tablist">
+				<li class="nav-item" role="presentation">
+					<a href="<?= base_url('administrator/Suppliers'); ?>">
+						<i class="ri-user-heart-line  font-size-20"></i>
+						<span class="mt-2 d-none d-sm-block">Suppliers</span>
+					</a>
+				</li>
+				<li class="nav-item" role="presentation">
+					<a href="<?= base_url('administrator/Receipts'); ?>">
+						<i class="ri-file-list-3-line font-size-20"></i>
+						<span class="mt-2 d-none d-sm-block">Receipts</span>
+					</a>
+				</li>
+				<li class="nav-item" role="presentation">
+					<a href="<?= base_url('administrator/Expenses'); ?>">
+						<i class="ri-money-dollar-circle-line font-size-20"></i>
+						<span class="mt-2 d-none d-sm-block">Expenses</span>
+					</a>
+				</li>
+				<li class="nav-item" role="presentation">
+					<a href="<?= base_url('administrator/MoneyBook'); ?>">
+						<i class="ri-money-dollar-circle-line font-size-20"></i>
+						<span class="mt-2 d-none d-sm-block">Money Book</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
 <div class="row">
     <?php if(!empty($tasks)){ 
         foreach($tasks as $task){
@@ -41,6 +99,55 @@ function markcompleted(id){
 		});
 	}
 }
+function submit() {
+        $('#page-overlay1').hide();
+        var type = $("#type").val();
+        var TtMsg = 'Are you sure you want to ' + type + ' today';
+        $.confirm({
+            title: TtMsg,
+            buttons: {
+                formSubmit: {
+                    text: 'Yes',
+                    btnClass: 'btn-blue',
+                    action: function() {
+                        $('#page-overlay').show();
+                        $.ajax({
+                            url: '<?php echo base_url(); ?>administrator/attendance/clockinout',
+                            type: 'POST',
+                            data: {
+                                "type": type,
+                            },
+                            success: function(data) {
+                                result = JSON.parse(data);
+                                var msg = result.message;
+                                if (result.error == '0') {
+                                    toastr['success'](msg);
+                                } else {
+                                    toastr['warning'](msg);
+                                }
+                            },
+                            error: function(e) {
+                                toastr['warning'](e.message);
+                            }
+                        });
+
+                    }
+                },
+                no: function() {
+                    $('#page-overlay').hide();
+                },
+            },
+            onContentReady: function() {
+                // bind to events
+                var jc = this;
+                this.$content.find('form').on('submit', function(e) {
+                    // if the user submits the form by pressing enter in the field.
+                    e.preventDefault();
+                    jc.$$formSubmit.trigger('click'); // reference the button and click it
+                });
+            }
+        });
+    }
 </script>
 <?php }else{ ?>
 	<div class="row">

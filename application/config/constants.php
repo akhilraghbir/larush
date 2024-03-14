@@ -85,16 +85,17 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 $DBPORT = 3306;
-if($_SERVER['HTTP_HOST']=='surbjit.aotg.ca'){
-   $CONFIG_SERVER_ROOT = 'https://surbjit.aotg.ca/';
-   $CONFIG_SERVER_PROJECT_ROOT = 'https://surbjit.aotg.ca/';
-   $CONFIG_SERVER_UPLOADS_ROOT = "https://surbjit.aotg.ca/uploads/";
-   $CONFIG_SERVER_ADMIN_ROOT = 'https://surbjit.aotg.ca/administrator/';
+if($_SERVER['HTTP_HOST']=='larush.ojashomecinema.com'){
+   $CONFIG_SERVER_ROOT = 'https://larush.ojashomecinema.com/';
+   $CONFIG_SERVER_PROJECT_ROOT = 'https://larush.ojashomecinema.com/';
+   $CONFIG_SERVER_UPLOADS_ROOT = "https://larush.ojashomecinema.com/uploads/";
+   $CONFIG_SERVER_ADMIN_ROOT = 'https://larush.ojashomecinema.com/administrator/';
    $DBHOST='localhost';
-   $DBUSER='mycrywal_surbjit';
-   $DBPASS=';bk(xVdz6m&R';
-   $DBNAME='mycrywal_surbjit';
-}else if($_SERVER['HTTP_HOST']=='localhost'){
+   $DBUSER='ojasfyuc_larush';
+   $DBPASS='p2JDYAF_NPWn';
+   $DBNAME='ojasfyuc_larush';
+}
+else if($_SERVER['HTTP_HOST']=='localhost'){
    $CONFIG_SERVER_ROOT = 'http://localhost/larush/';
    $CONFIG_SERVER_PROJECT_ROOT = 'http://localhost/larush/';
    $CONFIG_SERVER_UPLOADS_ROOT = "http://localhost/larush/uploads/";

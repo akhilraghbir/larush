@@ -137,11 +137,13 @@
         var clist = $('#bookList').DataTable({
             "destroy": true,
             "responsive": false,
+            "dom": 'Bfrtip',
             "processing": true,
             "serverSide": true,
             "order": [
                 [5, "desc"]
             ],
+            buttons: ["copy", "csv", "pdf"],
             "ajax": {
                 "url": "<?php echo CONFIG_SERVER_ADMIN_ROOT ?>MoneyBook/ajaxListing",
                 "type": 'POST',

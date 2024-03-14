@@ -209,7 +209,7 @@ class Dashboard extends CI_Controller
 		$dataTableSortOrdering = ['ta.id','tu.first_name','ta.clock_in'];
 		$table_name='tbl_attendance as ta';
 		$joinsArray[] = ['table_name'=>'tbl_users as tu','condition'=>"tu.id = ta.user_id",'join_type'=>'left'];
-		$wherecondition = 'ta.id!="0" and date(created_on)="'.$today.'"';
+		$wherecondition = 'ta.id!="0" and ta.date="'.$today.'"';
 		$getRecordListing = $this->Datatables_model->datatablesQuery($selectColumns,$dataTableSortOrdering,$table_name,$joinsArray,$wherecondition,$indexColumn,'','POST');
 		$totalRecords = $getRecordListing['recordsTotal'];
 		$recordsFiltered = $getRecordListing['recordsFiltered'];

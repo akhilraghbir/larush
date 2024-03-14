@@ -74,6 +74,12 @@
             <td class="bold text-right" colspan="4">Total :</td>
             <td>$ <?= $purchase[0]['grand_total'];?></td>
         </tr>
+        <?php if((int)$purchase[0]['final_amount']!=0){ ?>
+        <tr>
+            <td class="bold">Round Off :</td>
+            <td colspan="4">$ <?= $purchase[0]['final_amount'] - $purchase[0]['grand_total'];?></td>
+        </tr>
+        <?php } ?>
         <tr>
             <td class="bold">Note :</td>
             <td colspan="4"><?= $purchase[0]['notes'];?></td>

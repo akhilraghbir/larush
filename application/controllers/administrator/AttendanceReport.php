@@ -60,6 +60,7 @@ class AttendanceReport extends CI_Controller {
                 $recordListing[$i][2]= $recordData->clock_in;
 				$recordListing[$i][3]= $recordData->clock_out;
 				$recordListing[$i][4]= timeDifference($recordData->clock_in,$recordData->clock_out);
+				$recordListing[$i][5]= '<a href="javascript:void()" onclick="getAttendance('.$recordData->id.')"><i class="ri-timer-line"></i></a>';
 				$i++;
                 $srNumber++;
             }
@@ -71,5 +72,44 @@ class AttendanceReport extends CI_Controller {
          echo '{"draw":'.$draw.',"recordsTotal":'.$recordsFiltered.',"recordsFiltered":'.$recordsFiltered.',"data":'.$final_data.'}';
        	
 	}	
+
+	public function getAttendance(){
+		if($_POST['id']){
+			$data = $this->Common_model->getDataFromTable('tbl_attendance','',  $whereField=['id'=>$_POST['id']], $whereValue='', $orderBy='', $order='', $limit='', $offset=0, true);
+			if(is_array($data) && count($data)>0){
+				$res['error'] = 0;
+				$res['data'] = $data[0];
+			}else{
+				$res['error'] = 1;
+				$res['msg'] = 'No Data Found';
+			}
+			echo json_encode($res);exit;
+		}
+	}
+
+	public function updateAttendance(){
+		if($_POST){
+			$mandatoryFields= ['clock_in','clock_out','date'];    
+            foreach($mandatoryFields as $row){
+				$fieldname = ucwords(strtolower(str_replace("_", " ", $row)));
+				$this->form_validation->set_rules($row, $fieldname, 'required'); 
+            }
+            if($this->form_validation->run() == FALSE){
+				$errorMessage=validation_errors();
+				$res['error'] = 1;
+				$res['msg'] = $errorMessage;
+			}else{
+				$id = $_POST['id'];
+				$update['clock_in'] = $_POST['clock_in'];
+				$update['clock_out'] = $_POST['clock_out'];
+				$upd = $this->Common_model->updateDataFromTable('tbl_attendance',$update,'id',$id);
+				if($upd){
+					$res['error'] = 0;
+					$res['msg'] = 'Attendance Updated successfully';
+				}
+			}
+			echo json_encode($res);exit;
+		}
+	}
 }
 ?>

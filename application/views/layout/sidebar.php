@@ -41,7 +41,7 @@
                     <li class="<?= ($modulename == 'Receipts') ? 'mm-active' : ''; ?>">
                         <a href="<?= base_url('administrator/Receipts'); ?>" class="waves-effect">
                             <i class="ri-file-list-3-line"></i>
-                            <span>Receipts</span>
+                            <span>Buying Receipts</span>
                         </a>
                     </li>
                     <li class="<?= ($modulename == 'Dispatch') ? 'mm-active' : ''; ?>">
@@ -137,15 +137,22 @@
                             <li><a href="<?= base_url('administrator/SalesReport'); ?>">Sales Report</a></li>
                             <li><a href="<?= base_url('administrator/PurchaseReport'); ?>">Purchase Report</a></li>
                             <li><a href="<?= base_url('administrator/DispatchReport'); ?>">Dispatch Report Fe / Non Fe</a></li>
+                            <li><a href="<?= base_url('administrator/RoundOffReport'); ?>">Round Off Report</a></li>
                         </ul>
                     </li>
                     
                 <?php } 
                 else if($this->session->user_type == 'Employee'){ ?>
+                    <li class="<?= ($modulename == 'Suppliers') ? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('administrator/Suppliers'); ?>" class="waves-effect">
+                            <i class="ri-user-heart-line"></i>
+                            <span>Suppliers</span>
+                        </a>
+                    </li>
                     <li class="<?= ($modulename == 'Receipts') ? 'mm-active' : ''; ?>">
                         <a href="<?= base_url('administrator/Receipts'); ?>" class="waves-effect">
                             <i class="ri-file-list-3-line"></i>
-                            <span>Receipts</span>
+                            <span>Buying Receipts</span>
                         </a>
                     </li>
                     <li class="<?= ($modulename == 'Expenses') ? 'mm-active' : ''; ?>">
