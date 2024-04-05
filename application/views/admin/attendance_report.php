@@ -33,6 +33,7 @@
                             <thead>
                                 <tr>
                                     <th>S No</th>
+                                    <th>Employee</th>
                                     <th>Date</th>
                                     <th>Clock In</th>
                                     <th>Clock Out</th>

@@ -174,7 +174,7 @@ class Login extends CI_Controller
 
                 $token = $this->input->post('security_token');
                 $email = $this->input->post('username');
-                $whereCond = "email_id='$email' and password_token='$token' ";
+                $whereCond = "email_id='$email' and password_reset_token='$token' ";
                 $checkExists = $this->Common_model->getSelectedFields('tbl_users', '*', $whereCond);
                 if (!empty($checkExists) && sizeof($checkExists) > 0) {
 
@@ -183,7 +183,7 @@ class Login extends CI_Controller
                         redirect(base_url() . 'login/resetPassword');
                         exit;
                     }
-                    $tokenGeneratedTime = $checkExists[0]['pwd_token_created_on'];
+                    $tokenGeneratedTime = $checkExists[0]['password_reset_created'];
                     $currentTime = current_datetime();
 
                     $seconds = strtotime($currentTime) - strtotime($tokenGeneratedTime);
@@ -193,12 +193,10 @@ class Login extends CI_Controller
                         redirect(base_url() . 'login/forgotPassword');
                     } else {
                         $data = array();
-                        $userId = $checkExists[0]['user_id'];
+                        $userId = $checkExists[0]['id'];
                         $data['password'] = md5($this->input->post('password'));
-                        $data['password_token'] = '';
-                        $data['updated_on'] = current_datetime();
-                        $data['updated_by'] = $userId;
-                        if ($this->Common_model->updateDataFromTabel('tbl_users', $data, 'user_id', $userId)) {
+                        $data['password_reset_token'] = '';
+                        if ($this->Common_model->updateDataFromTabel('tbl_users', $data, 'id', $userId)) {
                             $this->form_validation->clear_field_data();
                             $this->messages->setMessageFront("Password Updated. Please Login", 'success');
                             redirect(base_url() . 'login');

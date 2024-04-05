@@ -34,25 +34,10 @@ if(isset($data)){
 
 			<div class="form-row">
 				<div class="col-md-6">
-					<div class="position-relative form-group"><label for="exampleEmail11" class="">Email</label><input value="<?php if(isset($formData['email_id'])){echo $formData['email_id'];} ?>" name="email_id" id="email" placeholder="Please Enter Email Id"  autocomplete='off' type="text" class="email form-control"></div>
-				</div>
-				<div class="col-md-6">
-					<div class="position-relative form-group"><label for="examplePassword11" class="">Mobile</label><input value="<?php if(isset($formData['phno'])){echo $formData['phno'];} ?>" name="mobile_no" id="mobile" placeholder="Please Enter Mobile Number" maxlength="10" type="text"  class="numberOnly form-control"></div>
+					<div class="position-relative form-group"><label for="examplePassword11" class="">Mobile</label><input value="<?php if(isset($formData['phno'])){echo $formData['phno'];} ?>" name="phno" id="mobile" placeholder="Please Enter Mobile Number" maxlength="10" type="text"  class="numberOnly form-control"></div>
 				</div>
 			</div>
 
-			<div class="form-row">
-
-				<div class="col-md-6">
-					<div class="position-relative form-group"><label for="exampleEmail11" class="">Status</label>
-						<select class="form-control" name='status'>
-							<option value='Active' <?php if(isset($formData['status'])){ if($formData['status']=='Active'){ echo "selected=selected";} } ?> >Active</option>
-							<option value='Inactive' <?php if(isset($formData['status'])){ if($formData['status']=='Inactive'){ echo "selected=selected";} } ?> >Inactive</option>
-						</select>
-					</div>
-				</div>
-			   
-			</div>
 	
 			<div class="form-row">
 					<input type='hidden' name="id" value="<?php echo $formData['id'] ?>">

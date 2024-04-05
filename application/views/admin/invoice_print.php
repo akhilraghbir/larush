@@ -28,9 +28,9 @@
         </tr>
         <tr>
             <td colspan="2"><b>Buyer:</b><br>
-                <?= $buyer[0]['buyer_name'] ?>,<br>
                 <?= $buyer[0]['company_name'] ?>,<br>
-                <?= $buyer[0]['company_address'] ?>
+                <?= $buyer[0]['company_address'] ?>,<br>
+                <?= $buyer[0]['buyer_name'] ?>
             </td>
             <td colspan="3">
                 Invoice No: <?= $invoice[0]['invoice_number']?><br>

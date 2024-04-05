@@ -28,9 +28,9 @@
         </tr>
         <tr>
             <td colspan="2"><b>Supplier:</b><br>
-                <?= $supplier[0]['supplier_name'] ?>,<br>
                 <?= $supplier[0]['company_name'] ?>,<br>
-                <?= $supplier[0]['company_address'] ?>
+                <?= $supplier[0]['company_address'] ?>,<br>
+                <?= $supplier[0]['supplier_name'] ?>
             </td>
             <td colspan="3">
                 Receipt No: <?= $purchase[0]['receipt_number']?><br>

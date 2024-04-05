@@ -31,17 +31,31 @@
                                                     <img src="<?= base_url('assets/backend/');?>images/larush_logo.jpg" alt="" height="120" class="auth-logo logo-dark mx-auto">
                                                 </a>
                                             </div>
-                                            <h4 class="font-size-18 mt-4">Recover your password!</h4>
-                                            <p class="text-muted">Validate your username to reset your password</p>
+                                            <h4 class="font-size-18 mt-4">Create New password!</h4>
                                             <?php echo $this->messages->getMessageFront(); ?>
                                         </div>
 
                                         <div class="p-2">
-                                            <form class="" method="post" action="<?= base_url('forgot-password'); ?>">
+                                            <form class="" method="post" action="<?= base_url('reset-password'); ?>">
                                                 <div class="mb-3 auth-form-group-custom mb-4">
                                                     <i class="ri-user-2-line auti-custom-input-icon"></i>
                                                     <label for="username" class="fw-semibold">Username</label>
                                                     <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
+                                                </div>
+                                                <div class="mb-3 auth-form-group-custom mb-4">
+                                                    <i class="ri-key-line  auti-custom-input-icon"></i>
+                                                    <label for="security_token" class="fw-semibold">Security Token</label>
+                                                    <input type="text" class="form-control" name="security_token" id="security_token" placeholder="Enter Security Token">
+                                                </div>
+                                                <div class="mb-3 auth-form-group-custom mb-4">
+                                                    <i class="ri-lock-2-line auti-custom-input-icon"></i>
+                                                    <label for="password" class="fw-semibold">Password</label>
+                                                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter New Password">
+                                                </div>
+                                                <div class="mb-3 auth-form-group-custom mb-4">
+                                                    <i class="ri-lock-2-line auti-custom-input-icon"></i>
+                                                    <label for="confirm_password" class="fw-semibold">Confirm Password</label>
+                                                    <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
                                                 </div>
 
                                                 <div class="mt-4 text-center">

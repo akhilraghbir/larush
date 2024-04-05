@@ -51,6 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'login';
 $route['forgot-password'] = 'login/forgotPassword';
+$route['reset-password'] = 'login/resetPassword';
 $route['administrator/dashboard'] = 'administrator/dashboard';
 $route['sign-contract/(:any)'] = 'Contracts/view/$1';
 $route['load-contract-pdf/(:any)'] = 'Contracts/load_pdf/$1';

@@ -164,7 +164,7 @@ class CatalyticDispatch extends CI_Controller {
 		$selectColumns = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date','td.created_on','td.is_invoice_generated'];
 		$dataTableSortOrdering = ['td.id','td.dispatch_number','tb.buyer_name','td.dispatch_date','td.created_on'];
 		$table_name = 'tbl_dispatch as td';
-		$joinsArray[] = ['table_name'=>'tbl_buyers as tb','condition'=>"tb.id = td.buyer_id",'join_type'=>'left'];;
+		$joinsArray[] = ['table_name'=>'tbl_buyers as tb','condition'=>"tb.id = td.buyer_id",'join_type'=>'left'];
 		$wherecondition = 'td.id!="0" and td.is_catalytic_dispatch="Yes"';
 		if($date!=''){
             $date = explode("-",$date);

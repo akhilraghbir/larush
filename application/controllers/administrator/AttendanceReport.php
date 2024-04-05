@@ -30,10 +30,10 @@ class AttendanceReport extends CI_Controller {
         $date         = $this->input->post('date');
         $user_id         = $this->input->post('user_id');
 		$indexColumn = 'ta.id';
-		$selectColumns = ['ta.id','ta.date','ta.clock_in','ta.clock_out'];
-		$dataTableSortOrdering = ['ta.id','ta.date','ta.clock_in','ta.clock_out'];
+		$selectColumns = ['ta.id','tu.first_name','ta.date','ta.clock_in','ta.clock_out'];
+		$dataTableSortOrdering = ['ta.id','tu.first_name','ta.date','ta.clock_in','ta.clock_out'];
 		$table_name='tbl_attendance as ta';
-		$joinsArray = [];
+		$joinsArray[] = ['table_name'=>'tbl_users as tu','condition'=>"tu.id = ta.user_id",'join_type'=>'left'];
 		$wherecondition = 'ta.id!="0"';
         if($date!=''){
             $date = explode("-",$date);
@@ -56,11 +56,12 @@ class AttendanceReport extends CI_Controller {
             foreach($getRecordListing['data'] as $recordData) {
 				$content .='[';
                 $recordListing[$i][0]= ++$j;
-                $recordListing[$i][1]= $recordData->date;
-                $recordListing[$i][2]= $recordData->clock_in;
-				$recordListing[$i][3]= $recordData->clock_out;
-				$recordListing[$i][4]= timeDifference($recordData->clock_in,$recordData->clock_out);
-				$recordListing[$i][5]= '<a href="javascript:void()" onclick="getAttendance('.$recordData->id.')"><i class="ri-timer-line"></i></a>';
+				$recordListing[$i][1]= $recordData->first_name;
+                $recordListing[$i][2]= $recordData->date;
+                $recordListing[$i][3]= $recordData->clock_in;
+				$recordListing[$i][4]= $recordData->clock_out;
+				$recordListing[$i][5]= timeDifference($recordData->clock_in,$recordData->clock_out);
+				$recordListing[$i][6]= '<a href="javascript:void()" onclick="getAttendance('.$recordData->id.')"><i class="ri-timer-line"></i></a>';
 				$i++;
                 $srNumber++;
             }

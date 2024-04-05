@@ -115,14 +115,13 @@ class MoneyBook extends CI_Controller {
 	public function ajaxListing(){
 		$draw          =  $this->input->post('draw');
 		$start         =  $this->input->post('start');
-		$status        =  $this->input->post('status');
 		$date          =  $this->input->post('date');
-		$expense_category = $this->input->post('expense_category');
 		$indexColumn ='tb.id';
-		$selectColumns = ['tb.id','tu.first_name','tb.purpose','tb.amount','tb.type','tb.created_on'];
-		$dataTableSortOrdering = ['tb.id','tb.purpose','tb.amount','tb.type','tu.first_name','tb.created_on'];
+		$selectColumns = ['tb.id','tu.first_name','tb.purpose','tb.amount','tb.type','tb.created_on','tcu.first_name as cfirst_name'];
+		$dataTableSortOrdering = ['tb.id','tb.purpose','tcu.first_name as cfirst_name','tb.amount','tb.type','tu.first_name','tb.created_on'];
 		$table_name ='tbl_moneyBook as tb';
-		$joinsArray[] = ['table_name'=>'tbl_users as tu','condition'=>"tu.id = tb.user_id",'join_type'=>'left'];;
+		$joinsArray[] = ['table_name'=>'tbl_users as tu','condition'=>"tu.id = tb.user_id",'join_type'=>'left'];
+		$joinsArray[] = ['table_name'=>'tbl_users as tcu','condition'=>"tcu.id = tb.created_by",'join_type'=>'left'];
 		$wherecondition='tb.id!="0"';
 		
 		if($this->session->user_type == 'Employee'){
@@ -151,10 +150,11 @@ class MoneyBook extends CI_Controller {
 				$content .='[';
 				$recordListing[$i][0]= $i+1;
                 $recordListing[$i][1]= $recordData->purpose;
-				$recordListing[$i][2]= floatval($recordData->amount);
-				$recordListing[$i][3]= $recordData->type;
-                $recordListing[$i][4]= $recordData->first_name;
-                $recordListing[$i][5]= displayDateInWords($recordData->created_on);
+				$recordListing[$i][2]= $recordData->cfirst_name;
+				$recordListing[$i][3]= floatval($recordData->amount);
+				$recordListing[$i][4]= $recordData->type;
+                $recordListing[$i][5]= $recordData->first_name;
+                $recordListing[$i][6]= displayDateInWords($recordData->created_on);
 				$i++;
                 $srNumber++;
             }
